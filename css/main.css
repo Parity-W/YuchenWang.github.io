@@ -26,8 +26,8 @@ a {
 	-webkit-transition: all 0.3s ease-out;
 }
 a:hover {
-	color: #FFD700 !important;
-	text-shadow:-5px 3px 18px #FFD700 !important;
+	color: #FFDF00 !important;
+	text-shadow:-5px 3px 20px #FFDF00 !important;
 	-webkit-transition: all 0.3s ease-out;
 }
 p {
