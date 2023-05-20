@@ -1,6 +1,6 @@
 body {
 	background-image:url('../img/god.jpg');
-	background-size:contain;
+	background-size:100% 407pt;
 	background-repeat:no-repeat;
 /* 　background-attachment: fixed!important; */
 }
