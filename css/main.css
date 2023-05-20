@@ -14,9 +14,9 @@ nav ul, footer ul {
 nav ul li, footer ul li {
 	display: inline;
 	background-color: #C6B085;
-	border: 3px solid #D4AF37;
+	border: 3px solid #5E4E2A;
 	border-radius: 14px;
-	box-shadow: 3px 3px 8px 0px #D4AF37;
+	box-shadow: 3px 3px 8px 0px #5E4E2A;
 	padding: 4px 10px 4px 10px;
 	margin: 0 1ex 0 0;
 }
