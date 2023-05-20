@@ -1,6 +1,6 @@
 body {
-	background-image:url('../img/Pergamene script.jpg');
-	background-size:100%;
+	background-image:url('../img/ship.jpg');
+	background-size:contain;
 	background-repeat:no-repeat;
 /* 　background-attachment: fixed!important; */
 }
