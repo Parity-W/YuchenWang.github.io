@@ -31,9 +31,9 @@ a:hover {
 	transition: all 0.3s ease-out;
 }
 
-a:active {
+/* a:active {
 	box-shadow: inset 0 0 20px rgba(255, 223, 0, 0.8), 0 0 10px rgba(255, 223, 0, 0.4), 0 0 30px rgba(255, 223, 0, 0.2);
-}
+} */
 
 p {
 	font-size: 1.2em;
