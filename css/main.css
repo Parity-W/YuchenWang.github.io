@@ -26,10 +26,11 @@ a {
 	-webkit-transition: all 0.3s ease-out;
 }
 a:hover {
-	color: #FFDF00 !important;
-	text-shadow:-5px 3px 20px #FFDF00 !important;
+	color: hsl(50, 100%, 60%) !important;
+	text-shadow: -6px 4px 18px hsl(50, 100%, 60%) !important;
 	-webkit-transition: all 0.3s ease-out;
 }
+
 p {
 	font-size: 1.2em;
 	line-height: 1.5em;
