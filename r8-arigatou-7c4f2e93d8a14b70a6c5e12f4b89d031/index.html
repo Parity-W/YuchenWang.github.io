@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#071725" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="description" content="教師の日に、心からの感謝を込めて。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:title" content="先生、いつもありがとうございます。" />
+    <meta property="og:description" content="教師の日に、心からの感謝を込めて。" />
+    <meta property="og:url" content="https://parity-w.github.io/YuchenWang.github.io/r8-arigatou-7c4f2e93d8a14b70a6c5e12f4b89d031/" />
+    <link rel="preload" href="./washi-gold-chrysanthemum.webp" as="image" type="image/webp" />
+    <title>先生、いつもありがとうございます。</title>
+    <style>
+      :root {
+        --night: #071725;
+        --ivory: #fff8e8;
+        --gold: #d7ad5b;
+        --serif-jp: 'Yu Mincho', 'Hiragino Mincho ProN', 'Noto Serif JP', serif;
+        --sans-jp: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+        background: var(--night);
+      }
+
+      body {
+        color: var(--ivory);
+        font-family: var(--sans-jp);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      .greeting-page {
+        position: relative;
+        display: grid;
+        min-height: 100vh;
+        min-height: 100svh;
+        place-items: center;
+        overflow: hidden;
+        isolation: isolate;
+        background: var(--night);
+      }
+
+      .greeting-art,
+      .greeting-shade,
+      .greeting-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .greeting-art {
+        z-index: -4;
+        object-fit: cover;
+        object-position: center 60%;
+        animation: quiet-arrival 12s cubic-bezier(0.2, 0.75, 0.2, 1) both;
+      }
+
+      .greeting-shade {
+        z-index: -3;
+        background:
+          linear-gradient(180deg, rgb(2 13 24 / 34%) 0%, rgb(4 16 28 / 10%) 48%, rgb(3 13 22 / 18%) 100%),
+          radial-gradient(circle at 50% 37%, transparent 0 18%, rgb(3 14 25 / 16%) 72%);
+      }
+
+      .greeting-grain {
+        z-index: -2;
+        opacity: 0.25;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
+        mix-blend-mode: soft-light;
+        pointer-events: none;
+      }
+
+      .greeting-card {
+        position: relative;
+        display: flex;
+        min-height: min(88vh, 840px);
+        min-height: min(88svh, 840px);
+        width: min(88vw, 560px);
+        flex-direction: column;
+        justify-content: space-between;
+        margin: max(20px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+        padding: clamp(28px, 6vw, 54px) clamp(25px, 6.5vw, 52px);
+        border: 1px solid rgb(228 189 112 / 38%);
+        border-radius: clamp(24px, 7vw, 42px) 8px clamp(24px, 7vw, 42px) 8px;
+        background: linear-gradient(145deg, rgb(7 25 41 / 74%), rgb(4 18 31 / 46%));
+        box-shadow:
+          0 30px 90px rgb(0 0 0 / 28%),
+          inset 0 0 0 6px rgb(255 248 232 / 2%);
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+      }
+
+      .greeting-card::before,
+      .greeting-card::after {
+        position: absolute;
+        content: '';
+        pointer-events: none;
+      }
+
+      .greeting-card::before {
+        inset: 10px;
+        border: 1px solid rgb(230 199 133 / 10%);
+        border-radius: inherit;
+      }
+
+      .greeting-card::after {
+        top: 0;
+        right: clamp(28px, 8vw, 64px);
+        width: 1px;
+        height: clamp(38px, 8vh, 76px);
+        background: linear-gradient(var(--gold), transparent);
+      }
+
+      .greeting-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        gap: 8px 16px;
+        color: rgb(255 241 207 / 76%);
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        animation: rise-in 900ms 120ms ease-out both;
+      }
+
+      .greeting-header p,
+      .greeting-header time,
+      .greeting-copy p,
+      .greeting-footer p,
+      .greeting-copy h1 {
+        margin: 0;
+      }
+
+      .greeting-header time {
+        color: rgb(255 248 232 / 58%);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .greeting-rule {
+        grid-column: 1 / -1;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, var(--gold) 0 22%, rgb(215 173 91 / 18%) 22% 100%);
+      }
+
+      .greeting-copy {
+        align-self: center;
+        width: 100%;
+        padding: 5vh 0 7vh;
+        text-align: center;
+      }
+
+      .greeting-to {
+        margin-bottom: clamp(20px, 3.6vh, 32px) !important;
+        color: #e1b665;
+        font-family: var(--serif-jp);
+        font-size: clamp(0.9rem, 3.6vw, 1.05rem);
+        letter-spacing: 0.38em;
+        text-indent: 0.38em;
+        animation: rise-in 900ms 260ms ease-out both;
+      }
+
+      .greeting-copy h1 {
+        font-family: var(--serif-jp);
+        font-size: clamp(2rem, 8vw, 3.3rem);
+        font-weight: 400;
+        letter-spacing: 0.045em;
+        line-height: 1.45;
+        text-wrap: balance;
+        text-shadow: 0 2px 20px rgb(0 0 0 / 35%);
+      }
+
+      .greeting-copy h1 span,
+      .greeting-copy h1 strong {
+        display: block;
+        animation: rise-in 1100ms cubic-bezier(0.18, 0.75, 0.25, 1) both;
+      }
+
+      .greeting-copy h1 span {
+        animation-delay: 380ms;
+      }
+
+      .greeting-copy h1 strong {
+        color: #fff5dd;
+        font-weight: 600;
+        animation-delay: 520ms;
+      }
+
+      .greeting-note {
+        margin-top: clamp(24px, 4.5vh, 40px) !important;
+        color: rgb(255 244 220 / 78%);
+        font-family: var(--serif-jp);
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        letter-spacing: 0.12em;
+        line-height: 2;
+        animation: rise-in 1100ms 680ms ease-out both;
+      }
+
+      .greeting-footer {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: rgb(255 241 207 / 66%);
+        font-family: var(--serif-jp);
+        font-size: 0.82rem;
+        letter-spacing: 0.12em;
+        animation: rise-in 900ms 840ms ease-out both;
+      }
+
+      .greeting-sign {
+        display: grid;
+        width: 37px;
+        height: 37px;
+        flex: 0 0 37px;
+        place-items: center;
+        border: 1px solid rgb(224 101 69 / 68%);
+        border-radius: 50% 47% 52% 45%;
+        color: #e87b60;
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+        transform: rotate(-4deg);
+      }
+
+      @keyframes rise-in {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes quiet-arrival {
+        from {
+          opacity: 0.65;
+          transform: scale(1.055);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @media (max-width: 420px) {
+        .greeting-card {
+          min-height: min(88vh, 840px);
+          min-height: min(88svh, 840px);
+          width: auto;
+          max-width: none;
+          justify-self: stretch;
+          margin: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+          padding: 27px 24px 30px;
+        }
+
+        .greeting-copy {
+          padding-top: 3vh;
+        }
+
+        .greeting-copy h1 {
+          font-size: clamp(1.9rem, 9.6vw, 2.55rem);
+        }
+      }
+
+      @media (max-height: 650px) {
+        .greeting-card {
+          min-height: min(88vh, 840px);
+          min-height: min(88svh, 840px);
+          margin-block-start: max(12px, env(safe-area-inset-top));
+          margin-block-end: max(12px, env(safe-area-inset-bottom));
+          padding-block: 22px;
+        }
+
+        .greeting-copy {
+          padding-block: 2vh;
+        }
+
+        .greeting-to {
+          margin-bottom: 12px !important;
+        }
+
+        .greeting-note {
+          margin-top: 14px !important;
+          line-height: 1.7;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="greeting-page">
+      <img
+        class="greeting-art"
+        src="./washi-gold-chrysanthemum.webp"
+        alt=""
+        aria-hidden="true"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <div class="greeting-shade" aria-hidden="true"></div>
+      <div class="greeting-grain" aria-hidden="true"></div>
+
+      <article class="greeting-card" lang="ja" aria-labelledby="greeting-title">
+        <header class="greeting-header">
+          <span class="greeting-rule" aria-hidden="true"></span>
+          <p>教師の日</p>
+          <time datetime="2026-09-10">令和八年九月十日</time>
+        </header>
+
+        <div class="greeting-copy">
+          <p class="greeting-to">先生へ</p>
+          <h1 id="greeting-title">
+            <span>先生、いつも</span>
+            <strong>ありがとうございます。</strong>
+          </h1>
+          <p class="greeting-note">
+            教師の日に、<br />
+            心からの感謝を込めて。
+          </p>
+        </div>
+
+        <footer class="greeting-footer">
+          <span class="greeting-sign" aria-hidden="true">感謝</span>
+          <p>いつまでも、お元気で。</p>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>
