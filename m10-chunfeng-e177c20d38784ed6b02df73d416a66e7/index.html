@@ -44,8 +44,16 @@
         --jade-bright: #6ea86f;
         --gold: #b58b45;
         --line: rgba(31, 83, 57, 0.2);
-        --ease-turn: cubic-bezier(0.23, 0.72, 0.21, 1);
+        --ease-turn: cubic-bezier(0.18, 0.68, 0.18, 1);
+        --turn-duration: 1180ms;
+        --leaf-height: min(70vh, 710px);
         font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, SimSun, serif;
+      }
+
+      @supports (height: 1svh) {
+        :root {
+          --leaf-height: min(70svh, 710px);
+        }
       }
 
       * {
@@ -109,6 +117,10 @@
         animation: spring-breath 14s ease-in-out infinite alternate;
       }
 
+      .experience.is-turning .scene {
+        animation-play-state: paused;
+      }
+
       .wash {
         z-index: 1;
         background:
@@ -130,8 +142,13 @@
         width: min(100%, 620px);
         height: 100%;
         margin: 0 auto;
-        perspective: 1500px;
+        perspective: clamp(1150px, 280vw, 1650px);
+        -webkit-perspective: clamp(1150px, 280vw, 1650px);
+        perspective-origin: 18% 48%;
+        -webkit-perspective-origin: 18% 48%;
         transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+        touch-action: pan-y;
       }
 
       .book::before {
@@ -148,67 +165,260 @@
       .page {
         position: absolute;
         inset: 0;
-        z-index: 0;
+        z-index: calc(30 - var(--page-order, 0));
         display: grid;
         place-items: center;
         padding:
           max(66px, calc(env(safe-area-inset-top) + 46px))
           clamp(24px, 6.5vw, 44px)
           max(112px, calc(env(safe-area-inset-bottom) + 96px));
-        opacity: 0;
-        visibility: hidden;
-        overflow-x: hidden;
-        overflow-y: auto;
-        overscroll-behavior: contain;
+        opacity: 1;
+        visibility: visible;
+        overflow: visible;
+        pointer-events: none;
         transform-style: preserve-3d;
-        -webkit-overflow-scrolling: touch;
+        -webkit-transform-style: preserve-3d;
       }
 
       .page.is-current {
+        z-index: 40;
+        pointer-events: auto;
+      }
+
+      .book.is-turning .page {
+        pointer-events: none;
+      }
+
+      .book.is-turning .sheet {
+        overflow: hidden;
+        -webkit-overflow-scrolling: auto;
+      }
+
+      .page.is-turned {
         z-index: 2;
-        opacity: 1;
+        visibility: hidden;
+      }
+
+      .page.is-preparing-reveal,
+      .page.is-revealing {
+        z-index: 35;
         visibility: visible;
       }
 
-      .page.is-exiting {
-        z-index: 2;
-        opacity: 1;
+      .page.is-preparing-back,
+      .page.is-turning-forward,
+      .page.is-turning-back {
+        z-index: 70;
         visibility: visible;
-        animation: recede 780ms var(--ease-turn) both;
       }
 
-      .page.is-entering {
-        z-index: 4;
-        opacity: 1;
+      .page.is-receding {
+        z-index: 40;
         visibility: visible;
-        animation: turn-in-next 780ms var(--ease-turn) both;
       }
 
-      .page.is-entering.is-reverse {
-        animation-name: turn-in-previous;
+      .leaf,
+      .contact-shadow {
+        grid-area: 1 / 1;
+        width: 100%;
+        max-width: 510px;
+        height: var(--leaf-height);
       }
 
-      .page.is-entering::after {
+      .leaf {
+        position: relative;
+        z-index: 1;
+        transform: translate3d(3px, 2px, -8px) scale(0.994);
+        transform-origin: 0.75% 50%;
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+      }
+
+      .page.is-current .leaf {
+        transform: translate3d(0, 0, 0) rotateY(0deg);
+      }
+
+      .page.is-turned .leaf {
+        transform: translate3d(0, 0, 0) rotateY(-179.6deg);
+      }
+
+      .page.is-turning-forward .leaf,
+      .page.is-turning-back .leaf {
+        will-change: transform;
+        animation-name: leaf-turn;
+        animation-duration: var(--turn-duration);
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+      }
+
+      .page.is-turning-back .leaf {
+        animation-direction: reverse;
+      }
+
+      .page.is-revealing .leaf {
+        animation: under-page-rise var(--turn-duration) var(--ease-turn) both;
+      }
+
+      .page.is-receding .leaf {
+        animation: under-page-rise var(--turn-duration) var(--ease-turn) reverse both;
+      }
+
+      .leaf-face {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border: 1px solid rgba(245, 251, 225, 0.76);
+        border-radius: 3px 42px 5px 30px;
+        box-shadow:
+          0 28px 80px rgba(4, 34, 21, 0.22),
+          inset 0 0 0 1px rgba(42, 100, 64, 0.07);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      .leaf-face::before {
         content: "";
         position: absolute;
         inset: 0;
-        z-index: 9;
+        z-index: 4;
         pointer-events: none;
-        background: linear-gradient(90deg, transparent 72%, rgba(255, 255, 245, 0.5) 89%, rgba(21, 61, 42, 0.22));
-        animation: fold-light-next 780ms var(--ease-turn) both;
+        opacity: 0.18;
+        background:
+          repeating-linear-gradient(102deg, rgba(47, 91, 54, 0.045) 0 1px, transparent 1px 9px),
+          radial-gradient(circle at 78% 21%, rgba(255, 255, 244, 0.68), transparent 27%);
+        mix-blend-mode: soft-light;
       }
 
-      .page.is-entering.is-reverse::after {
-        background: linear-gradient(90deg, rgba(21, 61, 42, 0.2), rgba(255, 255, 245, 0.48) 12%, transparent 30%);
-        animation-name: fold-light-previous;
+      .leaf-front {
+        background: rgba(247, 251, 235, 0.98);
+        transform: rotateY(0deg) translateZ(0.45px);
+      }
+
+      .leaf-back {
+        background:
+          linear-gradient(108deg, rgba(202, 220, 177, 0.92) 0%, rgba(245, 250, 230, 0.99) 18%, rgba(235, 244, 216, 0.98) 72%, rgba(210, 227, 186, 0.96) 100%);
+        box-shadow:
+          0 28px 78px rgba(4, 34, 21, 0.2),
+          inset 12px 0 28px rgba(47, 86, 53, 0.11),
+          inset -1px 0 rgba(255, 255, 247, 0.75);
+        transform: rotateY(180deg) translateZ(0.45px);
+      }
+
+      .sheet-back {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse at 76% 27%, rgba(137, 176, 112, 0.14), transparent 28%),
+          radial-gradient(ellipse at 68% 73%, rgba(113, 158, 94, 0.11), transparent 26%),
+          linear-gradient(96deg, rgba(67, 105, 66, 0.1), transparent 12%, transparent 88%, rgba(255, 255, 247, 0.42));
+      }
+
+      .sheet-back::before,
+      .sheet-back::after {
+        content: "";
+        position: absolute;
+        width: 32%;
+        aspect-ratio: 1;
+        border: 1px solid rgba(62, 113, 70, 0.1);
+        border-radius: 68% 18% 66% 26%;
+        transform: rotate(24deg);
+      }
+
+      .sheet-back::before {
+        top: 12%;
+        right: 10%;
+      }
+
+      .sheet-back::after {
+        right: 23%;
+        bottom: 11%;
+        transform: scale(0.72) rotate(-32deg);
+      }
+
+      .fold-sheen,
+      .paper-edge {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        z-index: 7;
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      .fold-sheen {
+        right: -7%;
+        width: 48%;
+        background:
+          linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 240, 0.06) 31%,
+            rgba(255, 255, 249, 0.78) 53%,
+            rgba(25, 62, 41, 0.22) 71%,
+            transparent 100%
+          );
+        mix-blend-mode: soft-light;
+      }
+
+      .paper-edge {
+        right: -1px;
+        width: clamp(28px, 10%, 48px);
+        transform-origin: left center;
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+        background:
+          linear-gradient(90deg, transparent, rgba(255, 255, 247, 0.32) 42%, rgba(44, 78, 50, 0.2) 100%);
+      }
+
+      .page.is-turning-forward .fold-sheen,
+      .page.is-turning-forward .paper-edge,
+      .page.is-turning-back .fold-sheen,
+      .page.is-turning-back .paper-edge {
+        animation-duration: var(--turn-duration);
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+      }
+
+      .page.is-turning-forward .fold-sheen,
+      .page.is-turning-back .fold-sheen {
+        animation-name: fold-sheen;
+      }
+
+      .page.is-turning-forward .paper-edge,
+      .page.is-turning-back .paper-edge {
+        animation-name: edge-curl;
+      }
+
+      .page.is-turning-back .fold-sheen,
+      .page.is-turning-back .paper-edge {
+        animation-direction: reverse;
+      }
+
+      .contact-shadow {
+        position: relative;
+        z-index: 0;
+        border-radius: 3px 42px 5px 30px;
+        opacity: 0;
+        pointer-events: none;
+        transform-origin: left center;
+        background:
+          linear-gradient(90deg, rgba(5, 33, 20, 0.36), rgba(7, 42, 25, 0.14) 17%, rgba(8, 39, 24, 0.04) 42%, transparent 68%);
+      }
+
+      .page.is-turning-forward .contact-shadow,
+      .page.is-turning-back .contact-shadow {
+        animation: contact-shadow-turn var(--turn-duration) linear both;
+      }
+
+      .page.is-turning-back .contact-shadow {
+        animation-direction: reverse;
       }
 
       .sheet {
         position: relative;
         width: 100%;
-        max-width: 510px;
-        min-height: min(67vh, 680px);
-        min-height: min(67svh, 680px);
+        height: 100%;
+        min-height: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -216,13 +426,13 @@
         background:
           linear-gradient(130deg, rgba(255, 255, 249, 0.94), rgba(238, 248, 221, 0.81)),
           var(--paper);
-        border: 1px solid rgba(245, 251, 225, 0.7);
-        border-radius: 3px 42px 5px 30px;
-        box-shadow:
-          0 28px 80px rgba(4, 34, 21, 0.22),
-          inset 0 0 0 1px rgba(42, 100, 64, 0.07);
-        backdrop-filter: blur(16px) saturate(0.92);
-        -webkit-backdrop-filter: blur(16px) saturate(0.92);
+        border: 0;
+        border-radius: inherit;
+        box-shadow: none;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
       }
 
       .sheet::before {
@@ -236,20 +446,17 @@
 
       .page-1 .sheet {
         justify-content: space-between;
-        min-height: min(70vh, 710px);
         background:
           linear-gradient(155deg, rgba(252, 255, 241, 0.93), rgba(235, 247, 216, 0.77)),
           var(--paper);
       }
 
       .page-2 .sheet {
-        min-height: min(72vh, 730px);
         padding-top: clamp(28px, 5.6vh, 52px);
         padding-bottom: clamp(28px, 5.6vh, 52px);
       }
 
       .page-3 .sheet {
-        min-height: min(62vh, 630px);
         justify-content: center;
         background:
           linear-gradient(150deg, rgba(249, 253, 235, 0.89), rgba(224, 241, 204, 0.77)),
@@ -376,7 +583,7 @@
 
       .poem span {
         display: block;
-        white-space: nowrap;
+        white-space: normal;
       }
 
       .poem span:nth-child(4) {
@@ -420,13 +627,13 @@
       }
 
       .page-3.is-current .to-be-continued,
-      .page-3.is-entering .to-be-continued {
+      .page-3.is-revealing .to-be-continued {
         animation: quiet-arrival 1.2s 900ms ease both;
       }
 
       .navigation {
         position: absolute;
-        z-index: 10;
+        z-index: 100;
         right: max(18px, calc(env(safe-area-inset-right) + 12px));
         bottom: max(18px, calc(env(safe-area-inset-bottom) + 14px));
         left: max(18px, calc(env(safe-area-inset-left) + 12px));
@@ -436,6 +643,11 @@
         gap: 14px;
         max-width: 540px;
         margin: 0 auto;
+      }
+
+      .navigation[aria-busy="true"] .nav-button {
+        opacity: 0.56;
+        pointer-events: none;
       }
 
       .nav-button {
@@ -542,33 +754,105 @@
         to { transform: scale(1.07) translate3d(0.6%, -0.5%, 0); }
       }
 
-      @keyframes turn-in-next {
-        0% { clip-path: inset(0 0 0 100%); transform: rotateY(12deg) translateX(5%); filter: brightness(0.84); }
-        62% { filter: brightness(0.95); }
-        100% { clip-path: inset(0); transform: rotateY(0) translateX(0); filter: brightness(1); }
+      @keyframes leaf-turn {
+        0% {
+          transform: translate3d(0, 0, 0) rotateY(0deg) rotateZ(0deg);
+        }
+        8% {
+          transform: translate3d(-0.5px, -0.5px, 4px) rotateY(-3deg) rotateZ(-0.02deg);
+        }
+        20% {
+          transform: translate3d(-1px, -1px, 12px) rotateY(-15deg) rotateZ(-0.08deg);
+        }
+        36% {
+          transform: translate3d(-2px, -2px, 25px) rotateY(-53deg) rotateZ(-0.23deg);
+        }
+        50% {
+          transform: translate3d(-2px, -2px, 30px) rotateY(-90deg) rotateZ(-0.34deg);
+        }
+        64% {
+          transform: translate3d(-2px, -2px, 24px) rotateY(-128deg) rotateZ(-0.24deg);
+        }
+        80% {
+          transform: translate3d(-1px, -1px, 11px) rotateY(-165deg) rotateZ(-0.08deg);
+        }
+        92% {
+          transform: translate3d(-0.5px, -0.5px, 3px) rotateY(-177deg) rotateZ(-0.02deg);
+        }
+        100% {
+          transform: translate3d(0, 0, 0) rotateY(-179.6deg) rotateZ(0deg);
+        }
       }
 
-      @keyframes turn-in-previous {
-        0% { clip-path: inset(0 100% 0 0); transform: rotateY(-12deg) translateX(-5%); filter: brightness(0.84); }
-        62% { filter: brightness(0.95); }
-        100% { clip-path: inset(0); transform: rotateY(0) translateX(0); filter: brightness(1); }
+      @keyframes under-page-rise {
+        from {
+          transform: translate3d(3px, 2px, -8px) scale(0.994);
+        }
+        48% {
+          transform: translate3d(1px, 1px, -3px) scale(0.997);
+        }
+        to {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
       }
 
-      @keyframes recede {
-        0% { transform: scale(1); filter: brightness(1); }
-        100% { transform: scale(0.975); filter: brightness(0.78); }
+      @keyframes fold-sheen {
+        0%,
+        100% {
+          opacity: 0;
+          transform: translateX(22%) scaleX(0.72);
+        }
+        20% {
+          opacity: 0.34;
+        }
+        50% {
+          opacity: 0.92;
+          transform: translateX(-16%) scaleX(1.08);
+        }
+        80% {
+          opacity: 0.28;
+          transform: translateX(-48%) scaleX(0.84);
+        }
       }
 
-      @keyframes fold-light-next {
-        0% { transform: translateX(6%); opacity: 0; }
-        32% { opacity: 1; }
-        100% { transform: translateX(-110%); opacity: 0; }
+      @keyframes edge-curl {
+        0%,
+        100% {
+          opacity: 0;
+          transform: rotateY(0deg) scaleX(0.78);
+        }
+        20% {
+          opacity: 0.48;
+          transform: rotateY(-13deg) scaleX(0.9);
+        }
+        50% {
+          opacity: 0.88;
+          transform: rotateY(18deg) scaleX(1.15);
+        }
+        80% {
+          opacity: 0.38;
+          transform: rotateY(7deg) scaleX(0.92);
+        }
       }
 
-      @keyframes fold-light-previous {
-        0% { transform: translateX(-6%); opacity: 0; }
-        32% { opacity: 1; }
-        100% { transform: translateX(110%); opacity: 0; }
+      @keyframes contact-shadow-turn {
+        0%,
+        100% {
+          opacity: 0;
+          transform: translate3d(0, 0, 0) scaleX(0.98);
+        }
+        28% {
+          opacity: 0.34;
+          transform: translate3d(-2px, 2px, 0) scaleX(0.82);
+        }
+        50% {
+          opacity: 0.58;
+          transform: translate3d(-5px, 3px, 0) scaleX(0.56);
+        }
+        78% {
+          opacity: 0.2;
+          transform: translate3d(-2px, 2px, 0) scaleX(0.84);
+        }
       }
 
       @keyframes write-line {
@@ -581,7 +865,7 @@
         to { opacity: 1; transform: translateY(0); }
       }
 
-      @media (max-width: 390px) {
+      @media (max-width: 420px) {
         .page {
           padding-right: 20px;
           padding-left: 20px;
@@ -612,16 +896,16 @@
       }
 
       @media (max-height: 740px) {
+        :root {
+          --leaf-height: 540px;
+        }
+
         .page {
           padding-top: max(48px, calc(env(safe-area-inset-top) + 34px));
           padding-bottom: max(88px, calc(env(safe-area-inset-bottom) + 78px));
         }
 
-        .sheet,
-        .page-1 .sheet,
-        .page-2 .sheet,
-        .page-3 .sheet {
-          min-height: 540px;
+        .sheet {
           padding-top: 24px;
           padding-bottom: 24px;
         }
@@ -650,11 +934,19 @@
       }
 
       @media (orientation: landscape) and (max-height: 560px) {
+        :root {
+          --leaf-height: calc(100vh - 92px);
+        }
+
         .experience {
           min-height: 100vh;
         }
 
         @supports (height: 100dvh) {
+          :root {
+            --leaf-height: calc(100dvh - 92px);
+          }
+
           .experience {
             min-height: 100dvh;
           }
@@ -668,12 +960,12 @@
             max(76px, calc(env(safe-area-inset-left) + 64px));
         }
 
-        .sheet,
-        .page-1 .sheet,
-        .page-2 .sheet,
-        .page-3 .sheet {
-          width: min(100%, 680px);
-          min-height: calc(100dvh - 92px);
+        .leaf,
+        .contact-shadow {
+          max-width: 680px;
+        }
+
+        .sheet {
           padding: 20px 40px;
         }
 
@@ -729,14 +1021,130 @@
         .experience::after { right: 0; transform: scaleX(-1); }
       }
 
+      @keyframes motion-lite-out {
+        from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+        to { opacity: 0; transform: translate3d(-6%, 0, 0) scale(0.985); }
+      }
+
+      @keyframes motion-lite-in {
+        from { opacity: 0; transform: translate3d(5%, 0, 0) scale(0.985); }
+        to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+      }
+
+      @keyframes motion-lite-out-back {
+        from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+        to { opacity: 0; transform: translate3d(6%, 0, 0) scale(0.985); }
+      }
+
+      @keyframes motion-lite-in-back {
+        from { opacity: 0; transform: translate3d(-5%, 0, 0) scale(0.985); }
+        to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+      }
+
+      @keyframes motion-quiet-out {
+        from { opacity: 1; }
+        to { opacity: 0; }
+      }
+
+      @keyframes motion-quiet-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      .motion-lite .book {
+        perspective: none;
+        -webkit-perspective: none;
+      }
+
+      .motion-lite .page {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .motion-lite .page.is-current,
+      .motion-lite .page.is-preparing-reveal,
+      .motion-lite .page.is-preparing-back,
+      .motion-lite .page.is-revealing,
+      .motion-lite .page.is-receding,
+      .motion-lite .page.is-turning-forward,
+      .motion-lite .page.is-turning-back {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .motion-lite .page .leaf,
+      .motion-lite .page.is-current .leaf,
+      .motion-lite .page.is-turned .leaf {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      .motion-lite .page.is-preparing-back .leaf {
+        opacity: 0;
+      }
+
+      .motion-lite .page.is-turning-forward .leaf {
+        animation: motion-lite-out 420ms ease-in both;
+      }
+
+      .motion-lite .page.is-revealing .leaf {
+        animation: motion-lite-in 420ms ease-out both;
+      }
+
+      .motion-lite .page.is-receding .leaf {
+        animation: motion-lite-out-back 420ms ease-in both;
+      }
+
+      .motion-lite .page.is-turning-back .leaf {
+        animation: motion-lite-in-back 420ms ease-out both;
+      }
+
+      .motion-lite .fold-sheen,
+      .motion-lite .paper-edge,
+      .motion-lite .contact-shadow {
+        display: none;
+      }
+
+      .motion-none .scene,
+      .motion-none .kicker::after,
+      .motion-none .to-be-continued {
+        animation: none !important;
+      }
+
+      .motion-none .page .leaf,
+      .motion-none .page.is-current .leaf,
+      .motion-none .page.is-turned .leaf {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      .motion-none .page.is-preparing-back .leaf {
+        opacity: 0;
+      }
+
+      .motion-none .page.is-turning-forward .leaf,
+      .motion-none .page.is-receding .leaf {
+        animation: motion-quiet-out 160ms ease-out both;
+      }
+
+      .motion-none .page.is-turning-back .leaf,
+      .motion-none .page.is-revealing .leaf {
+        animation: motion-quiet-in 160ms ease-out both;
+      }
+
+      .motion-none .fold-sheen,
+      .motion-none .paper-edge,
+      .motion-none .contact-shadow {
+        display: none;
+      }
+
       @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-          scroll-behavior: auto !important;
-          animation-duration: 1ms !important;
-          animation-delay: 0ms !important;
-          transition-duration: 1ms !important;
+        html {
+          scroll-behavior: auto;
+        }
+
+        .scene,
+        .kicker::after,
+        .to-be-continued {
+          animation: none !important;
         }
       }
     </style>
@@ -756,49 +1164,85 @@
       <div class="wash" aria-hidden="true"></div>
       <div class="grain" aria-hidden="true"></div>
 
-      <main class="book" id="book" aria-label="写给妈妈的教师节三页信笺">
-        <section class="page page-1 is-current" data-page="0" aria-hidden="false" aria-label="第一页，春风有信">
-          <article class="sheet">
-            <p class="kicker">二〇二六 · 九月十日</p>
+      <main class="book" id="book" aria-label="写给妈妈的教师节三页信笺" aria-busy="false">
+        <section class="page page-1 is-current" data-page="0" style="--page-order: 0" aria-hidden="false" aria-label="第一页，春风有信">
+          <span class="contact-shadow" aria-hidden="true"></span>
+          <div class="leaf">
+            <div class="leaf-face leaf-front">
+              <article class="sheet">
+                <p class="kicker">二〇二六 · 九月十日</p>
 
-            <div class="opening">
-              <div class="opening-copy">
-                <p>您教孩子们<br />读懂一篇文章。</p>
-                <p>我用了许多年，<br />才慢慢读懂您。</p>
-                <p class="wish">妈妈，教师节快乐。</p>
-              </div>
-              <h1 class="vertical-title">春风有信</h1>
+                <div class="opening">
+                  <div class="opening-copy">
+                    <p>您教孩子们<br />读懂一篇文章。</p>
+                    <p>我用了许多年，<br />才慢慢读懂您。</p>
+                    <p class="wish">妈妈，教师节快乐。</p>
+                  </div>
+                  <h1 class="vertical-title">春风有信</h1>
+                </div>
+
+                <p class="signature">爱您的，<span>晨儿</span></p>
+              </article>
+              <span class="fold-sheen" aria-hidden="true"></span>
+              <span class="paper-edge" aria-hidden="true"></span>
             </div>
-
-            <p class="signature">爱您的，<span>晨儿</span></p>
-          </article>
+            <div class="leaf-face leaf-back" aria-hidden="true">
+              <div class="sheet-back"></div>
+              <span class="fold-sheen" aria-hidden="true"></span>
+              <span class="paper-edge" aria-hidden="true"></span>
+            </div>
+          </div>
         </section>
 
-        <section class="page page-2" data-page="1" aria-hidden="true" aria-label="第二页，写给妈妈的诗">
-          <article class="sheet">
-            <div class="poem-wrap">
-              <p class="poem-date">写于二〇二六年教师节</p>
-              <blockquote class="poem">
-                <span>荣光灵蛇耀华庭，顺意绛帐振玉声。</span>
-                <span>升迁墨海传薪盛，利泽文峰揽月荣。</span>
-                <span>副高四九织锦路，转任一园稚子风。</span>
-                <span>高堂岁岁身康健，校苑金秋福寿通。</span>
-              </blockquote>
+        <section class="page page-2" data-page="1" style="--page-order: 1" aria-hidden="true" aria-label="第二页，写给妈妈的诗" inert>
+          <span class="contact-shadow" aria-hidden="true"></span>
+          <div class="leaf">
+            <div class="leaf-face leaf-front">
+              <article class="sheet">
+                <div class="poem-wrap">
+                  <p class="poem-date">写于二〇二六年教师节</p>
+                  <blockquote class="poem">
+                    <span>荣光灵蛇耀华庭，顺意绛帐振玉声。</span>
+                    <span>升迁墨海传薪盛，利泽文峰揽月荣。</span>
+                    <span>副高四九织锦路，转任一园稚子风。</span>
+                    <span>高堂岁岁身康健，校苑金秋福寿通。</span>
+                  </blockquote>
+                </div>
+              </article>
+              <span class="fold-sheen" aria-hidden="true"></span>
+              <span class="paper-edge" aria-hidden="true"></span>
             </div>
-          </article>
+            <div class="leaf-face leaf-back" aria-hidden="true">
+              <div class="sheet-back"></div>
+              <span class="fold-sheen" aria-hidden="true"></span>
+              <span class="paper-edge" aria-hidden="true"></span>
+            </div>
+          </div>
         </section>
 
-        <section class="page page-3" data-page="2" aria-hidden="true" aria-label="第三页，未完待续">
-          <article class="sheet">
-            <div class="closing">
-              <h2>妈，</h2>
-              <p class="closing-copy">往后的日子，<br />我们慢慢写。</p>
+        <section class="page page-3" data-page="2" style="--page-order: 2" aria-hidden="true" aria-label="第三页，未完待续" inert>
+          <span class="contact-shadow" aria-hidden="true"></span>
+          <div class="leaf">
+            <div class="leaf-face leaf-front">
+              <article class="sheet">
+                <div class="closing">
+                  <h2>妈，</h2>
+                  <p class="closing-copy">往后的日子，<br />我们慢慢写。</p>
+                </div>
+                <p class="to-be-continued">未完待续</p>
+              </article>
+              <span class="fold-sheen" aria-hidden="true"></span>
+              <span class="paper-edge" aria-hidden="true"></span>
             </div>
-            <p class="to-be-continued">未完待续</p>
-          </article>
+            <div class="leaf-face leaf-back" aria-hidden="true">
+              <div class="sheet-back"></div>
+              <span class="fold-sheen" aria-hidden="true"></span>
+              <span class="paper-edge" aria-hidden="true"></span>
+            </div>
+          </div>
         </section>
 
-        <nav class="navigation" aria-label="信笺翻页">
+        <nav class="navigation" aria-label="信笺翻页" aria-busy="false">
           <button class="nav-button" id="previousPage" type="button" aria-label="翻到上一页" disabled>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
             <span class="nav-label">上一页</span>
@@ -825,91 +1269,313 @@
         const pages = Array.from(document.querySelectorAll(".page"));
         const experience = document.getElementById("experience");
         const book = document.getElementById("book");
+        const navigation = document.querySelector(".navigation");
         const previousButton = document.getElementById("previousPage");
         const nextButton = document.getElementById("nextPage");
         const nextLabel = document.getElementById("nextLabel");
         const currentPage = document.getElementById("currentPage");
         const announcement = document.getElementById("pageAnnouncement");
-        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const temporaryClasses = [
+          "is-preparing-reveal",
+          "is-preparing-back",
+          "is-revealing",
+          "is-receding",
+          "is-turning-forward",
+          "is-turning-back"
+        ];
+        const mainAnimationNames = new Set([
+          "leaf-turn",
+          "motion-lite-out",
+          "motion-lite-in",
+          "motion-lite-out-back",
+          "motion-lite-in-back",
+          "motion-quiet-out",
+          "motion-quiet-in"
+        ]);
+        const supports = (property, value) => Boolean(window.CSS && CSS.supports && CSS.supports(property, value));
+        const supportsRichTurn =
+          supports("perspective", "1px") &&
+          supports("transform-style", "preserve-3d") &&
+          supports("transform", "rotateY(1deg)") &&
+          (supports("backface-visibility", "hidden") || supports("-webkit-backface-visibility", "hidden"));
 
-        let index = 0;
-        let animating = false;
-        let pointerStart = null;
-
-        const updateControls = () => {
-          previousButton.disabled = index === 0;
-          nextButton.disabled = index === pages.length - 1;
-          nextLabel.textContent = index === pages.length - 2 ? "写到后来" : "翻页";
-          currentPage.textContent = String(index + 1).padStart(2, "0");
-          experience.style.setProperty("--page-index", String(index));
-          announcement.textContent = `当前为第 ${index + 1} 页，共 ${pages.length} 页`;
+        const state = {
+          index: 0,
+          phase: "idle",
+          direction: null,
+          token: 0
         };
 
-        const finishTurn = (current, incoming) => {
-          current.classList.remove("is-current", "is-exiting");
-          current.setAttribute("aria-hidden", "true");
-          current.inert = true;
+        let pointerGesture = null;
+        let touchFallbackStart = null;
+        let pendingTarget = null;
+        let activeFinish = null;
+        let safetyTimer = 0;
 
-          incoming.classList.remove("is-entering", "is-reverse");
-          incoming.classList.add("is-current");
-          incoming.setAttribute("aria-hidden", "false");
-          incoming.inert = false;
-          incoming.scrollTop = 0;
+        document.documentElement.classList.toggle("motion-lite", !supportsRichTurn);
+        document.documentElement.classList.toggle("motion-none", motionQuery.matches);
 
-          animating = false;
+        const updateControls = () => {
+          previousButton.disabled = state.index === 0;
+          nextButton.disabled = state.index === pages.length - 1;
+          nextLabel.textContent = state.index === pages.length - 2 ? "写到后来" : "翻页";
+          currentPage.textContent = String(state.index + 1).padStart(2, "0");
+          experience.style.setProperty("--page-index", String(state.index));
+          announcement.textContent = `当前为第 ${state.index + 1} 页，共 ${pages.length} 页`;
+        };
+
+        const setBusy = (busy) => {
+          experience.classList.toggle("is-turning", busy);
+          book.classList.toggle("is-turning", busy);
+          book.setAttribute("aria-busy", String(busy));
+          navigation.setAttribute("aria-busy", String(busy));
+          [previousButton, nextButton].forEach((button) => {
+            if (busy) {
+              button.setAttribute("aria-disabled", "true");
+            } else {
+              button.removeAttribute("aria-disabled");
+            }
+          });
+        };
+
+        const settlePageStates = () => {
+          window.clearTimeout(safetyTimer);
+          safetyTimer = 0;
+          activeFinish = null;
+          pendingTarget = null;
+          state.direction = null;
+
+          pages.forEach((page, pageIndex) => {
+            page.classList.remove(...temporaryClasses);
+            page.classList.toggle("is-current", pageIndex === state.index);
+            page.classList.toggle("is-turned", pageIndex < state.index);
+            page.setAttribute("aria-hidden", pageIndex === state.index ? "false" : "true");
+            if (pageIndex === state.index) {
+              page.removeAttribute("inert");
+            } else {
+              page.setAttribute("inert", "");
+            }
+          });
+
+          setBusy(false);
           updateControls();
         };
 
-        const turnTo = (nextIndex) => {
-          if (animating || nextIndex < 0 || nextIndex >= pages.length || nextIndex === index) return;
+        const forceFinish = () => {
+          if (typeof activeFinish === "function") {
+            activeFinish();
+            return;
+          }
 
-          animating = true;
-          const direction = nextIndex > index ? "next" : "previous";
-          const current = pages[index];
-          const incoming = pages[nextIndex];
-
-          current.classList.add("is-exiting");
-          incoming.classList.add("is-entering");
-          if (direction === "previous") incoming.classList.add("is-reverse");
-          incoming.setAttribute("aria-hidden", "false");
-          incoming.inert = false;
-
-          index = nextIndex;
-          if (reducedMotion) {
-            finishTurn(current, incoming);
-          } else {
-            window.setTimeout(() => finishTurn(current, incoming), 800);
+          if (state.phase !== "idle" && Number.isInteger(pendingTarget)) {
+            state.token += 1;
+            state.index = pendingTarget;
+            state.phase = "idle";
+            settlePageStates();
           }
         };
 
-        previousButton.addEventListener("click", () => turnTo(index - 1));
-        nextButton.addEventListener("click", () => turnTo(index + 1));
+        const safetyDelay = () => {
+          if (document.documentElement.classList.contains("motion-none")) return 420;
+          if (document.documentElement.classList.contains("motion-lite")) return 900;
+          return 1650;
+        };
+
+        const turnTo = (nextIndex) => {
+          if (
+            state.phase !== "idle" ||
+            nextIndex < 0 ||
+            nextIndex >= pages.length ||
+            nextIndex === state.index ||
+            Math.abs(nextIndex - state.index) !== 1
+          ) return false;
+
+          const originalIndex = state.index;
+          const token = ++state.token;
+          const direction = nextIndex > originalIndex ? "forward" : "back";
+          const current = pages[originalIndex];
+          const incoming = pages[nextIndex];
+          const turningLeaf = (direction === "forward" ? current : incoming).querySelector(".leaf");
+          const incomingSheet = incoming.querySelector(".sheet");
+
+          state.phase = "preparing";
+          state.direction = direction;
+          pendingTarget = nextIndex;
+          pointerGesture = null;
+          setBusy(true);
+
+          if (incomingSheet) incomingSheet.scrollTop = 0;
+          incoming.classList.add(direction === "forward" ? "is-preparing-reveal" : "is-preparing-back");
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              if (token !== state.token || state.phase !== "preparing") return;
+
+              state.phase = "turning";
+              let finished = false;
+
+              const completeTurn = (commit) => {
+                if (finished || token !== state.token) return;
+                finished = true;
+                turningLeaf.removeEventListener("animationend", onAnimationEnd);
+                turningLeaf.removeEventListener("animationcancel", onAnimationCancel);
+                window.clearTimeout(safetyTimer);
+                safetyTimer = 0;
+                activeFinish = null;
+                state.phase = "settling";
+                state.index = commit ? nextIndex : originalIndex;
+                state.phase = "idle";
+                settlePageStates();
+              };
+
+              const isMainAnimation = (event) =>
+                event.target === turningLeaf && mainAnimationNames.has(event.animationName);
+
+              const onAnimationEnd = (event) => {
+                if (isMainAnimation(event)) completeTurn(true);
+              };
+
+              const onAnimationCancel = (event) => {
+                if (isMainAnimation(event)) completeTurn(false);
+              };
+
+              activeFinish = () => completeTurn(true);
+              turningLeaf.addEventListener("animationend", onAnimationEnd);
+              turningLeaf.addEventListener("animationcancel", onAnimationCancel);
+
+              if (direction === "forward") {
+                incoming.classList.remove("is-preparing-reveal");
+                incoming.classList.add("is-revealing");
+                current.classList.add("is-turning-forward");
+              } else {
+                incoming.classList.remove("is-preparing-back");
+                incoming.classList.add("is-turning-back");
+                current.classList.add("is-receding");
+              }
+
+              safetyTimer = window.setTimeout(() => completeTurn(true), safetyDelay());
+            });
+          });
+
+          return true;
+        };
+
+        const resetPointerGesture = (event) => {
+          if (!pointerGesture || !event || pointerGesture.id === event.pointerId) {
+            pointerGesture = null;
+          }
+        };
+
+        previousButton.addEventListener("click", () => turnTo(state.index - 1));
+        nextButton.addEventListener("click", () => turnTo(state.index + 1));
 
         document.addEventListener("keydown", (event) => {
-          if (event.key === "ArrowRight" || event.key === "PageDown") turnTo(index + 1);
-          if (event.key === "ArrowLeft" || event.key === "PageUp") turnTo(index - 1);
+          if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable='true']")) return;
+
+          let accepted = false;
+          if (event.key === "ArrowRight" || event.key === "PageDown") accepted = turnTo(state.index + 1);
+          if (event.key === "ArrowLeft" || event.key === "PageUp") accepted = turnTo(state.index - 1);
+          if (accepted) event.preventDefault();
         });
 
-        book.addEventListener("pointerdown", (event) => {
-          if (event.pointerType === "mouse") return;
-          pointerStart = { x: event.clientX, y: event.clientY };
+        if ("PointerEvent" in window) {
+          book.addEventListener("pointerdown", (event) => {
+            if (
+              state.phase !== "idle" ||
+              event.pointerType === "mouse" ||
+              event.isPrimary === false ||
+              event.target.closest(".navigation")
+            ) return;
+
+            pointerGesture = {
+              id: event.pointerId,
+              x: event.clientX,
+              y: event.clientY,
+              time: event.timeStamp
+            };
+
+            try {
+              book.setPointerCapture(event.pointerId);
+            } catch (_) {
+              /* Pointer capture is an enhancement; XWeb may decline it. */
+            }
+          });
+
+          book.addEventListener("pointerup", (event) => {
+            if (!pointerGesture || pointerGesture.id !== event.pointerId) return;
+            const start = pointerGesture;
+            pointerGesture = null;
+
+            try {
+              if (book.hasPointerCapture(event.pointerId)) book.releasePointerCapture(event.pointerId);
+            } catch (_) {
+              /* The pointer may already have been released by the browser. */
+            }
+
+            const deltaX = event.clientX - start.x;
+            const deltaY = event.clientY - start.y;
+            const elapsed = Math.max(16, event.timeStamp - start.time);
+            const horizontal = Math.abs(deltaX) > Math.abs(deltaY) * 1.3;
+            const deliberate = Math.abs(deltaX) > 54 || (Math.abs(deltaX / elapsed) > 0.45 && Math.abs(deltaX) > 28);
+
+            if (horizontal && deliberate) turnTo(deltaX < 0 ? state.index + 1 : state.index - 1);
+          });
+
+          book.addEventListener("pointercancel", resetPointerGesture);
+          book.addEventListener("lostpointercapture", resetPointerGesture);
+        } else {
+          book.addEventListener("touchstart", (event) => {
+            if (state.phase !== "idle" || event.touches.length !== 1 || event.target.closest(".navigation")) {
+              touchFallbackStart = null;
+              return;
+            }
+            const touch = event.touches[0];
+            touchFallbackStart = { x: touch.clientX, y: touch.clientY, time: event.timeStamp };
+          }, { passive: true });
+
+          book.addEventListener("touchend", (event) => {
+            if (!touchFallbackStart || event.changedTouches.length !== 1) {
+              touchFallbackStart = null;
+              return;
+            }
+
+            const start = touchFallbackStart;
+            const touch = event.changedTouches[0];
+            touchFallbackStart = null;
+            const deltaX = touch.clientX - start.x;
+            const deltaY = touch.clientY - start.y;
+            const elapsed = Math.max(16, event.timeStamp - start.time);
+            const horizontal = Math.abs(deltaX) > Math.abs(deltaY) * 1.3;
+            const deliberate = Math.abs(deltaX) > 54 || (Math.abs(deltaX / elapsed) > 0.45 && Math.abs(deltaX) > 28);
+
+            if (horizontal && deliberate) turnTo(deltaX < 0 ? state.index + 1 : state.index - 1);
+          }, { passive: true });
+
+          book.addEventListener("touchcancel", () => { touchFallbackStart = null; }, { passive: true });
+        }
+
+        const syncMotionPreference = () => {
+          document.documentElement.classList.toggle("motion-none", motionQuery.matches);
+          if (state.phase !== "idle") forceFinish();
+        };
+
+        if (motionQuery.addEventListener) {
+          motionQuery.addEventListener("change", syncMotionPreference);
+        } else if (motionQuery.addListener) {
+          motionQuery.addListener(syncMotionPreference);
+        }
+
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden && state.phase !== "idle") forceFinish();
+        });
+        window.addEventListener("pagehide", forceFinish);
+        window.addEventListener("blur", () => {
+          pointerGesture = null;
+          touchFallbackStart = null;
         });
 
-        book.addEventListener("pointerup", (event) => {
-          if (!pointerStart) return;
-          const deltaX = event.clientX - pointerStart.x;
-          const deltaY = event.clientY - pointerStart.y;
-          pointerStart = null;
-
-          if (Math.abs(deltaX) < 46 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
-          turnTo(deltaX < 0 ? index + 1 : index - 1);
-        });
-
-        pages.forEach((page, pageIndex) => {
-          page.inert = pageIndex !== 0;
-        });
-
-        updateControls();
+        settlePageStates();
       })();
     </script>
   </body>
