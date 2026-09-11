@@ -218,7 +218,7 @@
       gl.disable(gl.CULL_FACE); gl.depthFunc(gl.LEQUAL);
     }
 
-    begin(sheet, frame, direction, grab) {
+    begin(sheet, frame, direction, grab, opened = false) {
       const gl = this.gl, rect = sheet.getBoundingClientRect();
       this.width = rect.width; this.height = rect.height;
       this.origin = [rect.left - frame.left, rect.top - frame.top];
@@ -238,7 +238,8 @@
       this.grab = { x: direction > 0 ? grab.x : rect.width - grab.x, y: grab.y };
       this.direction = direction;
       this.end = (2 * this.grab.x + rect.width * 0.22) / (rect.width * 0.92);
-      this.draw(0, 0, 0);
+      // A returning leaf starts already turned to the left, then unrolls to zero.
+      this.draw(opened ? this.end : 0, 0, 0);
     }
 
     draw(progress, dx, dy) {

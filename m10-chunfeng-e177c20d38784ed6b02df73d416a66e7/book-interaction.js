@@ -76,22 +76,28 @@
       y: clamp(point.y - rect.top, 3, rect.height - 3)
     };
     const turn = { direction, target, page, rect, grab, p: 0, dx: 0, dy: 0, commit: false, rich: Boolean(renderer && !motionQuery.matches) };
-    const grabX = direction > 0 ? grab.x : rect.width - grab.x;
-    turn.end = (2 * grabX + rect.width * 0.22) / (rect.width * 0.92);
+    // Going back brings the PREVIOUS leaf over the stationary current page.
+    // Both directions use the same left-bound paper, never a mirrored right spine.
+    turn.incoming = direction < 0;
+    turn.meshPage = turn.incoming ? pages[target] : page;
+    const paperGrab = { x: turn.incoming ? rect.width - 3 : grab.x, y: grab.y };
+    turn.paperEnd = (2 * paperGrab.x + rect.width * 0.22) / (rect.width * 0.92);
+    turn.end = turn.incoming ? 1 : turn.paperEnd;
+    turn.travel = turn.incoming ? Math.max(rect.width * 0.35, rect.width - grab.x) : rect.width * 0.92;
     pages[target].querySelector('.sheet').scrollTop = 0;
-    // Capture while the source still has its exact flat DOM layout.
+    pages[target].classList.add('is-under');
+    // Snapshot the correct leaf in its flat layout before hiding its DOM surface.
     if (turn.rich) {
-      try { renderer.begin(sheet, book.getBoundingClientRect(), direction, grab); }
+      try { renderer.begin(turn.meshPage.querySelector('.sheet'), book.getBoundingClientRect(), 1, paperGrab, turn.incoming); }
       catch (error) {
         console.warn('Paper texture could not be prepared.', error.message);
         turn.rich = false;
       }
     }
     state.turn = turn; state.phase = phase;
-    pages[target].classList.add('is-under');
     controls(true);
     if (turn.rich) {
-      page.classList.add('is-mesh-source');
+      turn.meshPage.classList.add('is-mesh-source');
       book.classList.add('is-curling');
       canvas.classList.add('is-active');
     }
@@ -103,7 +109,10 @@
     renderQueued = false;
     const turn = state.turn;
     if (!turn) return;
-    if (turn.rich) renderer.draw(turn.p, turn.dx, turn.dy);
+    if (turn.rich) {
+      const curl = turn.incoming ? turn.paperEnd * (1 - turn.p) : turn.p;
+      renderer.draw(curl, turn.dx, turn.dy);
+    }
     book.dataset.progress = turn.p.toFixed(3);
   }
 
@@ -177,7 +186,7 @@
     pointer.lastX = x; pointer.lastTime = time;
     const turn = state.turn;
     turn.dx = dx; turn.dy = dy;
-    turn.p = clamp(-dx * turn.direction / (turn.rect.width * 0.92), 0, turn.end);
+    turn.p = clamp(-dx * turn.direction / turn.travel, 0, turn.end);
     requestDraw();
     return true;
   }
