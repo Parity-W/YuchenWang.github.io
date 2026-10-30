@@ -16,13 +16,23 @@
   var MONO = '"JetBrains Mono","SFMono-Regular",Menlo,Consolas,monospace';
   var SPORT = '"Barlow Condensed","Oswald","Arial Narrow",sans-serif';
 
+  var LS_DATES = "garminRunDatesV1";
+  function loadDates() {
+    try { return JSON.parse(localStorage.getItem(LS_DATES) || "{}") || {}; }
+    catch (e) { return {}; }
+  }
+  function saveDates() {
+    try { localStorage.setItem(LS_DATES, JSON.stringify(state.dates)); } catch (e) {}
+  }
+
   var state = {
     tab: "overview",
     acts: new Set(),
     mets: new Set(["pace", "stride", "cad"]),
     lapX: "km",
     smooth: 0,
-    dataAct: ACTS[0] ? ACTS[0].id : null
+    dataAct: ACTS[0] ? ACTS[0].id : null,
+    dates: loadDates()
   };
 
   var charts = {}; // id -> Chart instance
@@ -142,9 +152,13 @@
       wrap.appendChild(el("div", "gl", g + " 距离组"));
       groups[g].forEach(function (a) {
         var row = el("div", "act" + (state.acts.has(a.id) ? " on" : ""));
+        var dt = state.dates[a.id];
         row.innerHTML =
           '<i class="sw" style="background:' + actColor(a) + ';color:' + actColor(a) + '"></i>' +
+          '<div style="flex:1;min-width:0">' +
           '<span class="nm">' + a.label + (a.recent ? ' <span class="tagnew">NEW</span>' : '') + '</span>' +
+          (dt ? '<div style="font-family:' + MONO + ';font-size:9px;color:#4d5b6c;letter-spacing:.06em;margin-top:1px">' + dt + '</div>' : '') +
+          '</div>' +
           '<span class="mt">' + a.summary.paceFmt + '</span>';
         row.title = a.source + " · " + num(a.summary.dist, 2) + " km · " + a.summary.timeFmt;
         row.onclick = function () {
@@ -155,6 +169,7 @@
       });
       box.appendChild(wrap);
     });
+    renderDates();
     // data-tab selector
     var sel = $("dataAct");
     if (sel.options.length === 0) {
@@ -166,6 +181,99 @@
       sel.value = state.dataAct;
       sel.onchange = function () { state.dataAct = sel.value; renderDataTable(); };
     }
+  }
+
+  /* ======================================================= DATES */
+  function renderDates() {
+    var host = $("dateList");
+    if (!host) return;
+    host.innerHTML = "";
+    ACTS.forEach(function (a) {
+      var row = el("div", "drow" + (state.dates[a.id] ? " has" : ""));
+      var input = el("input");
+      input.type = "date";
+      input.value = state.dates[a.id] || "";
+      input.setAttribute("aria-label", a.label + " 日期");
+      input.onchange = function () {
+        if (input.value) state.dates[a.id] = input.value;
+        else delete state.dates[a.id];
+        saveDates();
+        renderSidebar(); refresh();
+      };
+      row.appendChild(el("span", null, a.label));
+      row.appendChild(input);
+      host.appendChild(row);
+    });
+  }
+
+  /* ================================================ FITNESS TIMELINE */
+  function renderTimeline() {
+    var card = $("timelineCard");
+    if (!card) return;
+    var dated = ACTS.filter(function (a) { return state.dates[a.id]; });
+    if (dated.length < 2) { card.style.display = "none"; return; }
+    card.style.display = "";
+    kill("tl");
+    var t0 = Math.min.apply(null, dated.map(function (a) { return Date.parse(state.dates[a.id]); }));
+    function dayOf(a) { return Math.round((Date.parse(state.dates[a.id]) - t0) / 86400000); }
+    function dateAt(d) {
+      var dt = new Date(t0 + d * 86400000);
+      return dt.getFullYear() + "-" + String(dt.getMonth() + 1).padStart(2, "0") + "-" + String(dt.getDate()).padStart(2, "0");
+    }
+    var pts = dated.map(function (a) {
+      return { x: dayOf(a), y: a.summary.pace, r: Math.max(4, a.summary.dist * 0.85), a: a };
+    }).sort(function (p, q) { return p.x - q.x; });
+
+    // linear trend
+    var n = pts.length, sx = 0, sy = 0;
+    pts.forEach(function (p) { sx += p.x; sy += p.y; });
+    var mx = sx / n, my = sy / n, sxy = 0, sxx = 0;
+    pts.forEach(function (p) { sxy += (p.x - mx) * (p.y - my); sxx += (p.x - mx) * (p.x - mx); });
+    var trend = [];
+    if (sxx > 0) {
+      var b = sxy / sxx, c = my - b * mx;
+      var x0 = pts[0].x, x1 = pts[n - 1].x;
+      trend = [{ x: x0, y: c + b * x0 }, { x: x1, y: c + b * x1 }];
+    }
+
+    charts.tl = new Chart($("cTimeline"), {
+      type: "bubble",
+      data: {
+        datasets: [
+          {
+            label: "sessions", data: pts,
+            backgroundColor: pts.map(function (p) { return actColor(p.a) + "88"; }),
+            borderColor: pts.map(function (p) { return actColor(p.a); }),
+            borderWidth: 1.4, pointStyle: "rectRot"
+          },
+          {
+            label: "trend", data: trend, type: "line", borderColor: "#3ae0ff",
+            borderWidth: 1.3, borderDash: [5, 4], pointRadius: 0, fill: false
+          }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          x: Object.assign(gridX(), {
+            title: { display: true, text: "DATE", color: DIM, font: { family: MONO, size: 9 } },
+            ticks: { callback: function (v) { return dateAt(v); }, autoSkip: true, maxTicksLimit: 8 }
+          }),
+          y: Object.assign(gridY({ tick: function (v) { return fmtPace(v); }, title: "AVG PACE (min/km)", reverse: true }), {})
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (c) {
+                var p = c.raw;
+                if (!p.a) return null;
+                return p.a.label + " · " + dateAt(p.x) + " · " + fmtPace(p.y) + "/km · " + num(p.a.summary.dist, 2) + "km";
+              }
+            }
+          }
+        }
+      }
+    });
   }
 
   /* ======================================================= METRIC DOCK */
@@ -614,13 +722,22 @@
     });
 
     // summary table
+    var bestPace = {};
+    ACTS.forEach(function (a) {
+      var g = bucket(a);
+      if (!bestPace[g] || a.summary.pace < bestPace[g]) bestPace[g] = a.summary.pace;
+    });
     var t = $("cmpTable");
-    var h = "<thead><tr><th>场次</th><th>距离</th><th>用时</th>";
+    var h = "<thead><tr><th>场次</th><th>距离</th><th>用时</th><th>ΔvsPB</th>";
     mets.forEach(function (m) { h += "<th>" + m.name + "<div style='font-size:8.5px;color:#3d4756'>" + m.unit + "</div></th>"; });
     h += "</tr></thead><tbody>";
     acts.forEach(function (a) {
+      var d = a.summary.pace - bestPace[bucket(a)];
+      var dcell = d <= 0.5
+        ? "<td class='hi'>PB</td>"
+        : "<td style='color:#ffb020'>+" + fmtPace(d) + "</td>";
       h += "<tr><td><span style='color:" + actColor(a) + "'>■</span> " + a.label + "</td><td>" +
-        num(a.summary.dist, 2) + "</td><td>" + a.summary.timeFmt + "</td>";
+        num(a.summary.dist, 2) + "</td><td>" + a.summary.timeFmt + "</td>" + dcell;
       mets.forEach(function (m) {
         var v = val(a, m.key);
         h += "<td class='" + (score(a, m.key) >= 80 ? "hi" : "") + "'>" +
@@ -976,7 +1093,7 @@
 
   /* ====================================================== REFRESH ===== */
   function refresh() {
-    if (state.tab === "overview") { renderEnvelope(); renderLoad(); renderRadarCore(); }
+    if (state.tab === "overview") { renderEnvelope(); renderLoad(); renderRadarCore(); renderTimeline(); }
     if (state.tab === "laps") { renderLaps(); renderSplitBars(); }
     if (state.tab === "compare") { renderCompare(); }
     if (state.tab === "lab") { renderLab(); }
@@ -1020,6 +1137,24 @@
     $("selRecent").onclick = function () {
       state.acts.clear();
       ACTS.filter(function (a) { return a.recent; }).forEach(function (a) { state.acts.add(a.id); });
+      renderSidebar(); refresh();
+    };
+    $("copyDates").onclick = function () {
+      var payload = {};
+      ACTS.forEach(function (a) { if (state.dates[a.id]) payload[a.id] = state.dates[a.id]; });
+      var txt = JSON.stringify(payload, null, 2);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(function () {
+          $("copyDates").textContent = "已复制 ✓";
+          setTimeout(function () { $("copyDates").textContent = "复制日期 JSON"; }, 1200);
+        });
+      } else {
+        window.prompt("复制以下 JSON 发给我回填 data.js：", txt);
+      }
+    };
+    $("clearDates").onclick = function () {
+      state.dates = {};
+      saveDates();
       renderSidebar(); refresh();
     };
     $("mCore").onclick = function () {

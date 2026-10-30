@@ -179,6 +179,20 @@ table.t td.dim{color:var(--dim)}
   font-family:var(--mono);font-size:10.5px;color:var(--mut);line-height:1.7;
   border-left:2px solid var(--line2);padding:6px 10px;background:rgba(255,255,255,.02);margin-top:10px
 }
+.datebox{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
+.datebox .gl{
+  font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;
+  margin:2px 0 7px;display:flex;align-items:center;gap:6px
+}
+.datebox .gl::after{content:"";height:1px;flex:1;background:var(--line)}
+.drow{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.drow span{flex:1;font-family:var(--mono);font-size:10px;color:var(--mut);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drow input{
+  width:126px;flex:0 0 126px;background:#0d131b;border:1px solid var(--line2);color:var(--txt);
+  font-family:var(--mono);font-size:10px;padding:3px 6px;color-scheme:dark;
+}
+.drow input:focus{outline:none;border-color:var(--cyan)}
+.drow.has input{border-color:rgba(201,255,61,.45)}
 .note b{color:var(--cyan);font-weight:600}
 .eqbox{
   font-family:var(--mono);font-size:11.5px;color:var(--txt);background:rgba(58,224,255,.06);
@@ -302,8 +316,17 @@ footer.foot a:hover{color:var(--lime)}
           <button id="selRecent">近期</button>
         </div>
         <div id="actList"></div>
+        <div class="datebox">
+          <div class="gl">日期 · 可编辑（存本地）</div>
+          <div id="dateList"></div>
+          <div style="display:flex;gap:6px;margin-top:7px">
+            <button class="btn ghost" id="copyDates">复制日期 JSON</button>
+            <button class="btn ghost" id="clearDates">清空</button>
+          </div>
+        </div>
         <div class="note" style="margin-top:10px">
-          点击场次切换选中；面板底部 <b>METRIC DOCK</b> 可增删评估维度。
+          点击场次切换选中；面板底部 <b>METRIC DOCK</b> 可增删评估维度。<br>
+          填了 ≥2 个日期后，总览页会出现 <b>Fitness Timeline</b>。
         </div>
       </div>
     </aside>
@@ -317,7 +340,8 @@ footer.foot a:hover{color:var(--lime)}
           <h3><i class="dot"></i>Personal Best Board<span class="hint">from “Personal Recording”</span></h3>
           <div class="body">
             <div class="pbs" id="pbBoard"></div>
-            <div class="note">源数据中的 Date 列为 Excel 序列号，与真实日期无对应关系，<b>已按你的说明不展示日期</b>；后续你提供日期后可一键填入 <span class="chip">data.js → personalRecords[].date</span>。</div>
+            <div class="note">源数据中的 Date 列为 Excel 序列号，与真实日期无对应关系，<b>已按你的说明不展示日期</b>；日期可在左侧栏直接填写。<br>
+            口径说明：21k_1 场次汇总为 <b>1:40:35 / 4:43/km</b>，而 PB 表半马记录 <b>1:38:31 / 4:40/km</b>——前者是手表全程遥测汇总，后者应是官方芯片成绩，两者差异 ~2 分钟，均保留。</div>
           </div>
         </div>
 
@@ -349,6 +373,14 @@ footer.foot a:hover{color:var(--lime)}
           <div class="card">
             <h3><i class="dot"></i>Fingerprint 指纹雷达<span class="hint">核心三项 · 归一化</span></h3>
             <div class="body"><div class="chartbox"><canvas id="cRadarCore"></canvas></div></div>
+          </div>
+        </div>
+
+        <div class="card" id="timelineCard" style="margin-top:16px;display:none">
+          <h3><i class="dot"></i>Fitness Timeline 表现时间线<span class="hint">按日期 · 平均配速 · 气泡=距离</span></h3>
+          <div class="body">
+            <div class="chartbox"><canvas id="cTimeline"></canvas></div>
+            <div class="note">虚线为线性趋势。配速轴越小越快（已反转），趋势线<b>向下</b>代表越跑越快。</div>
           </div>
         </div>
       </section>
