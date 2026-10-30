@@ -118,6 +118,9 @@
       };
     }, this);
 
+    // ---- 阴影（随重心起伏缩放）
+    this.shadow = mk("ellipse", { rx: 34, ry: 7, fill: "rgba(15,23,42,.07)" }, svg);
+
     // ---- 躯干 / 头
     var core = mk("g", null, svg);
     this.torso = mk("line", { stroke: INK, "stroke-width": 9, "stroke-linecap": "round" }, core);
@@ -147,16 +150,19 @@
       // 髋：+ 向前（着地）→ − 向后（蹬离）
       var th = A.hip * Math.cos(2 * Math.PI * ph);
       var psi;
-      if (ph < s) psi = A.kneeStance * Math.sin(Math.PI * ph / s);
-      else {
+      if (ph < s) {
+        // 支撑相：负荷期微屈，蹬伸期回伸
+        psi = A.kneeStance * Math.sin(Math.PI * ph / s);
+      } else {
+        // 摆动相：蹬离后膝迅速大幅折叠（前段陡升），前摆时回伸
         var u = (ph - s) / (1 - s);
-        psi = A.kneeSwing * Math.sin(Math.PI * u);
+        psi = A.kneeSwing * Math.sin(Math.PI * Math.pow(u, 0.55));
       }
       var footA;
       if (ph < s) footA = 6 - 9 * Math.sin(Math.PI * ph / s);
       else {
         var u2 = (ph - s) / (1 - s);
-        footA = -20 * Math.sin(Math.PI * u2);
+        footA = -20 * Math.sin(Math.PI * Math.pow(u2, 0.7));
       }
       return { th: th, psi: psi, footA: footA };
     }
@@ -237,6 +243,13 @@
     put(this.head, po.neck);
     put(this.hipJ, po.hip);
     put(this.shoulderJ, po.sh);
+
+    // 阴影随离地高度缩放
+    var lift = clamp((GEO.groundY - (po.hip.y + (GEO.thigh + GEO.shank) * 0.95)) / 18, -0.4, 1);
+    this.shadow.setAttribute("cx", po.hip.x);
+    this.shadow.setAttribute("cy", GEO.groundY + 3);
+    this.shadow.setAttribute("rx", 30 + lift * 6);
+    this.shadow.setAttribute("opacity", (0.9 - lift * 0.45).toFixed(2));
 
     this.comLine.setAttribute("x1", po.hip.x); this.comLine.setAttribute("y1", po.hip.y - 40);
     this.comLine.setAttribute("x2", po.hip.x); this.comLine.setAttribute("y2", g.groundY);

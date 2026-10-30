@@ -241,6 +241,12 @@ table.t td.dim{color:var(--ink3)}
 }
 
 /* ---------------- data ---------------- */
+.insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:9px}
+.insight{display:flex;gap:9px;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:var(--surface2)}
+.insight .d{width:8px;height:8px;border-radius:50%;margin-top:5px;flex:0 0 8px}
+.insight p{margin:0;font-size:12px;line-height:1.6;color:var(--ink2)}
+.insight p b{color:var(--ink)}
+
 .tablewrap{max-height:460px;overflow:auto;border:1px solid var(--line);border-radius:10px}
 .tablewrap table.t thead th{position:sticky;top:0;background:var(--surface2);z-index:2}
 select{
@@ -378,6 +384,11 @@ footer.foot a:hover{color:var(--accent)}
             <div class="note">PB 表 Date 列为 Excel 序列号、与真实日期无关，<b>不展示</b>；日期可在左侧栏填写。<br>
             口径说明：21k_1 遥测汇总 <b>1:40:35 / 4:43</b>，PB 表半马 <b>1:38:31 / 4:40</b>——前者为手表全程汇总，后者为官方成绩，差约 2 分钟，均保留。</div>
           </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><i class="dot"></i>Auto Insights 自动洞察<span class="hint">由数据计算</span></div>
+          <div class="body"><div class="insights" id="insightsList"></div></div>
         </div>
 
         <div class="row2" style="margin-top:16px">

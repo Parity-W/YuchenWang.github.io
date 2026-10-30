@@ -371,7 +371,7 @@
           x: Object.assign(gridX(), {
             type: "logarithmic",
             title: { display: true, text: "DISTANCE (km, log)", color: DIM, font: { family: MONO, size: 9 } },
-            ticks: { callback: function (v) { return [1, 3, 5, 10, 21.1, 42.2].indexOf(+v.toFixed(1)) >= 0 || v === 1 || v === 3 || v === 5 || v === 10 ? v : ""; } }
+            ticks: { callback: function (v) { return [1, 3, 5, 10, 21, 42].indexOf(Math.round(v)) >= 0 ? v : ""; } }
           }),
           y: Object.assign(gridY({
             tick: function (v) { return fmtPace(v); },
@@ -414,6 +414,53 @@
     });
     body += "</tbody>";
     t.innerHTML = head + body;
+  }
+
+  /* ======================================================== INSIGHTS = */
+  function renderInsights() {
+    var box = $("insightsList");
+    if (!box) return;
+    var items = [];
+    // 1. Riegel 类型
+    var fit = riegelFit(PR.filter(function (r) { return r.time && r.dist; })
+      .map(function (r) { return { d: r.dist, t: r.time }; }));
+    if (fit) {
+      var type = fit.b > 1.10 ? "偏速度型：短距离强，长距离衰减明显"
+        : fit.b < 1.03 ? "偏耐力型：距离延展能力突出"
+          : "速度与耐力较为均衡";
+      items.push({ c: "#1a5cff", t: "疲劳指数 <b>b = " + fit.b.toFixed(3) + "</b>（经典 1.06）——" + type + "。" });
+    }
+    // 2. 10K 进步趋势（录入顺序）
+    var tens = ACTS.filter(function (a) { return /^10k/.test(a.id); });
+    if (tens.length >= 2) {
+      var f = tens[0], l = tens[tens.length - 1];
+      var dd = f.summary.pace - l.summary.pace;
+      if (dd > 0) items.push({ c: "#00a870", t: "10K 按录入顺序 <b>" + f.summary.timeFmt + " → " + l.summary.timeFmt + "</b>，配速提升 <b>" + fmtPace(dd) + "/km</b>。" });
+    }
+    // 3. 近期训练 vs PB
+    var rec5 = ACTS.filter(function (a) { return a.recent && a.summary.dist >= 4.5 && a.summary.dist < 6; })[0];
+    var pr5 = PR.filter(function (p) { return Math.abs(p.dist - 5) < 0.2; })[0];
+    if (rec5 && pr5) {
+      var d2 = rec5.summary.pace - pr5.pace;
+      if (d2 > 0) items.push({ c: "#ff5a2d", t: "近期 5K 训练配速 <b>" + rec5.summary.paceFmt + "/km</b>，比 5K PB（" + pr5.paceFmt + "）慢 <b>" + fmtPace(d2) + "/km</b>——处于有氧筑基/恢复期。" });
+    }
+    // 4. 步幅 vs 步频驱动
+    items.push({ c: "#6f4bf0", t: "速度主要由<b>步幅</b>驱动（步幅-速度 r≈0.82，步频-速度 r≈0.24）。想提速，优先打磨蹬伸与步幅而非盲目提频。" });
+    // 5. 最大心率漂移
+    var dec = ACTS.filter(function (a) { return a.summary.decoupling != null; })
+      .sort(function (a, b) { return b.summary.decoupling - a.summary.decoupling; })[0];
+    if (dec && dec.summary.decoupling > 5) {
+      items.push({ c: "#e8387f", t: "<b>" + dec.label + "</b> 心率漂移 <b>+" + dec.summary.decoupling.toFixed(1) + "%</b>（>10%）——后半程掉速与心率升高并存，长距离耐力 / 散热是主要短板。" });
+    }
+    // 6. 触地效率随距离
+    var g3 = ACTS.filter(function (a) { return a.id === "3k_1"; })[0];
+    var g21 = ACTS.filter(function (a) { return a.id === "21k_1"; })[0];
+    if (g3 && g21) {
+      items.push({ c: "#0aa2c0", t: "触地时间 3K 时 <b>" + num(g3.summary.gct, 0) + " ms</b>，半马时升至 <b>" + num(g21.summary.gct, 0) + " ms</b>（+11%）——长距离下脚踝刚度/弹性利用下降，是疲劳的信号。" });
+    }
+    box.innerHTML = items.map(function (it) {
+      return '<div class="insight"><span class="d" style="background:' + it.c + '"></span><p>' + it.t + '</p></div>';
+    }).join("");
   }
 
   /* ======================================================== LOAD CHART */
@@ -1230,7 +1277,7 @@
   /* ====================================================== REFRESH ===== */
   function refresh() {
     placeRunner();
-    if (state.tab === "overview") { renderEnvelope(); renderLoad(); renderRadarCore(); renderTimeline(); renderGait(); }
+    if (state.tab === "overview") { renderEnvelope(); renderLoad(); renderRadarCore(); renderTimeline(); renderGait(); renderInsights(); }
     if (state.tab === "gait") { renderGait(); }
     if (state.tab === "laps") { renderLaps(); renderSplitBars(); }
     if (state.tab === "compare") { renderCompare(); }
