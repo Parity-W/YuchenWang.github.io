@@ -5,6 +5,7 @@ document.writeln("        		<li><a href=\"talks.html\">Talks</a></li>");
 document.writeln("        		<li><a href=\"teaching.html\">Teaching</a></li>");
 document.writeln("        		<li><a href=\"doc.html\">Documents</a></li>");
 document.writeln("        		<li><a href=\"starcharts.html\">Star Charts</a></li>");
+document.writeln("        		<li><a href=\"../run/index.html\">Running</a></li>");
 document.writeln("        		<li><a href=\"links.html\">Links</a></li>");
 document.writeln("    		</ul>");
 document.writeln("		</nav>");

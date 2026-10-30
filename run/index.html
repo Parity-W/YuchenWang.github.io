@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GARMIN TELEMETRY — Yuchen Wang / 跑步数据实验台</title>
+<link rel="shortcut icon" type="image/x-icon" href="../img/wolf.icon" media="screen">
+<style>
+:root{
+  --bg:#07090d;
+  --bg2:#0b0f15;
+  --panel:#0e141c;
+  --panel2:#121a24;
+  --line:rgba(126,150,175,.14);
+  --line2:rgba(126,150,175,.28);
+  --txt:#e7eef6;
+  --mut:#77879b;
+  --dim:#4d5b6c;
+  --lime:#c9ff3d;
+  --cyan:#3ae0ff;
+  --amber:#ffb020;
+  --pink:#ff4d7d;
+  --green:#37e6a0;
+  --violet:#a97bff;
+  --mono:"JetBrains Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sport:"Barlow Condensed","Oswald","Arial Narrow",Haettenschweiler,"Franklin Gothic Medium",sans-serif;
+  --sans:"Inter","Segoe UI",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1100px 600px at 12% -10%, rgba(58,224,255,.07), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(201,255,61,.06), transparent 55%),
+    var(--bg);
+  color:var(--txt);
+  font-family:var(--sans);
+  font-size:13px;
+  min-height:100vh;
+  padding-bottom:132px;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);
+  mix-blend-mode:overlay;
+}
+.wrap{position:relative;z-index:1;max-width:1560px;margin:0 auto;padding:0 20px}
+
+/* ---------------- header ---------------- */
+header.topbar{
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(14,20,28,.92),rgba(7,9,13,.6));
+  backdrop-filter:blur(6px);
+  position:sticky;top:0;z-index:40;
+}
+.topbar-in{display:flex;align-items:center;gap:22px;padding:14px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand .mark{
+  width:40px;height:40px;flex:0 0 40px;
+  background:conic-gradient(from 210deg,var(--lime),var(--cyan),var(--violet),var(--lime));
+  clip-path:polygon(0 0,100% 0,100% 72%,72% 100%,0 100%);
+  display:grid;place-items:center;
+}
+.brand .mark span{font-family:var(--sport);font-size:26px;font-weight:800;color:#07090d;letter-spacing:-1px}
+.brand h1{
+  font-family:var(--sport);font-size:26px;line-height:.95;margin:0;letter-spacing:.06em;
+  text-transform:uppercase;font-weight:700;
+}
+.brand h1 em{font-style:normal;color:var(--lime)}
+.brand .sub{font-family:var(--mono);font-size:10px;color:var(--mut);letter-spacing:.18em;text-transform:uppercase;margin-top:3px}
+
+.kpis{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+.kpi{
+  border:1px solid var(--line);border-left:2px solid var(--cyan);
+  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);
+  padding:6px 12px;min-width:96px;
+}
+.kpi .k{font-family:var(--mono);font-size:9px;color:var(--mut);letter-spacing:.14em;text-transform:uppercase}
+.kpi .v{font-family:var(--sport);font-size:22px;line-height:1.05;letter-spacing:.02em;font-weight:700}
+.kpi .v small{font-size:11px;color:var(--mut);font-family:var(--mono);font-weight:400}
+.kpi.lime{border-left-color:var(--lime)} .kpi.amber{border-left-color:var(--amber)}
+.kpi.pink{border-left-color:var(--pink)} .kpi.violet{border-left-color:var(--violet)}
+
+/* ---------------- tabs ---------------- */
+nav.tabs{display:flex;gap:2px;padding:0 0 0;margin-top:2px;overflow-x:auto}
+nav.tabs button{
+  appearance:none;background:transparent;border:1px solid transparent;border-bottom:none;
+  color:var(--mut);font-family:var(--sport);font-size:16px;letter-spacing:.1em;text-transform:uppercase;
+  padding:9px 18px 8px;cursor:pointer;white-space:nowrap;transition:.16s;
+}
+nav.tabs button:hover{color:var(--txt);background:rgba(255,255,255,.035)}
+nav.tabs button.on{
+  color:#07090d;background:var(--lime);font-weight:700;
+  clip-path:polygon(0 0,100% 0,100% 78%,94% 100%,0 100%);
+}
+
+/* ---------------- layout ---------------- */
+.grid{display:grid;grid-template-columns:264px 1fr;gap:16px;padding:18px 0 24px;align-items:start}
+@media (max-width:1080px){.grid{grid-template-columns:1fr}}
+.side{
+  border:1px solid var(--line);background:var(--panel);
+  position:sticky;top:132px;max-height:calc(100vh - 170px);overflow:auto;
+}
+.side h3,.card h3{
+  font-family:var(--sport);font-size:14px;letter-spacing:.16em;text-transform:uppercase;
+  margin:0;padding:10px 12px;border-bottom:1px solid var(--line);
+  color:var(--txt);display:flex;align-items:center;gap:8px;
+}
+.side h3 .dot,.card h3 .dot{width:6px;height:6px;background:var(--lime);flex:0 0 6px;transform:rotate(45deg)}
+.side .body{padding:10px}
+.grp{margin-bottom:12px}
+.grp>.gl{
+  font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;
+  margin:6px 0 6px;display:flex;align-items:center;gap:6px
+}
+.grp>.gl::after{content:"";height:1px;flex:1;background:var(--line)}
+.act{
+  display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;
+  border:1px solid transparent;border-left:2px solid var(--line2);margin-bottom:3px;transition:.14s;
+}
+.act:hover{background:rgba(255,255,255,.04)}
+.act.on{background:rgba(201,255,61,.09);border-left-color:var(--lime)}
+.act .sw{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:var(--dim)}
+.act.on .sw{box-shadow:0 0 8px currentColor}
+.act .nm{font-family:var(--sport);font-size:15px;letter-spacing:.06em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act .mt{font-family:var(--mono);font-size:10px;color:var(--mut)}
+.act.on .mt{color:var(--lime)}
+.tagnew{font-family:var(--mono);font-size:8px;background:var(--pink);color:#07090d;padding:1px 4px;letter-spacing:.1em}
+
+.cards{display:grid;gap:16px}
+.card{border:1px solid var(--line);background:var(--panel);min-width:0}
+.card>h3 .hint{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.1em;text-transform:none}
+.card .body{padding:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:900px){.row2,.row3{grid-template-columns:1fr}}
+
+/* ---------------- PB board ---------------- */
+.pbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.pb{
+  position:relative;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.045),transparent 70%);
+  padding:12px 12px 10px;overflow:hidden;
+}
+.pb::after{
+  content:"";position:absolute;right:-24px;top:-24px;width:80px;height:80px;
+  border:1px solid var(--line2);transform:rotate(45deg);
+}
+.pb .d{font-family:var(--sport);font-size:30px;line-height:.9;letter-spacing:.02em;color:var(--lime)}
+.pb .d small{font-size:14px;color:var(--mut)}
+.pb .t{font-family:var(--mono);font-size:19px;margin-top:6px;letter-spacing:.02em}
+.pb .p{font-family:var(--mono);font-size:11px;color:var(--mut);margin-top:2px}
+.pb .bar{height:3px;background:var(--line);margin-top:8px}
+.pb .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--lime))}
+
+table.t{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+table.t th{
+  text-align:right;padding:7px 8px;color:var(--mut);font-weight:500;letter-spacing:.08em;
+  border-bottom:1px solid var(--line2);text-transform:uppercase;font-size:9.5px;white-space:nowrap;
+}
+table.t th:first-child,table.t td:first-child{text-align:left}
+table.t td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+table.t tbody tr:hover{background:rgba(255,255,255,.035)}
+table.t td.hi{color:var(--lime)}
+table.t td.dim{color:var(--dim)}
+.chip{
+  display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  border:1px solid var(--line2);color:var(--mut);padding:1px 5px;margin-left:6px;
+}
+
+/* ---------------- chart blocks ---------------- */
+.chartbox{position:relative;height:300px}
+.chartbox.tall{height:380px}
+.chartbox.sq{height:340px}
+.legend-inline{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--mut);margin-top:8px}
+.legend-inline i{display:inline-block;width:10px;height:3px;margin-right:5px;vertical-align:middle}
+
+.note{
+  font-family:var(--mono);font-size:10.5px;color:var(--mut);line-height:1.7;
+  border-left:2px solid var(--line2);padding:6px 10px;background:rgba(255,255,255,.02);margin-top:10px
+}
+.note b{color:var(--cyan);font-weight:600}
+.eqbox{
+  font-family:var(--mono);font-size:11.5px;color:var(--txt);background:rgba(58,224,255,.06);
+  border:1px dashed rgba(58,224,255,.3);padding:10px 12px;margin-top:10px;line-height:1.85
+}
+.eqbox .v{color:var(--lime);font-weight:700}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:8px}
+.stat{border:1px solid var(--line);padding:8px 10px;background:rgba(255,255,255,.02)}
+.stat .k{font-family:var(--mono);font-size:9px;color:var(--mut);letter-spacing:.12em;text-transform:uppercase}
+.stat .v{font-family:var(--sport);font-size:21px;letter-spacing:.02em}
+.stat .v small{font-family:var(--mono);font-size:10px;color:var(--mut)}
+
+/* ---------------- bottom metric dock ---------------- */
+.dock{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;
+  background:linear-gradient(180deg,rgba(11,15,21,.86),rgba(7,9,13,.98));
+  border-top:1px solid var(--line2);backdrop-filter:blur(10px);
+  box-shadow:0 -18px 40px rgba(0,0,0,.6);
+}
+.dock::before{
+  content:"";position:absolute;left:0;right:0;top:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--lime),var(--cyan),transparent);opacity:.55;
+}
+.dock-in{max-width:1560px;margin:0 auto;padding:9px 20px 11px}
+.dock-top{display:flex;align-items:center;gap:14px;margin-bottom:7px;flex-wrap:wrap}
+.dock-title{
+  font-family:var(--sport);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt);
+  display:flex;align-items:center;gap:9px;
+}
+.dock-title .pulse{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:p 1.6s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.25}}
+.dock-sub{font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.1em}
+.dock-actions{margin-left:auto;display:flex;gap:6px}
+.btn{
+  appearance:none;border:1px solid var(--line2);background:transparent;color:var(--mut);
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 10px;cursor:pointer;transition:.15s;
+}
+.btn:hover{color:#07090d;background:var(--lime);border-color:var(--lime)}
+.btn.ghost:hover{color:var(--txt);background:rgba(255,255,255,.08);border-color:var(--line2)}
+.metricrail{display:flex;gap:6px;overflow-x:auto;padding-bottom:3px}
+.mchip{
+  appearance:none;flex:0 0 auto;cursor:pointer;
+  border:1px solid var(--line2);background:rgba(255,255,255,.02);
+  padding:6px 10px 5px;text-align:left;transition:.15s;position:relative;
+}
+.mchip:hover{background:rgba(255,255,255,.07);border-color:var(--mut)}
+.mchip .n{display:block;font-family:var(--sport);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--txt);line-height:1.15}
+.mchip .u{display:block;font-family:var(--mono);font-size:8.5px;color:var(--dim);letter-spacing:.08em;margin-top:2px}
+.mchip.on{border-color:var(--lime);background:rgba(201,255,61,.13);box-shadow:inset 0 0 0 1px rgba(201,255,61,.2)}
+.mchip.on .u{color:var(--lime)}
+.mchip.core::after{
+  content:"CORE";position:absolute;top:-7px;right:-6px;background:var(--cyan);color:#07090d;
+  font-family:var(--mono);font-size:7px;letter-spacing:.1em;padding:1px 3px;
+}
+.mchip .tick{position:absolute;bottom:3px;right:4px;font-size:9px;color:var(--lime);opacity:0}
+.mchip.on .tick{opacity:1}
+
+/* ---------------- data table ---------------- */
+.tablewrap{max-height:460px;overflow:auto;border:1px solid var(--line)}
+.tablewrap table.t thead th{position:sticky;top:0;background:#10161f;z-index:2}
+.seg{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{
+  appearance:none;border:1px solid var(--line2);background:transparent;color:var(--mut);
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;cursor:pointer
+}
+.seg button.on{background:var(--cyan);color:#07090d;border-color:var(--cyan);font-weight:700}
+select,input[type=text]{
+  background:#0d131b;border:1px solid var(--line2);color:var(--txt);
+  font-family:var(--mono);font-size:11px;padding:5px 8px;
+}
+select:focus,input:focus{outline:none;border-color:var(--cyan)}
+.pill{font-family:var(--mono);font-size:9px;letter-spacing:.08em;border:1px solid var(--line2);color:var(--mut);padding:2px 6px}
+.pill.lime{color:var(--lime);border-color:rgba(201,255,61,.4)}
+.pill.pink{color:var(--pink);border-color:rgba(255,77,125,.4)}
+footer.foot{border-top:1px solid var(--line);margin-top:8px;padding:16px 0 30px;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;display:flex;gap:14px;flex-wrap:wrap}
+footer.foot a{color:var(--mut);text-decoration:none;border-bottom:1px dotted var(--line2)}
+footer.foot a:hover{color:var(--lime)}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:#0a0e14}
+::-webkit-scrollbar-thumb{background:#1d2734;border:2px solid #0a0e14}
+::-webkit-scrollbar-thumb:hover{background:#2c3a4a}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="topbar-in">
+      <div class="brand">
+        <div class="mark"><span>YW</span></div>
+        <div>
+          <h1>Garmin <em>Telemetry</em></h1>
+          <div class="sub">Yuchen Wang &nbsp;//&nbsp; Running Performance Lab</div>
+        </div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button data-tab="overview" class="on">Overview 总览</button>
+      <button data-tab="laps">Lap Telemetry 分段遥测</button>
+      <button data-tab="compare">Cross Compare 横向对比</button>
+      <button data-tab="lab">Biomech Lab 生物力学</button>
+      <button data-tab="model">Model 模型推算</button>
+      <button data-tab="data">Raw Data 原始数据</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <!-- ================= sidebar ================= -->
+    <aside class="side">
+      <h3><i class="dot"></i>Sessions 场次</h3>
+      <div class="body">
+        <div class="seg">
+          <button id="selAll" class="on">全选</button>
+          <button id="selNone">清空</button>
+          <button id="selBest">各距离最佳</button>
+          <button id="selRecent">近期</button>
+        </div>
+        <div id="actList"></div>
+        <div class="note" style="margin-top:10px">
+          点击场次切换选中；面板底部 <b>METRIC DOCK</b> 可增删评估维度。
+        </div>
+      </div>
+    </aside>
+
+    <!-- ================= main ================= -->
+    <main class="cards">
+
+      <!-- ---------- OVERVIEW ---------- -->
+      <section id="tab-overview">
+        <div class="card">
+          <h3><i class="dot"></i>Personal Best Board<span class="hint">from “Personal Recording”</span></h3>
+          <div class="body">
+            <div class="pbs" id="pbBoard"></div>
+            <div class="note">源数据中的 Date 列为 Excel 序列号，与真实日期无对应关系，<b>已按你的说明不展示日期</b>；后续你提供日期后可一键填入 <span class="chip">data.js → personalRecords[].date</span>。</div>
+          </div>
+        </div>
+
+        <div class="row2" style="margin-top:16px">
+          <div class="card">
+            <h3><i class="dot"></i>Pace–Distance Envelope 配速包络<span class="hint">log–log + 幂律拟合</span></h3>
+            <div class="body"><div class="chartbox"><canvas id="cEnv"></canvas></div>
+              <div class="legend-inline">
+                <span><i style="background:#c9ff3d"></i>实测 PB</span>
+                <span><i style="background:#3ae0ff"></i>Riegel 拟合曲线 T = a·D<sup>b</sup></span>
+                <span><i style="background:#ff4d7d"></i>近期训练</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3><i class="dot"></i>Riegel Projection 成绩推算<span class="hint">T₂ = T₁·(D₂/D₁)<sup>1.06</sup></span></h3>
+            <div class="body">
+              <div style="overflow-x:auto"><table class="t" id="projTable"></table></div>
+              <div class="note">每行为「以该 PB 为基准」推算其它距离。<b>对角线</b>（灰底）为实测值。不同距离推算差异本身即是有价值的信号：短距离推算偏乐观说明耐力储备好，反之说明速度储备好。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row2" style="margin-top:16px">
+          <div class="card">
+            <h3><i class="dot"></i>Session Load 场次负荷<span class="hint">距离 · 时长</span></h3>
+            <div class="body"><div class="chartbox"><canvas id="cLoad"></canvas></div></div>
+          </div>
+          <div class="card">
+            <h3><i class="dot"></i>Fingerprint 指纹雷达<span class="hint">核心三项 · 归一化</span></h3>
+            <div class="body"><div class="chartbox"><canvas id="cRadarCore"></canvas></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- LAPS ---------- -->
+      <section id="tab-laps" class="hidden">
+        <div class="card">
+          <h3><i class="dot"></i>Per-Kilometre Telemetry 逐公里遥测<span class="hint" id="lapHint"></span></h3>
+          <div class="body">
+            <div class="seg">
+              <label class="pill" style="display:flex;align-items:center;gap:6px">X 轴
+                <select id="lapX">
+                  <option value="km">距离 (km)</option>
+                  <option value="pct">完成度 (%)</option>
+                  <option value="lap">Split 序号</option>
+                </select>
+              </label>
+              <button class="on" id="lapSmooth0">原始</button>
+              <button id="lapSmooth1">3 点平滑</button>
+            </div>
+            <div class="chartbox tall"><canvas id="cLaps"></canvas></div>
+            <div class="note">所选指标共用左侧主坐标轴族；配速类指标单独使用右侧 <b>min/km</b> 轴（数值越小越快，轴已反转）。</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <h3><i class="dot"></i>Split Bars 分段条<span class="hint">选中场次 · 逐 split 配速</span></h3>
+          <div class="body"><div class="chartbox" id="splitBarsWrap"><canvas id="cSplit"></canvas></div></div>
+        </div>
+      </section>
+
+      <!-- ---------- COMPARE ---------- -->
+      <section id="tab-compare" class="hidden">
+        <div class="card">
+          <h3><i class="dot"></i>Normalised Comparison 归一化对比<span class="hint">选中指标 × 选中场次</span></h3>
+          <div class="body">
+            <div class="chartbox tall"><canvas id="cCompare"></canvas></div>
+            <div class="note">每个指标独立做 min–max 归一化到 0–100（<b>配速类已反向</b>，100 = 该指标下的最好表现）。因此横读可回答「哪一场在这一维度上最强」。</div>
+          </div>
+        </div>
+        <div class="row2" style="margin-top:16px">
+          <div class="card">
+            <h3><i class="dot"></i>Metric Radar 多维雷达<span class="hint">选中指标</span></h3>
+            <div class="body"><div class="chartbox sq"><canvas id="cRadar"></canvas></div></div>
+          </div>
+          <div class="card">
+            <h3><i class="dot"></i>Summary Table 汇总表</h3>
+            <div class="body"><div style="overflow-x:auto"><table class="t" id="cmpTable"></table></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- LAB ---------- -->
+      <section id="tab-lab" class="hidden">
+        <div class="card">
+          <h3><i class="dot"></i>Cadence × Stride 速度分解<span class="hint">气泡面积 = 速度</span></h3>
+          <div class="body">
+            <div class="chartbox tall"><canvas id="cCS"></canvas></div>
+            <div class="note"><b>速度 = 步频 × 步幅 / 60</b>。等速线以灰色虚线绘出：沿等速线移动意味着同等速度下步频/步幅配比改变。远离等速线向上/向外 = 更快。</div>
+          </div>
+        </div>
+        <div class="row2" style="margin-top:16px">
+          <div class="card">
+            <h3><i class="dot"></i>Pace–HR Coupling 配速心率耦合</h3>
+            <div class="body"><div class="chartbox sq"><canvas id="cHR"></canvas></div>
+              <div class="note">同一心率下配速越快 = 有氧能力越好。点越靠<b>左下</b>越优。</div>
+            </div>
+          </div>
+          <div class="card">
+            <h3><i class="dot"></i>Ground Contact × Stride 触地-步幅</h3>
+            <div class="body"><div class="chartbox sq"><canvas id="cGCT"></canvas></div>
+              <div class="note">触地时间越短、步幅越长通常代表更好的弹性利用。左下角为「慢而粘地」，右上角为「长步幅但触地久」。</div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <h3><i class="dot"></i>Correlation Matrix 相关性矩阵<span class="hint">Pearson r · 全部 split</span></h3>
+          <div class="body"><div style="overflow-x:auto"><table class="t" id="corrTable"></table></div>
+            <div class="note">基于所有场次的所有 split 计算。<b>绿色</b>=强正相关，<b>粉色</b>=强负相关。用于判断「哪个技术变量真正在驱动配速」。</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- MODEL ---------- -->
+      <section id="tab-model" class="hidden">
+        <div class="row2">
+          <div class="card">
+            <h3><i class="dot"></i>Riegel Exponent 拟合<span class="hint">个人疲劳指数</span></h3>
+            <div class="body">
+              <div class="statgrid" id="riegelStats"></div>
+              <div class="eqbox" id="riegelEq"></div>
+              <div class="note">经典 Riegel 取 b = 1.06。<b>b 越小 → 距离延展能力越强（耐力型）</b>；b 越大 → 速度衰减越快（速度型）。</div>
+            </div>
+          </div>
+          <div class="card">
+            <h3><i class="dot"></i>Critical Speed Model 临界速度<span class="hint">D = D′ + CS·t</span></h3>
+            <div class="body">
+              <div class="statgrid" id="csStats"></div>
+              <div class="eqbox" id="csEq"></div>
+              <div class="note"><b>CS</b> = 理论上可长时间维持的最高速度（近似乳酸阈配速）；<b>D′</b> = 有限的无氧储备（米）。由各 PB 的 (t, D) 线性回归 D/t = CS + D′/t 得到。</div>
+            </div>
+          </div>
+        </div>
+        <div class="row2" style="margin-top:16px">
+          <div class="card">
+            <h3><i class="dot"></i>Model Fit 拟合图<span class="hint">速度 vs 1/时间</span></h3>
+            <div class="body"><div class="chartbox"><canvas id="cCSFit"></canvas></div></div>
+          </div>
+          <div class="card">
+            <h3><i class="dot"></i>Estimated VO₂max 估算<span class="hint">Daniels / Jack Daniels 公式</span></h3>
+            <div class="body">
+              <div style="overflow-x:auto"><table class="t" id="vo2Table"></table></div>
+              <div class="note">由各距离 PB 反推的 VO₂max 估算值（同一跑步经济性假设下）。差异反映不同距离的表现一致性。</div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <h3><i class="dot"></i>Pace–HR Decoupling 心率漂移<span class="hint">后半程 / 前半程</span></h3>
+          <div class="body"><div class="chartbox"><canvas id="cDecoup"></canvas></div>
+            <div class="note">计算方式：<b>后半程 (配速/心率)</b> 相对前半程的变化率。&lt;5% 视为配速与心率耦合良好；&gt;10% 提示耐力或散热/补水上存在短板。</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- DATA ---------- -->
+      <section id="tab-data" class="hidden">
+        <div class="card">
+          <h3><i class="dot"></i>Raw Splits 原始分段<span class="hint" id="dataHint"></span></h3>
+          <div class="body">
+            <div class="seg">
+              <label class="pill" style="display:flex;align-items:center;gap:6px">场次
+                <select id="dataAct"></select>
+              </label>
+              <button id="dlCsv" class="btn ghost">下载 CSV</button>
+            </div>
+            <div class="tablewrap"><table class="t" id="dataTable"></table></div>
+            <div class="note">配速列单位为 <b>min/km</b>（秒值已换算）。步幅单位 m、触地 ms、垂直振幅 cm。所有数值来自 Garmin 原始导出，未做平滑。</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="foot">
+    <span>GARMIN TELEMETRY · Yuchen Wang</span>
+    <span>源数据：Garmin Recording.xlsx（9 场）+ 近期 activity CSV（2 场）</span>
+    <span>共 <b id="footN"></b> 个 split</span>
+    <span><a href="../cn/index.html">← 返回主页</a></span>
+  </footer>
+</div>
+
+<!-- ================= bottom metric dock ================= -->
+<div class="dock">
+  <div class="dock-in">
+    <div class="dock-top">
+      <div class="dock-title"><i class="pulse"></i>Metric Dock</div>
+      <div class="dock-sub">勾选要纳入对比与建模的评估维度 · 点击即时生效</div>
+      <div class="dock-actions">
+        <button class="btn" id="mCore">仅核心三项</button>
+        <button class="btn ghost" id="mAll">全选</button>
+        <button class="btn ghost" id="mNone">清空</button>
+      </div>
+    </div>
+    <div class="metricrail" id="metricRail"></div>
+  </div>
+</div>
+
+<script src="vendor/chart.umd.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
