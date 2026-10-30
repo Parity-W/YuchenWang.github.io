@@ -2,531 +2,580 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GARMIN TELEMETRY — Yuchen Wang / 跑步数据实验台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GARMIN TELEMETRY — Yuchen Wang · 跑步数据实验台</title>
 <link rel="shortcut icon" type="image/x-icon" href="../img/wolf.icon" media="screen">
 <style>
 :root{
-  --bg:#07090d;
-  --bg2:#0b0f15;
-  --panel:#0e141c;
-  --panel2:#121a24;
-  --line:rgba(126,150,175,.14);
-  --line2:rgba(126,150,175,.28);
-  --txt:#e7eef6;
-  --mut:#77879b;
-  --dim:#4d5b6c;
-  --lime:#c9ff3d;
-  --cyan:#3ae0ff;
-  --amber:#ffb020;
-  --pink:#ff4d7d;
-  --green:#37e6a0;
-  --violet:#a97bff;
-  --mono:"JetBrains Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
-  --sport:"Barlow Condensed","Oswald","Arial Narrow",Haettenschweiler,"Franklin Gothic Medium",sans-serif;
-  --sans:"Inter","Segoe UI",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  --bg:#f4f6f9;
+  --surface:#ffffff;
+  --surface2:#f8fafc;
+  --line:#e6eaf1;
+  --line2:#d4dae5;
+  --ink:#0d1526;
+  --ink2:#4d5a70;
+  --ink3:#94a1b5;
+  --accent:#1a5cff;
+  --accent-soft:rgba(26,92,255,.07);
+  --hot:#ff5a2d;
+  --green:#00a870;
+  --violet:#6f4bf0;
+  --amber:#f0a020;
+  --cyan:#0aa2c0;
+  --pink:#e8387f;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:"Inter","Segoe UI",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  --r:14px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  background:
-    radial-gradient(1100px 600px at 12% -10%, rgba(58,224,255,.07), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, rgba(201,255,61,.06), transparent 55%),
-    var(--bg);
-  color:var(--txt);
+  background:var(--bg);
+  color:var(--ink);
   font-family:var(--sans);
-  font-size:13px;
-  min-height:100vh;
-  padding-bottom:132px;
+  font-size:13.5px;
+  line-height:1.5;
   -webkit-font-smoothing:antialiased;
+  padding-bottom:150px;
 }
 body::before{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);
-  mix-blend-mode:overlay;
+  background-image:radial-gradient(circle at 1px 1px, rgba(15,23,42,.055) 1px, transparent 0);
+  background-size:22px 22px;
 }
-.wrap{position:relative;z-index:1;max-width:1560px;margin:0 auto;padding:0 20px}
+.wrap{position:relative;z-index:1;max-width:1480px;margin:0 auto;padding:0 18px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
 
 /* ---------------- header ---------------- */
-header.topbar{
+header.top{
+  position:sticky;top:0;z-index:60;
+  background:rgba(255,255,255,.86);
+  backdrop-filter:saturate(180%) blur(12px);
   border-bottom:1px solid var(--line);
-  background:linear-gradient(180deg,rgba(14,20,28,.92),rgba(7,9,13,.6));
-  backdrop-filter:blur(6px);
-  position:sticky;top:0;z-index:40;
 }
-.topbar-in{display:flex;align-items:center;gap:22px;padding:14px 0;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px;min-width:0}
-.brand .mark{
-  width:40px;height:40px;flex:0 0 40px;
-  background:conic-gradient(from 210deg,var(--lime),var(--cyan),var(--violet),var(--lime));
-  clip-path:polygon(0 0,100% 0,100% 72%,72% 100%,0 100%);
-  display:grid;place-items:center;
-}
-.brand .mark span{font-family:var(--sport);font-size:26px;font-weight:800;color:#07090d;letter-spacing:-1px}
+.top-in{display:flex;align-items:center;gap:18px;padding:14px 0 10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}
+.brand svg{width:34px;height:34px;display:block}
 .brand h1{
-  font-family:var(--sport);font-size:26px;line-height:.95;margin:0;letter-spacing:.06em;
-  text-transform:uppercase;font-weight:700;
+  font-size:19px;letter-spacing:.16em;margin:0;font-weight:650;text-transform:uppercase;
 }
-.brand h1 em{font-style:normal;color:var(--lime)}
-.brand .sub{font-family:var(--mono);font-size:10px;color:var(--mut);letter-spacing:.18em;text-transform:uppercase;margin-top:3px}
-
-.kpis{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+.brand .sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;margin-top:1px}
+.kpis{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
 .kpi{
-  border:1px solid var(--line);border-left:2px solid var(--cyan);
-  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);
-  padding:6px 12px;min-width:96px;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:6px 12px;min-width:88px;
 }
-.kpi .k{font-family:var(--mono);font-size:9px;color:var(--mut);letter-spacing:.14em;text-transform:uppercase}
-.kpi .v{font-family:var(--sport);font-size:22px;line-height:1.05;letter-spacing:.02em;font-weight:700}
-.kpi .v small{font-size:11px;color:var(--mut);font-family:var(--mono);font-weight:400}
-.kpi.lime{border-left-color:var(--lime)} .kpi.amber{border-left-color:var(--amber)}
-.kpi.pink{border-left-color:var(--pink)} .kpi.violet{border-left-color:var(--violet)}
+.kpi .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase}
+.kpi .v{font-family:var(--mono);font-size:19px;line-height:1.15;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.kpi .v small{font-size:10px;color:var(--ink3);margin-left:2px;letter-spacing:0}
 
-/* ---------------- tabs ---------------- */
-nav.tabs{display:flex;gap:2px;padding:0 0 0;margin-top:2px;overflow-x:auto}
+nav.tabs{display:flex;gap:3px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
 nav.tabs button{
-  appearance:none;background:transparent;border:1px solid transparent;border-bottom:none;
-  color:var(--mut);font-family:var(--sport);font-size:16px;letter-spacing:.1em;text-transform:uppercase;
-  padding:9px 18px 8px;cursor:pointer;white-space:nowrap;transition:.16s;
+  appearance:none;background:transparent;border:0;cursor:pointer;
+  font-family:var(--sans);font-size:12.5px;font-weight:550;letter-spacing:.06em;
+  color:var(--ink2);padding:7px 13px;border-radius:999px;white-space:nowrap;transition:.15s;
 }
-nav.tabs button:hover{color:var(--txt);background:rgba(255,255,255,.035)}
-nav.tabs button.on{
-  color:#07090d;background:var(--lime);font-weight:700;
-  clip-path:polygon(0 0,100% 0,100% 78%,94% 100%,0 100%);
-}
+nav.tabs button:hover{background:rgba(15,23,42,.05);color:var(--ink)}
+nav.tabs button.on{background:var(--ink);color:#fff}
 
 /* ---------------- layout ---------------- */
-.grid{display:grid;grid-template-columns:264px 1fr;gap:16px;padding:18px 0 24px;align-items:start}
-@media (max-width:1080px){.grid{grid-template-columns:1fr}}
+.grid{display:grid;grid-template-columns:250px 1fr;gap:16px;padding:18px 0 26px;align-items:start}
 .side{
-  border:1px solid var(--line);background:var(--panel);
-  position:sticky;top:132px;max-height:calc(100vh - 170px);overflow:auto;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  position:sticky;top:126px;max-height:calc(100vh - 170px);overflow:auto;
 }
-.side h3,.card h3{
-  font-family:var(--sport);font-size:14px;letter-spacing:.16em;text-transform:uppercase;
-  margin:0;padding:10px 12px;border-bottom:1px solid var(--line);
-  color:var(--txt);display:flex;align-items:center;gap:8px;
+.side .hd{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--ink3);text-transform:uppercase;
+  padding:11px 13px;border-bottom:1px solid var(--line);
 }
-.side h3 .dot,.card h3 .dot{width:6px;height:6px;background:var(--lime);flex:0 0 6px;transform:rotate(45deg)}
-.side .body{padding:10px}
-.grp{margin-bottom:12px}
+.side .body{padding:11px}
+#sideToggle{display:none}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);min-width:0}
+.card .hd{
+  display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);
+  font-size:13px;font-weight:600;letter-spacing:.02em;
+}
+.card .hd .dot{width:5px;height:5px;background:var(--accent);border-radius:50%;flex:0 0 5px}
+.card .hd .hint{
+  margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase
+}
+.card .body{padding:14px}
+.cards{display:grid;gap:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:1000px){.row2{grid-template-columns:1fr}}
+
+/* ---------------- session list ---------------- */
+.seg{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.seg button{
+  appearance:none;border:1px solid var(--line2);background:var(--surface);color:var(--ink2);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 9px;border-radius:7px;cursor:pointer;transition:.15s;
+}
+.seg button:hover{border-color:var(--accent);color:var(--accent)}
+.seg button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.grp{margin-bottom:11px}
 .grp>.gl{
-  font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;
-  margin:6px 0 6px;display:flex;align-items:center;gap:6px
+  font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.14em;text-transform:uppercase;
+  margin:0 0 6px;display:flex;align-items:center;gap:6px
 }
 .grp>.gl::after{content:"";height:1px;flex:1;background:var(--line)}
 .act{
-  display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;
-  border:1px solid transparent;border-left:2px solid var(--line2);margin-bottom:3px;transition:.14s;
+  display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;border-radius:8px;
+  border:1px solid transparent;margin-bottom:2px;transition:.13s;
 }
-.act:hover{background:rgba(255,255,255,.04)}
-.act.on{background:rgba(201,255,61,.09);border-left-color:var(--lime)}
-.act .sw{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:var(--dim)}
-.act.on .sw{box-shadow:0 0 8px currentColor}
-.act .nm{font-family:var(--sport);font-size:15px;letter-spacing:.06em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.act .mt{font-family:var(--mono);font-size:10px;color:var(--mut)}
-.act.on .mt{color:var(--lime)}
-.tagnew{font-family:var(--mono);font-size:8px;background:var(--pink);color:#07090d;padding:1px 4px;letter-spacing:.1em}
-
-.cards{display:grid;gap:16px}
-.card{border:1px solid var(--line);background:var(--panel);min-width:0}
-.card>h3 .hint{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.1em;text-transform:none}
-.card .body{padding:14px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media (max-width:900px){.row2,.row3{grid-template-columns:1fr}}
-
-/* ---------------- PB board ---------------- */
-.pbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.pb{
-  position:relative;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.045),transparent 70%);
-  padding:12px 12px 10px;overflow:hidden;
+.act:hover{background:var(--surface2)}
+.act.on{background:var(--accent-soft);border-color:rgba(26,92,255,.25)}
+.act .sw{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+.act .nm{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act .mt{font-family:var(--mono);font-size:10px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.act.on .mt{color:var(--accent)}
+.tagnew{font-family:var(--mono);font-size:8px;background:var(--hot);color:#fff;padding:1px 4px;border-radius:3px;letter-spacing:.08em;margin-left:5px}
+.datebox{margin-top:12px;border-top:1px solid var(--line);padding-top:9px}
+.datebox .gl{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.14em;text-transform:uppercase;margin:0 0 7px;display:flex;gap:6px;align-items:center}
+.datebox .gl::after{content:"";height:1px;flex:1;background:var(--line)}
+.drow{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.drow span{flex:1;font-family:var(--mono);font-size:10px;color:var(--ink2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drow input{
+  width:124px;flex:0 0 124px;background:var(--surface2);border:1px solid var(--line2);
+  color:var(--ink);font-family:var(--mono);font-size:10px;padding:3px 6px;border-radius:6px;
 }
-.pb::after{
-  content:"";position:absolute;right:-24px;top:-24px;width:80px;height:80px;
-  border:1px solid var(--line2);transform:rotate(45deg);
-}
-.pb .d{font-family:var(--sport);font-size:30px;line-height:.9;letter-spacing:.02em;color:var(--lime)}
-.pb .d small{font-size:14px;color:var(--mut)}
-.pb .t{font-family:var(--mono);font-size:19px;margin-top:6px;letter-spacing:.02em}
-.pb .p{font-family:var(--mono);font-size:11px;color:var(--mut);margin-top:2px}
-.pb .bar{height:3px;background:var(--line);margin-top:8px}
-.pb .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--lime))}
+.drow input:focus{outline:none;border-color:var(--accent)}
+.drow.has input{border-color:rgba(26,92,255,.45);background:var(--accent-soft)}
 
-table.t{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+/* ---------------- PB ---------------- */
+.pbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+.pb{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:var(--surface2)}
+.pb .d{font-family:var(--mono);font-size:19px;letter-spacing:.02em;color:var(--ink)}
+.pb .d small{font-size:12px;color:var(--ink3)}
+.pb .t{font-family:var(--mono);font-size:20px;letter-spacing:-.01em;margin-top:5px;font-variant-numeric:tabular-nums}
+.pb .p{font-family:var(--mono);font-size:10.5px;color:var(--ink3);margin-top:1px}
+.pb .bar{height:3px;background:var(--line);border-radius:2px;margin-top:9px;overflow:hidden}
+.pb .bar i{display:block;height:100%;background:var(--accent);border-radius:2px}
+
+/* ---------------- tables ---------------- */
+table.t{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px;font-variant-numeric:tabular-nums}
 table.t th{
-  text-align:right;padding:7px 8px;color:var(--mut);font-weight:500;letter-spacing:.08em;
-  border-bottom:1px solid var(--line2);text-transform:uppercase;font-size:9.5px;white-space:nowrap;
+  text-align:right;padding:7px 9px;color:var(--ink3);font-weight:500;letter-spacing:.07em;
+  border-bottom:1px solid var(--line2);text-transform:uppercase;font-size:9px;white-space:nowrap;
 }
 table.t th:first-child,table.t td:first-child{text-align:left}
-table.t td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
-table.t tbody tr:hover{background:rgba(255,255,255,.035)}
-table.t td.hi{color:var(--lime)}
-table.t td.dim{color:var(--dim)}
-.chip{
-  display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
-  border:1px solid var(--line2);color:var(--mut);padding:1px 5px;margin-left:6px;
-}
+table.t td{padding:6px 9px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+table.t tbody tr:hover{background:var(--surface2)}
+table.t td.hi{color:var(--accent);font-weight:600}
+table.t td.dim{color:var(--ink3)}
+.chip{display:inline-block;font-family:var(--mono);font-size:9px;border:1px solid var(--line2);color:var(--ink3);padding:1px 5px;border-radius:4px;margin-left:5px}
 
-/* ---------------- chart blocks ---------------- */
-.chartbox{position:relative;height:300px}
-.chartbox.tall{height:380px}
-.chartbox.sq{height:340px}
-.legend-inline{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--mut);margin-top:8px}
-.legend-inline i{display:inline-block;width:10px;height:3px;margin-right:5px;vertical-align:middle}
-
+/* ---------------- charts ---------------- */
+.chartbox{position:relative;height:290px}
+.chartbox.tall{height:360px}
+.chartbox.sq{height:320px}
 .note{
-  font-family:var(--mono);font-size:10.5px;color:var(--mut);line-height:1.7;
-  border-left:2px solid var(--line2);padding:6px 10px;background:rgba(255,255,255,.02);margin-top:10px
+  font-family:var(--mono);font-size:10px;color:var(--ink2);line-height:1.75;
+  border-left:2px solid var(--accent);padding:7px 11px;background:var(--surface2);border-radius:0 8px 8px 0;margin-top:11px
 }
-.datebox{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
-.datebox .gl{
-  font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;
-  margin:2px 0 7px;display:flex;align-items:center;gap:6px
-}
-.datebox .gl::after{content:"";height:1px;flex:1;background:var(--line)}
-.drow{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.drow span{flex:1;font-family:var(--mono);font-size:10px;color:var(--mut);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.drow input{
-  width:126px;flex:0 0 126px;background:#0d131b;border:1px solid var(--line2);color:var(--txt);
-  font-family:var(--mono);font-size:10px;padding:3px 6px;color-scheme:dark;
-}
-.drow input:focus{outline:none;border-color:var(--cyan)}
-.drow.has input{border-color:rgba(201,255,61,.45)}
-.note b{color:var(--cyan);font-weight:600}
+.note b{color:var(--accent);font-weight:600}
 .eqbox{
-  font-family:var(--mono);font-size:11.5px;color:var(--txt);background:rgba(58,224,255,.06);
-  border:1px dashed rgba(58,224,255,.3);padding:10px 12px;margin-top:10px;line-height:1.85
+  font-family:var(--mono);font-size:11.5px;background:var(--accent-soft);border:1px solid rgba(26,92,255,.22);
+  border-radius:10px;padding:11px 13px;margin-top:11px;line-height:1.9
 }
-.eqbox .v{color:var(--lime);font-weight:700}
-.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:8px}
-.stat{border:1px solid var(--line);padding:8px 10px;background:rgba(255,255,255,.02)}
-.stat .k{font-family:var(--mono);font-size:9px;color:var(--mut);letter-spacing:.12em;text-transform:uppercase}
-.stat .v{font-family:var(--sport);font-size:21px;letter-spacing:.02em}
-.stat .v small{font-family:var(--mono);font-size:10px;color:var(--mut)}
+.eqbox .v{color:var(--accent);font-weight:700}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:8px}
+.stat{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface2)}
+.stat .k{font-family:var(--mono);font-size:8.5px;color:var(--ink3);letter-spacing:.12em;text-transform:uppercase}
+.stat .v{font-family:var(--mono);font-size:18px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.stat .v small{font-family:var(--mono);font-size:9.5px;color:var(--ink3)}
 
-/* ---------------- bottom metric dock ---------------- */
+/* ---------------- gait / runner ---------------- */
+.gaitwrap{display:grid;grid-template-columns:1fr 250px;gap:16px}
+@media (max-width:1000px){.gaitwrap{grid-template-columns:1fr}}
+#runnerCard{background:var(--surface2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+#runnerHost{height:330px}
+@media (max-width:640px){#runnerHost{height:250px}}
+.runctl{display:flex;gap:6px;align-items:center;padding:9px 12px;border-top:1px solid var(--line);flex-wrap:wrap;background:var(--surface)}
+.runctl button{
+  appearance:none;border:1px solid var(--line2);background:var(--surface);color:var(--ink2);
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:5px 10px;border-radius:7px;cursor:pointer;transition:.15s
+}
+.runctl button:hover{border-color:var(--accent);color:var(--accent)}
+.runctl button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.live{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.live .lv{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface2)}
+.live .lv .k{font-family:var(--mono);font-size:8.5px;color:var(--ink3);letter-spacing:.12em;text-transform:uppercase}
+.live .lv .v{font-family:var(--mono);font-size:17px;font-variant-numeric:tabular-nums}
+.live .lv .v small{font-size:9.5px;color:var(--ink3)}
+
+/* ---------------- bottom dock ---------------- */
 .dock{
-  position:fixed;left:0;right:0;bottom:0;z-index:60;
-  background:linear-gradient(180deg,rgba(11,15,21,.86),rgba(7,9,13,.98));
-  border-top:1px solid var(--line2);backdrop-filter:blur(10px);
-  box-shadow:0 -18px 40px rgba(0,0,0,.6);
+  position:fixed;left:0;right:0;bottom:0;z-index:70;
+  background:rgba(255,255,255,.93);backdrop-filter:saturate(180%) blur(14px);
+  border-top:1px solid var(--line2);
+  padding-bottom:env(safe-area-inset-bottom);
 }
-.dock::before{
-  content:"";position:absolute;left:0;right:0;top:-1px;height:1px;
-  background:linear-gradient(90deg,transparent,var(--lime),var(--cyan),transparent);opacity:.55;
+.dock-in{max-width:1480px;margin:0 auto;padding:8px 18px 10px}
+.dock-top{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+.dock-title{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.dock-title .pulse{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(26,92,255,.5);animation:pl 1.8s infinite}
+@keyframes pl{70%{box-shadow:0 0 0 9px rgba(26,92,255,0)}100%{box-shadow:0 0 0 0 rgba(26,92,255,0)}}
+.dock-sub{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.1em}
+.dock-actions{margin-left:auto;display:flex;gap:5px}
+.dock-actions button{
+  appearance:none;border:1px solid var(--line2);background:var(--surface);color:var(--ink2);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 9px;border-radius:7px;cursor:pointer;transition:.15s
 }
-.dock-in{max-width:1560px;margin:0 auto;padding:9px 20px 11px}
-.dock-top{display:flex;align-items:center;gap:14px;margin-bottom:7px;flex-wrap:wrap}
-.dock-title{
-  font-family:var(--sport);font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt);
-  display:flex;align-items:center;gap:9px;
-}
-.dock-title .pulse{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:p 1.6s infinite}
-@keyframes p{0%,100%{opacity:1}50%{opacity:.25}}
-.dock-sub{font-family:var(--mono);font-size:9.5px;color:var(--dim);letter-spacing:.1em}
-.dock-actions{margin-left:auto;display:flex;gap:6px}
-.btn{
-  appearance:none;border:1px solid var(--line2);background:transparent;color:var(--mut);
-  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  padding:5px 10px;cursor:pointer;transition:.15s;
-}
-.btn:hover{color:#07090d;background:var(--lime);border-color:var(--lime)}
-.btn.ghost:hover{color:var(--txt);background:rgba(255,255,255,.08);border-color:var(--line2)}
-.metricrail{display:flex;gap:6px;overflow-x:auto;padding-bottom:3px}
+.dock-actions button:hover{border-color:var(--accent);color:var(--accent)}
+.metricrail{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
 .mchip{
-  appearance:none;flex:0 0 auto;cursor:pointer;
-  border:1px solid var(--line2);background:rgba(255,255,255,.02);
-  padding:6px 10px 5px;text-align:left;transition:.15s;position:relative;
+  appearance:none;flex:0 0 auto;cursor:pointer;text-align:left;transition:.15s;position:relative;
+  border:1px solid var(--line2);background:var(--surface);border-radius:9px;padding:5px 10px 4px;
 }
-.mchip:hover{background:rgba(255,255,255,.07);border-color:var(--mut)}
-.mchip .n{display:block;font-family:var(--sport);font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--txt);line-height:1.15}
-.mchip .u{display:block;font-family:var(--mono);font-size:8.5px;color:var(--dim);letter-spacing:.08em;margin-top:2px}
-.mchip.on{border-color:var(--lime);background:rgba(201,255,61,.13);box-shadow:inset 0 0 0 1px rgba(201,255,61,.2)}
-.mchip.on .u{color:var(--lime)}
+.mchip:hover{border-color:var(--ink3)}
+.mchip .n{display:block;font-size:11.5px;font-weight:560;letter-spacing:.02em;color:var(--ink);line-height:1.2}
+.mchip .u{display:block;font-family:var(--mono);font-size:8.5px;color:var(--ink3);letter-spacing:.06em;margin-top:1px}
+.mchip.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px rgba(26,92,255,.18)}
+.mchip.on .u{color:var(--accent)}
 .mchip.core::after{
-  content:"CORE";position:absolute;top:-7px;right:-6px;background:var(--cyan);color:#07090d;
-  font-family:var(--mono);font-size:7px;letter-spacing:.1em;padding:1px 3px;
+  content:"CORE";position:absolute;top:-6px;right:-5px;background:var(--accent);color:#fff;
+  font-family:var(--mono);font-size:6.5px;letter-spacing:.1em;padding:1px 3px;border-radius:3px;
 }
-.mchip .tick{position:absolute;bottom:3px;right:4px;font-size:9px;color:var(--lime);opacity:0}
-.mchip.on .tick{opacity:1}
 
-/* ---------------- data table ---------------- */
-.tablewrap{max-height:460px;overflow:auto;border:1px solid var(--line)}
-.tablewrap table.t thead th{position:sticky;top:0;background:#10161f;z-index:2}
-.seg{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
-.seg button{
-  appearance:none;border:1px solid var(--line2);background:transparent;color:var(--mut);
-  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;cursor:pointer
+/* ---------------- data ---------------- */
+.tablewrap{max-height:460px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.tablewrap table.t thead th{position:sticky;top:0;background:var(--surface2);z-index:2}
+select{
+  background:var(--surface2);border:1px solid var(--line2);color:var(--ink);
+  font-family:var(--mono);font-size:11px;padding:5px 8px;border-radius:7px;max-width:100%;
 }
-.seg button.on{background:var(--cyan);color:#07090d;border-color:var(--cyan);font-weight:700}
-select,input[type=text]{
-  background:#0d131b;border:1px solid var(--line2);color:var(--txt);
-  font-family:var(--mono);font-size:11px;padding:5px 8px;
+select:focus{outline:none;border-color:var(--accent)}
+footer.foot{
+  border-top:1px solid var(--line);padding:16px 0 30px;
+  font-family:var(--mono);font-size:9.5px;color:var(--ink3);letter-spacing:.08em;
+  display:flex;gap:14px;flex-wrap:wrap;
 }
-select:focus,input:focus{outline:none;border-color:var(--cyan)}
-.pill{font-family:var(--mono);font-size:9px;letter-spacing:.08em;border:1px solid var(--line2);color:var(--mut);padding:2px 6px}
-.pill.lime{color:var(--lime);border-color:rgba(201,255,61,.4)}
-.pill.pink{color:var(--pink);border-color:rgba(255,77,125,.4)}
-footer.foot{border-top:1px solid var(--line);margin-top:8px;padding:16px 0 30px;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;display:flex;gap:14px;flex-wrap:wrap}
-footer.foot a{color:var(--mut);text-decoration:none;border-bottom:1px dotted var(--line2)}
-footer.foot a:hover{color:var(--lime)}
+footer.foot a{color:var(--ink2);text-decoration:none;border-bottom:1px dotted var(--line2)}
+footer.foot a:hover{color:var(--accent)}
 .hidden{display:none!important}
+
+/* ---------------- mobile ---------------- */
+@media (max-width:1000px){
+  .grid{grid-template-columns:1fr;padding-bottom:18px}
+  .side{position:static;max-height:none;order:2}
+  .side.collapsed .body{display:none}
+  #sideToggle{
+    display:flex;width:100%;align-items:center;justify-content:center;gap:6px;margin-bottom:10px;
+    appearance:none;border:1px solid var(--line2);background:var(--surface);border-radius:10px;
+    padding:9px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink2);cursor:pointer;
+  }
+  .cards{order:1}
+}
+@media (max-width:640px){
+  body{padding-bottom:136px;font-size:13px}
+  .wrap{padding:0 12px}
+  .top-in{padding:11px 0 8px;gap:12px}
+  .brand h1{font-size:16px;letter-spacing:.12em}
+  .kpis{width:100%;margin-left:0;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}
+  .kpi{flex:0 0 auto;min-width:80px;padding:5px 10px}
+  .kpi .v{font-size:16px}
+  nav.tabs button{font-size:11.5px;padding:6px 10px}
+  .card .body{padding:12px}
+  .chartbox{height:240px}
+  .chartbox.tall{height:290px}
+  .chartbox.sq{height:260px}
+  .pbs{grid-template-columns:repeat(2,1fr)}
+  .dock-in{padding:7px 12px 9px}
+  .dock-sub{display:none}
+  .dock-title{font-size:11px;letter-spacing:.08em;white-space:nowrap}
+  .mchip .n{font-size:11px}
+  .statgrid{grid-template-columns:repeat(2,1fr)}
+  .row2{gap:12px}
+  .cards{gap:12px}
+}
 ::-webkit-scrollbar{width:9px;height:9px}
-::-webkit-scrollbar-track{background:#0a0e14}
-::-webkit-scrollbar-thumb{background:#1d2734;border:2px solid #0a0e14}
-::-webkit-scrollbar-thumb:hover{background:#2c3a4a}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#d6dce6;border-radius:9px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:#b9c2d0}
 </style>
 </head>
 <body>
 
-<header class="topbar">
+<header class="top">
   <div class="wrap">
-    <div class="topbar-in">
+    <div class="top-in">
       <div class="brand">
-        <div class="mark"><span>YW</span></div>
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#0d1526" stroke-width="1.6"/>
+          <path d="M13 27 L20 13 L27 27" fill="none" stroke="#1a5cff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="11" r="2.6" fill="#ff5a2d"/>
+        </svg>
         <div>
-          <h1>Garmin <em>Telemetry</em></h1>
-          <div class="sub">Yuchen Wang &nbsp;//&nbsp; Running Performance Lab</div>
+          <h1>Telemetry</h1>
+          <div class="sub">Yuchen Wang · Running Lab</div>
         </div>
       </div>
       <div class="kpis" id="kpis"></div>
     </div>
     <nav class="tabs" id="tabs">
-      <button data-tab="overview" class="on">Overview 总览</button>
-      <button data-tab="laps">Lap Telemetry 分段遥测</button>
-      <button data-tab="compare">Cross Compare 横向对比</button>
-      <button data-tab="lab">Biomech Lab 生物力学</button>
-      <button data-tab="model">Model 模型推算</button>
-      <button data-tab="data">Raw Data 原始数据</button>
+      <button data-tab="overview" class="on">Overview</button>
+      <button data-tab="gait">Gait 跑姿</button>
+      <button data-tab="laps">Splits 分段</button>
+      <button data-tab="compare">Compare 对比</button>
+      <button data-tab="lab">Lab 生物力学</button>
+      <button data-tab="model">Model 模型</button>
+      <button data-tab="data">Data 原始</button>
     </nav>
   </div>
 </header>
 
 <div class="wrap">
   <div class="grid">
-    <!-- ================= sidebar ================= -->
-    <aside class="side">
-      <h3><i class="dot"></i>Sessions 场次</h3>
+
+    <aside class="side collapsed" id="side">
+      <div class="hd">Sessions · 场次</div>
       <div class="body">
         <div class="seg">
-          <button id="selAll" class="on">全选</button>
+          <button id="selAll">全选</button>
           <button id="selNone">清空</button>
-          <button id="selBest">各距离最佳</button>
+          <button id="selBest" class="on">各距离最佳</button>
           <button id="selRecent">近期</button>
         </div>
         <div id="actList"></div>
         <div class="datebox">
-          <div class="gl">日期 · 可编辑（存本地）</div>
+          <div class="gl">日期 · 可编辑</div>
           <div id="dateList"></div>
-          <div style="display:flex;gap:6px;margin-top:7px">
-            <button class="btn ghost" id="copyDates">复制日期 JSON</button>
-            <button class="btn ghost" id="clearDates">清空</button>
+          <div style="display:flex;gap:5px;margin-top:7px">
+            <button class="seg" id="copyDates" style="font-size:9px">复制日期 JSON</button>
+            <button class="seg" id="clearDates" style="font-size:9px">清空</button>
           </div>
-        </div>
-        <div class="note" style="margin-top:10px">
-          点击场次切换选中；面板底部 <b>METRIC DOCK</b> 可增删评估维度。<br>
-          填了 ≥2 个日期后，总览页会出现 <b>Fitness Timeline</b>。
         </div>
       </div>
     </aside>
 
-    <!-- ================= main ================= -->
     <main class="cards">
+      <button id="sideToggle">场次筛选 · SESSIONS ▾</button>
 
-      <!-- ---------- OVERVIEW ---------- -->
+      <!-- ================= OVERVIEW ================= -->
       <section id="tab-overview">
         <div class="card">
-          <h3><i class="dot"></i>Personal Best Board<span class="hint">from “Personal Recording”</span></h3>
+          <div class="hd"><i class="dot"></i>Gait Model 步态模型<span class="hint" id="gaitWho"></span></div>
           <div class="body">
-            <div class="pbs" id="pbBoard"></div>
-            <div class="note">源数据中的 Date 列为 Excel 序列号，与真实日期无对应关系，<b>已按你的说明不展示日期</b>；日期可在左侧栏直接填写。<br>
-            口径说明：21k_1 场次汇总为 <b>1:40:35 / 4:43/km</b>，而 PB 表半马记录 <b>1:38:31 / 4:40/km</b>——前者是手表全程遥测汇总，后者应是官方芯片成绩，两者差异 ~2 分钟，均保留。</div>
-          </div>
-        </div>
-
-        <div class="row2" style="margin-top:16px">
-          <div class="card">
-            <h3><i class="dot"></i>Pace–Distance Envelope 配速包络<span class="hint">log–log + 幂律拟合</span></h3>
-            <div class="body"><div class="chartbox"><canvas id="cEnv"></canvas></div>
-              <div class="legend-inline">
-                <span><i style="background:#c9ff3d"></i>实测 PB</span>
-                <span><i style="background:#3ae0ff"></i>Riegel 拟合曲线 T = a·D<sup>b</sup></span>
-                <span><i style="background:#ff4d7d"></i>近期训练</span>
+            <div class="gaitwrap">
+              <div id="gaitSlot"></div>
+              <div>
+                <div class="live" id="gaitLive"></div>
+                <div class="note" style="margin-top:10px">
+                  小人的动作由该场次的真实遥测数据驱动：<b>步频</b>决定步频周期，<b>步幅</b>决定髋摆幅，<b>触地时间</b>决定支撑相占比，<b>垂直振幅</b>决定重心起伏，速度为地面滚动速度。
+                </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="hd"><i class="dot"></i>Personal Best 个人最好<span class="hint">Personal Recording</span></div>
+          <div class="body">
+            <div class="pbs" id="pbBoard"></div>
+            <div class="note">PB 表 Date 列为 Excel 序列号、与真实日期无关，<b>不展示</b>；日期可在左侧栏填写。<br>
+            口径说明：21k_1 遥测汇总 <b>1:40:35 / 4:43</b>，PB 表半马 <b>1:38:31 / 4:40</b>——前者为手表全程汇总，后者为官方成绩，差约 2 分钟，均保留。</div>
+          </div>
+        </div>
+
+        <div class="row2" style="margin-top:16px">
           <div class="card">
-            <h3><i class="dot"></i>Riegel Projection 成绩推算<span class="hint">T₂ = T₁·(D₂/D₁)<sup>1.06</sup></span></h3>
-            <div class="body">
-              <div style="overflow-x:auto"><table class="t" id="projTable"></table></div>
-              <div class="note">每行为「以该 PB 为基准」推算其它距离。<b>对角线</b>（灰底）为实测值。不同距离推算差异本身即是有价值的信号：短距离推算偏乐观说明耐力储备好，反之说明速度储备好。</div>
+            <div class="hd"><i class="dot"></i>Pace–Distance 配速包络<span class="hint">log–log</span></div>
+            <div class="body"><div class="chartbox"><canvas id="cEnv"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="hd"><i class="dot"></i>Riegel Projection 成绩推算<span class="hint">T₂=T₁·(D₂/D₁)^1.06</span></div>
+            <div class="body"><div style="overflow-x:auto"><table class="t" id="projTable"></table></div>
+              <div class="note">每行为「以该 PB 为基准」推算其它距离，<b>灰底</b>为实测值。</div>
             </div>
           </div>
         </div>
 
         <div class="row2" style="margin-top:16px">
           <div class="card">
-            <h3><i class="dot"></i>Session Load 场次负荷<span class="hint">距离 · 时长</span></h3>
+            <div class="hd"><i class="dot"></i>Session Load 场次负荷</div>
             <div class="body"><div class="chartbox"><canvas id="cLoad"></canvas></div></div>
           </div>
           <div class="card">
-            <h3><i class="dot"></i>Fingerprint 指纹雷达<span class="hint">核心三项 · 归一化</span></h3>
+            <div class="hd"><i class="dot"></i>Fingerprint 核心指纹<span class="hint">归一化</span></div>
             <div class="body"><div class="chartbox"><canvas id="cRadarCore"></canvas></div></div>
           </div>
         </div>
 
         <div class="card" id="timelineCard" style="margin-top:16px;display:none">
-          <h3><i class="dot"></i>Fitness Timeline 表现时间线<span class="hint">按日期 · 平均配速 · 气泡=距离</span></h3>
-          <div class="body">
-            <div class="chartbox"><canvas id="cTimeline"></canvas></div>
-            <div class="note">虚线为线性趋势。配速轴越小越快（已反转），趋势线<b>向下</b>代表越跑越快。</div>
+          <div class="hd"><i class="dot"></i>Fitness Timeline 时间线<span class="hint">按日期</span></div>
+          <div class="body"><div class="chartbox"><canvas id="cTimeline"></canvas></div>
+            <div class="note">配速轴已反转，趋势线<b>向下</b>=越跑越快。</div>
           </div>
         </div>
       </section>
 
-      <!-- ---------- LAPS ---------- -->
+      <!-- ================= GAIT ================= -->
+      <section id="tab-gait" class="hidden">
+        <div class="card">
+          <div class="hd"><i class="dot"></i>Gait Simulator 步态仿真<span class="hint" id="gaitWho2"></span></div>
+          <div class="body">
+            <div id="gaitSlot2"></div>
+            <div class="row2" style="margin-top:16px">
+              <div class="card">
+                <div class="hd"><i class="dot"></i>Gait Parameters 步态参数</div>
+                <div class="body"><div class="statgrid" id="gaitStats"></div>
+                  <div class="note">支撑相 = 触地时间 / 步态周期；腾空相为其补集。精英跑者触地常在 <b>200 ms 以内</b>，步幅/身高比 &gt; 1.2 通常意味着较强的蹬伸能力。</div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="hd"><i class="dot"></i>Mapping 数据→动作</div>
+                <div class="body"><div style="overflow-x:auto"><table class="t" id="gaitMap"></table></div>
+                  <div class="note">动画为<b>示意模型</b>，用真实指标驱动关节角度与相位，用于直观理解技术参数差异，不等同于动作捕捉重建。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= LAPS ================= -->
       <section id="tab-laps" class="hidden">
         <div class="card">
-          <h3><i class="dot"></i>Per-Kilometre Telemetry 逐公里遥测<span class="hint" id="lapHint"></span></h3>
+          <div class="hd"><i class="dot"></i>Per-Kilometre Telemetry 逐公里遥测<span class="hint" id="lapHint"></span></div>
           <div class="body">
             <div class="seg">
-              <label class="pill" style="display:flex;align-items:center;gap:6px">X 轴
+              <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase">X 轴
                 <select id="lapX">
-                  <option value="km">距离 (km)</option>
-                  <option value="pct">完成度 (%)</option>
-                  <option value="lap">Split 序号</option>
+                  <option value="km">距离 km</option>
+                  <option value="pct">完成度 %</option>
+                  <option value="lap">Split #</option>
                 </select>
               </label>
-              <button class="on" id="lapSmooth0">原始</button>
+              <button id="lapSmooth0" class="on">原始</button>
               <button id="lapSmooth1">3 点平滑</button>
             </div>
             <div class="chartbox tall"><canvas id="cLaps"></canvas></div>
-            <div class="note">所选指标共用左侧主坐标轴族；配速类指标单独使用右侧 <b>min/km</b> 轴（数值越小越快，轴已反转）。</div>
+            <div class="note">配速类指标单独使用反转的 min/km 轴。</div>
           </div>
         </div>
         <div class="card" style="margin-top:16px">
-          <h3><i class="dot"></i>Split Bars 分段条<span class="hint">选中场次 · 逐 split 配速</span></h3>
+          <div class="hd"><i class="dot"></i>Split Bars 分段条</div>
           <div class="body"><div class="chartbox" id="splitBarsWrap"><canvas id="cSplit"></canvas></div></div>
         </div>
       </section>
 
-      <!-- ---------- COMPARE ---------- -->
+      <!-- ================= COMPARE ================= -->
       <section id="tab-compare" class="hidden">
         <div class="card">
-          <h3><i class="dot"></i>Normalised Comparison 归一化对比<span class="hint">选中指标 × 选中场次</span></h3>
+          <div class="hd"><i class="dot"></i>Normalised Comparison 归一化对比<span class="hint">指标 × 场次</span></div>
           <div class="body">
             <div class="chartbox tall"><canvas id="cCompare"></canvas></div>
-            <div class="note">每个指标独立做 min–max 归一化到 0–100（<b>配速类已反向</b>，100 = 该指标下的最好表现）。因此横读可回答「哪一场在这一维度上最强」。</div>
+            <div class="note">每个指标独立 min–max 归一化到 0–100（<b>配速类反向</b>，100 = 该维度最好）。</div>
           </div>
         </div>
         <div class="row2" style="margin-top:16px">
           <div class="card">
-            <h3><i class="dot"></i>Metric Radar 多维雷达<span class="hint">选中指标</span></h3>
+            <div class="hd"><i class="dot"></i>Metric Radar 多维雷达</div>
             <div class="body"><div class="chartbox sq"><canvas id="cRadar"></canvas></div></div>
           </div>
           <div class="card">
-            <h3><i class="dot"></i>Summary Table 汇总表</h3>
+            <div class="hd"><i class="dot"></i>Summary 汇总表</div>
             <div class="body"><div style="overflow-x:auto"><table class="t" id="cmpTable"></table></div></div>
           </div>
         </div>
       </section>
 
-      <!-- ---------- LAB ---------- -->
+      <!-- ================= LAB ================= -->
       <section id="tab-lab" class="hidden">
         <div class="card">
-          <h3><i class="dot"></i>Cadence × Stride 速度分解<span class="hint">气泡面积 = 速度</span></h3>
+          <div class="hd"><i class="dot"></i>Cadence × Stride 速度分解<span class="hint">气泡=速度</span></div>
           <div class="body">
             <div class="chartbox tall"><canvas id="cCS"></canvas></div>
-            <div class="note"><b>速度 = 步频 × 步幅 / 60</b>。等速线以灰色虚线绘出：沿等速线移动意味着同等速度下步频/步幅配比改变。远离等速线向上/向外 = 更快。</div>
+            <div class="note"><b>速度 = 步频 × 步幅 / 60</b>；灰色虚线为等速线。</div>
           </div>
         </div>
         <div class="row2" style="margin-top:16px">
           <div class="card">
-            <h3><i class="dot"></i>Pace–HR Coupling 配速心率耦合</h3>
+            <div class="hd"><i class="dot"></i>Pace–HR 配速心率耦合</div>
             <div class="body"><div class="chartbox sq"><canvas id="cHR"></canvas></div>
-              <div class="note">同一心率下配速越快 = 有氧能力越好。点越靠<b>左下</b>越优。</div>
+              <div class="note">同心率下配速越快越好，点越靠<b>左下</b>越优。</div>
             </div>
           </div>
           <div class="card">
-            <h3><i class="dot"></i>Ground Contact × Stride 触地-步幅</h3>
+            <div class="hd"><i class="dot"></i>Ground Contact × Stride</div>
             <div class="body"><div class="chartbox sq"><canvas id="cGCT"></canvas></div>
-              <div class="note">触地时间越短、步幅越长通常代表更好的弹性利用。左下角为「慢而粘地」，右上角为「长步幅但触地久」。</div>
+              <div class="note">触地越短、步幅越长＝弹性利用越好。</div>
             </div>
           </div>
         </div>
         <div class="card" style="margin-top:16px">
-          <h3><i class="dot"></i>Correlation Matrix 相关性矩阵<span class="hint">Pearson r · 全部 split</span></h3>
+          <div class="hd"><i class="dot"></i>Correlation 相关性矩阵<span class="hint">Pearson r</span></div>
           <div class="body"><div style="overflow-x:auto"><table class="t" id="corrTable"></table></div>
-            <div class="note">基于所有场次的所有 split 计算。<b>绿色</b>=强正相关，<b>粉色</b>=强负相关。用于判断「哪个技术变量真正在驱动配速」。</div>
+            <div class="note">基于所选场次的全部 split。<b>绿</b>=正相关，<b>红</b>=负相关。</div>
           </div>
         </div>
       </section>
 
-      <!-- ---------- MODEL ---------- -->
+      <!-- ================= MODEL ================= -->
       <section id="tab-model" class="hidden">
         <div class="row2">
           <div class="card">
-            <h3><i class="dot"></i>Riegel Exponent 拟合<span class="hint">个人疲劳指数</span></h3>
+            <div class="hd"><i class="dot"></i>Riegel Exponent 疲劳指数</div>
             <div class="body">
               <div class="statgrid" id="riegelStats"></div>
               <div class="eqbox" id="riegelEq"></div>
-              <div class="note">经典 Riegel 取 b = 1.06。<b>b 越小 → 距离延展能力越强（耐力型）</b>；b 越大 → 速度衰减越快（速度型）。</div>
+              <div class="note">经典值 b = 1.06。<b>b 越小 → 距离延展能力越强</b>；越大 → 速度衰减越快。</div>
             </div>
           </div>
           <div class="card">
-            <h3><i class="dot"></i>Critical Speed Model 临界速度<span class="hint">D = D′ + CS·t</span></h3>
+            <div class="hd"><i class="dot"></i>Critical Speed 临界速度</div>
             <div class="body">
               <div class="statgrid" id="csStats"></div>
               <div class="eqbox" id="csEq"></div>
-              <div class="note"><b>CS</b> = 理论上可长时间维持的最高速度（近似乳酸阈配速）；<b>D′</b> = 有限的无氧储备（米）。由各 PB 的 (t, D) 线性回归 D/t = CS + D′/t 得到。</div>
+              <div class="note"><b>CS</b>≈可持续的最高速度；<b>D′</b>为有限无氧储备（米）。由 D/t = CS + D′/t 线性回归得到。</div>
             </div>
           </div>
         </div>
         <div class="row2" style="margin-top:16px">
           <div class="card">
-            <h3><i class="dot"></i>Model Fit 拟合图<span class="hint">速度 vs 1/时间</span></h3>
+            <div class="hd"><i class="dot"></i>Model Fit 拟合图</div>
             <div class="body"><div class="chartbox"><canvas id="cCSFit"></canvas></div></div>
           </div>
           <div class="card">
-            <h3><i class="dot"></i>Estimated VO₂max 估算<span class="hint">Daniels / Jack Daniels 公式</span></h3>
-            <div class="body">
-              <div style="overflow-x:auto"><table class="t" id="vo2Table"></table></div>
-              <div class="note">由各距离 PB 反推的 VO₂max 估算值（同一跑步经济性假设下）。差异反映不同距离的表现一致性。</div>
+            <div class="hd"><i class="dot"></i>VO₂max 估算<span class="hint">Jack Daniels</span></div>
+            <div class="body"><div style="overflow-x:auto"><table class="t" id="vo2Table"></table></div>
+              <div class="note">由各距离 PB 反推，差异反映不同距离的表现一致性。</div>
             </div>
           </div>
         </div>
         <div class="card" style="margin-top:16px">
-          <h3><i class="dot"></i>Pace–HR Decoupling 心率漂移<span class="hint">后半程 / 前半程</span></h3>
+          <div class="hd"><i class="dot"></i>Pace–HR Decoupling 心率漂移</div>
           <div class="body"><div class="chartbox"><canvas id="cDecoup"></canvas></div>
-            <div class="note">计算方式：<b>后半程 (配速/心率)</b> 相对前半程的变化率。&lt;5% 视为配速与心率耦合良好；&gt;10% 提示耐力或散热/补水上存在短板。</div>
+            <div class="note">&lt;5% 耦合良好；&gt;10% 提示耐力 / 散热 / 补水短板。</div>
           </div>
         </div>
       </section>
 
-      <!-- ---------- DATA ---------- -->
+      <!-- ================= DATA ================= -->
       <section id="tab-data" class="hidden">
         <div class="card">
-          <h3><i class="dot"></i>Raw Splits 原始分段<span class="hint" id="dataHint"></span></h3>
+          <div class="hd"><i class="dot"></i>Raw Splits 原始分段<span class="hint" id="dataHint"></span></div>
           <div class="body">
             <div class="seg">
-              <label class="pill" style="display:flex;align-items:center;gap:6px">场次
+              <label style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase">场次
                 <select id="dataAct"></select>
               </label>
-              <button id="dlCsv" class="btn ghost">下载 CSV</button>
+              <button id="dlCsv">下载 CSV</button>
             </div>
             <div class="tablewrap"><table class="t" id="dataTable"></table></div>
-            <div class="note">配速列单位为 <b>min/km</b>（秒值已换算）。步幅单位 m、触地 ms、垂直振幅 cm。所有数值来自 Garmin 原始导出，未做平滑。</div>
+            <div class="note">配速为 min/km；步幅 m、触地 ms、垂直振幅 cm。数据来自 Garmin 原始导出，未平滑。</div>
           </div>
         </div>
       </section>
-
     </main>
   </div>
 
   <footer class="foot">
     <span>GARMIN TELEMETRY · Yuchen Wang</span>
-    <span>源数据：Garmin Recording.xlsx（9 场）+ 近期 activity CSV（2 场）</span>
+    <span>源：Garmin Recording.xlsx（9 场）+ 近期 CSV（2 场）</span>
     <span>共 <b id="footN"></b> 个 split</span>
     <span><a href="../cn/index.html">← 返回主页</a></span>
   </footer>
@@ -537,11 +586,11 @@ footer.foot a:hover{color:var(--lime)}
   <div class="dock-in">
     <div class="dock-top">
       <div class="dock-title"><i class="pulse"></i>Metric Dock</div>
-      <div class="dock-sub">勾选要纳入对比与建模的评估维度 · 点击即时生效</div>
+      <div class="dock-sub">勾选纳入对比与建模的评估维度</div>
       <div class="dock-actions">
-        <button class="btn" id="mCore">仅核心三项</button>
-        <button class="btn ghost" id="mAll">全选</button>
-        <button class="btn ghost" id="mNone">清空</button>
+        <button id="mCore">核心三项</button>
+        <button id="mAll">全选</button>
+        <button id="mNone">清空</button>
       </div>
     </div>
     <div class="metricrail" id="metricRail"></div>
@@ -550,6 +599,7 @@ footer.foot a:hover{color:var(--lime)}
 
 <script src="vendor/chart.umd.min.js"></script>
 <script src="data.js"></script>
+<script src="runner.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

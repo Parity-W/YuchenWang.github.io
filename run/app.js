@@ -10,10 +10,10 @@
   var ACTS = D.activities;
   var PR = D.personalRecords;
 
-  var PALETTE = ["#c9ff3d", "#3ae0ff", "#ffb020", "#ff4d7d", "#a97bff",
-    "#37e6a0", "#ff8a3d", "#5b9dff", "#f45b69", "#00d2be", "#ffe066", "#ff6ec7"];
-  var MUT = "#77879b", DIM = "#4d5b6c", LINE = "rgba(126,150,175,.14)";
-  var MONO = '"JetBrains Mono","SFMono-Regular",Menlo,Consolas,monospace';
+  var PALETTE = ["#1a5cff", "#00a870", "#ff5a2d", "#6f4bf0", "#0aa2c0",
+    "#e8387f", "#f0a020", "#3f6bd8", "#00b37a", "#8a63ff", "#d9534f", "#1f9aa8"];
+  var MUT = "#5b6675", DIM = "#98a2b3", LINE = "rgba(15,23,42,.075)";
+  var MONO = 'ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace';
   var SPORT = '"Barlow Condensed","Oswald","Arial Narrow",sans-serif';
 
   var LS_DATES = "garminRunDatesV1";
@@ -81,8 +81,10 @@
     Chart.defaults.color = MUT;
     Chart.defaults.borderColor = LINE;
     Chart.defaults.animation.duration = 380;
-    Chart.defaults.plugins.tooltip.backgroundColor = "rgba(10,14,20,.95)";
-    Chart.defaults.plugins.tooltip.borderColor = "rgba(126,150,175,.35)";
+    Chart.defaults.plugins.tooltip.backgroundColor = "rgba(255,255,255,.97)";
+    Chart.defaults.plugins.tooltip.titleColor = "#0d1526";
+    Chart.defaults.plugins.tooltip.bodyColor = "#263248";
+    Chart.defaults.plugins.tooltip.borderColor = "rgba(15,23,42,.14)";
     Chart.defaults.plugins.tooltip.borderWidth = 1;
     Chart.defaults.plugins.tooltip.titleFont = { family: MONO, size: 11 };
     Chart.defaults.plugins.tooltip.bodyFont = { family: MONO, size: 11 };
@@ -94,7 +96,7 @@
   }
   function kill(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
   function gridX() {
-    return { grid: { color: LINE, drawTicks: false }, border: { color: "rgba(126,150,175,.25)" }, ticks: { padding: 6 } };
+    return { grid: { color: LINE, drawTicks: false }, border: { color: "rgba(15,23,42,.18)" }, ticks: { padding: 6 } };
   }
   function gridY(opts) {
     var o = opts || {};
@@ -300,7 +302,7 @@
         Array.prototype.forEach.call(btns, function (x) { x.classList.remove("on"); });
         b.classList.add("on");
         state.tab = b.dataset.tab;
-        ["overview", "laps", "compare", "lab", "model", "data"].forEach(function (t) {
+        ["overview", "gait", "laps", "compare", "lab", "model", "data"].forEach(function (t) {
           $("tab-" + t).classList.toggle("hidden", t !== state.tab);
         });
         if (("#" + state.tab) !== location.hash) {
@@ -1091,9 +1093,145 @@
     document.body.appendChild(t); t.click(); document.body.removeChild(t);
   };
 
+  /* ========================================================= GAIT ==== */
+  var runner = null, runnerCard = null, gaitId = null, runnerAutoplay = true;
+  var SPEEDS = [1, 0.5, 0.25], speedIdx = 0;
+
+  function gaitSession() {
+    var hit = ACTS.filter(function (a) { return a.id === gaitId; })[0];
+    if (hit) return hit;
+    var s = selAct();
+    return s.length ? s[0] : ACTS[0];
+  }
+
+  function buildRunner() {
+    runnerCard = el("div");
+    runnerCard.id = "runnerCard";
+    runnerCard.innerHTML =
+      '<div id="runnerHost"></div>' +
+      '<div class="runctl">' +
+      '<button id="rPlay">❚❚ PAUSE</button>' +
+      '<button id="rSpeed">1.0×</button>' +
+      '<button id="rStep">STEP ▸</button>' +
+      '<select id="gaitAct" aria-label="选择场次"></select>' +
+      '</div>';
+    $("gaitSlot").appendChild(runnerCard);
+    var sel = $("gaitAct");
+    ACTS.forEach(function (a) {
+      var o = el("option");
+      o.value = a.id;
+      o.textContent = a.label + " · " + a.summary.paceFmt + "/km";
+      sel.appendChild(o);
+    });
+    sel.onchange = function () { gaitId = sel.value; renderGait(); };
+    runner = new Runner($("runnerHost"), { autoplay: false });
+
+    $("rPlay").onclick = function () {
+      runnerAutoplay = !runnerAutoplay;
+      $("rPlay").textContent = runnerAutoplay ? "❚❚ PAUSE" : "▶ PLAY";
+      $("rPlay").classList.toggle("on", !runnerAutoplay);
+      syncRunnerPlay();
+    };
+    $("rSpeed").onclick = function () {
+      speedIdx = (speedIdx + 1) % SPEEDS.length;
+      var x = SPEEDS[speedIdx];
+      runner.speed = x;
+      $("rSpeed").textContent = x.toFixed(2).replace(/0$/, "") + "×";
+      $("rSpeed").classList.toggle("on", x !== 1);
+    };
+    $("rStep").onclick = function () {
+      runnerAutoplay = false;
+      $("rPlay").textContent = "▶ PLAY";
+      runner.pause();
+      runner.step(0.04);
+    };
+    runner.onframe = function (st) {
+      var ph = $("lvPhase"), hp = $("lvHip"), kn = $("lvKnee");
+      if (ph) ph.textContent = st.phase.toFixed(2);
+      if (hp) hp.textContent = st.hip.toFixed(0) + "°";
+      if (kn) kn.textContent = st.knee.toFixed(0) + "°";
+    };
+  }
+
+  function syncRunnerPlay() {
+    if (!runner) return;
+    var visible = (state.tab === "gait" || state.tab === "overview");
+    if (visible && runnerAutoplay) runner.play(); else runner.pause();
+  }
+
+  function placeRunner() {
+    if (!runnerCard) return;
+    var host = state.tab === "gait" ? $("gaitSlot2")
+      : state.tab === "overview" ? $("gaitSlot") : null;
+    if (host && runnerCard.parentNode !== host) host.appendChild(runnerCard);
+    syncRunnerPlay();
+  }
+
+  function renderGait() {
+    if (!runner) return;
+    var a = gaitSession();
+    if (!a) return;
+    var s = a.summary;
+    var cycleMs = 120 / s.cad * 1000;
+    var contactPct = s.gct / cycleMs * 100;
+    var kmh = s.kmh || 3600 / s.pace;
+
+    runner.setParams({
+      cadence: s.cad, stride: s.stride, gct: s.gct, vo: s.vo, kmh: kmh
+    });
+    var who = a.label + " · " + s.paceFmt + "/km · " + num(s.dist, 2) + "km";
+    $("gaitWho").textContent = who;
+    $("gaitWho2").textContent = who;
+    var sel = $("gaitAct"); if (sel && sel.value !== a.id) sel.value = a.id;
+
+    $("gaitStats").innerHTML =
+      stat("步态周期", (cycleMs / 1000).toFixed(2), "s / 完整步态") +
+      stat("支撑相", contactPct.toFixed(0) + "%", num(s.gct, 0) + " ms 触地") +
+      stat("腾空相", (100 - contactPct).toFixed(0) + "%", "无触地时间") +
+      stat("步幅", num(s.stride, 2), "m / 步") +
+      stat("步频", num(s.cad, 0), "spm (单侧)") +
+      stat("垂直振幅", num(s.vo, 1), "cm") +
+      stat("垂直比", num(s.vr, 1) + "%", "振幅/步幅") +
+      stat("配速", s.paceFmt, "/km · " + num(kmh, 1) + " km/h");
+
+    $("gaitLive").innerHTML =
+      lv("CADENCE 步频", num(s.cad, 0), "spm") +
+      lv("STRIDE 步幅", num(s.stride, 2), "m") +
+      lv("CONTACT 触地", num(s.gct, 0) + " <small>ms</small>", contactPct.toFixed(0) + "% 周期") +
+      lv("FLIGHT 腾空", (100 - contactPct).toFixed(0) + "%", "无接触") +
+      lv("V-OSC 垂直振幅", num(s.vo, 1), "cm") +
+      lv("HIP 髋角", '<span id="lvHip">—</span>', "live") +
+      lv("KNEE 膝屈", '<span id="lvKnee">—</span>', "live") +
+      lv("PHASE 相位", '<span id="lvPhase">0.00</span>', "0–1");
+
+    var rows = [
+      ["步频 cadence", num(s.cad, 0) + " spm", "步态周期 " + (cycleMs / 1000).toFixed(2) + " s"],
+      ["步幅 stride", num(s.stride, 2) + " m", "髋摆幅 ±" + runner.amp.hip.toFixed(0) + "°"],
+      ["触地 gct", num(s.gct, 0) + " ms", "支撑相 " + contactPct.toFixed(0) + "%"],
+      ["垂直振幅 vo", num(s.vo, 1) + " cm", "重心起伏 " + runner.amp.bob.toFixed(0) + " px"],
+      ["速度 speed", num(kmh, 1) + " km/h", "前倾 " + runner.amp.lean.toFixed(0) + "° / 地面 " + num(kmh / 3.6, 2) + " m/s"],
+      ["膝屈峰值", runner.amp.kneeSwing.toFixed(0) + "°", "摆动中期"],
+      ["肘角", runner.amp.elbow.toFixed(0) + "°", "固定值"]
+    ];
+    var h = "<thead><tr><th>参数</th><th>数值</th><th>动画映射</th></tr></thead><tbody>";
+    rows.forEach(function (r) {
+      h += "<tr><td>" + r[0] + "</td><td class='hi'>" + r[1] + "</td><td style='text-align:left;color:#4d5a70'>" + r[2] + "</td></tr>";
+    });
+    h += "</tbody>";
+    $("gaitMap").innerHTML = h;
+
+    syncRunnerPlay();
+  }
+  function lv(k, v, sub) {
+    return '<div class="lv"><div class="k">' + k + '</div><div class="v">' + v +
+      (sub ? ' <small>' + sub + '</small>' : '') + '</div></div>';
+  }
+
   /* ====================================================== REFRESH ===== */
   function refresh() {
-    if (state.tab === "overview") { renderEnvelope(); renderLoad(); renderRadarCore(); renderTimeline(); }
+    placeRunner();
+    if (state.tab === "overview") { renderEnvelope(); renderLoad(); renderRadarCore(); renderTimeline(); renderGait(); }
+    if (state.tab === "gait") { renderGait(); }
     if (state.tab === "laps") { renderLaps(); renderSplitBars(); }
     if (state.tab === "compare") { renderCompare(); }
     if (state.tab === "lab") { renderLab(); }
@@ -1103,9 +1241,15 @@
 
   /* ========================================================= BOOT ===== */
   function pickDefault() {
-    var byGroup = {};
-    ACTS.forEach(function (a) { var g = bucket(a); if (!byGroup[g]) byGroup[g] = a; });
-    Object.keys(byGroup).forEach(function (g) { state.acts.add(byGroup[g].id); });
+    // 各距离组中最快的一场
+    var best = {};
+    ACTS.forEach(function (a) {
+      var g = bucket(a);
+      if (!best[g] || a.summary.pace < best[g].summary.pace) best[g] = a;
+    });
+    Object.keys(best).forEach(function (g) { state.acts.add(best[g].id); });
+    gaitId = Object.keys(best).map(function (g) { return best[g]; })
+      .sort(function (x, y) { return x.summary.pace - y.summary.pace; })[0].id;
   }
 
   function boot() {
@@ -1122,8 +1266,12 @@
     bindTabs();
     $("footN").textContent = ACTS.reduce(function (s, a) { return s + a.laps.length; }, 0);
 
-    $("selAll").onclick = function () { ACTS.forEach(function (a) { state.acts.add(a.id); }); renderSidebar(); refresh(); };
-    $("selNone").onclick = function () { state.acts.clear(); renderSidebar(); refresh(); };
+    var segBtns = [$("selAll"), $("selNone"), $("selBest"), $("selRecent")];
+    function markSeg(b) {
+      segBtns.forEach(function (x) { x.classList.toggle("on", x === b); });
+    }
+    $("selAll").onclick = function () { ACTS.forEach(function (a) { state.acts.add(a.id); }); markSeg(this); renderSidebar(); refresh(); };
+    $("selNone").onclick = function () { state.acts.clear(); markSeg(this); renderSidebar(); refresh(); };
     $("selBest").onclick = function () {
       state.acts.clear();
       var g = {};
@@ -1132,12 +1280,19 @@
         if (!g[k] || a.summary.pace < g[k].summary.pace) g[k] = a;
       });
       Object.keys(g).forEach(function (k) { state.acts.add(g[k].id); });
-      renderSidebar(); refresh();
+      markSeg(this); renderSidebar(); refresh();
     };
     $("selRecent").onclick = function () {
       state.acts.clear();
       ACTS.filter(function (a) { return a.recent; }).forEach(function (a) { state.acts.add(a.id); });
-      renderSidebar(); refresh();
+      markSeg(this); renderSidebar(); refresh();
+    };
+    markSeg($("selBest"));
+    $("sideToggle").onclick = function () {
+      var s = $("side");
+      s.classList.toggle("collapsed");
+      this.textContent = s.classList.contains("collapsed")
+        ? "场次筛选 · SESSIONS ▾" : "收起 · HIDE ▴";
     };
     $("copyDates").onclick = function () {
       var payload = {};
@@ -1173,6 +1328,7 @@
 
     pickDefault();
     renderSidebar();
+    buildRunner();
     refresh();
 
     // deep link:  #laps / #compare / #lab / #model / #data
