@@ -690,9 +690,13 @@ function loadImports(){
 function handleFiles(files){
   var list=[];for(var i=0;i<files.length;i++)list.push(files[i]);
   if(!list.length)return;
-  var done=0,bad=[],pending=list.length;
+  var done=0,bad=[],pending=list.length,raw=[];
   function finish(){
-    if(done){saveImports();S.lap=1;go('session');toast('Imported '+done+' session'+(done>1?'s':'')+' · now showing '+cur().label);}
+    if(done){
+      saveImports();S.lap=1;go('session');
+      toast('Imported '+done+' session'+(done>1?'s':'')+' · now showing '+cur().label);
+      fsSave(raw);
+    }
     else toast('Could not read '+bad.join(', ')+'. Expected a Garmin lap CSV with a Lap column.');
   }
   list.forEach(function(f){
@@ -705,7 +709,7 @@ function handleFiles(files){
           var found=false;
           for(var i=0;i<A.length;i++){if(A[i].id===act.id){A[i]=act;found=true;break;}}
           if(!found)A.push(act);
-          S.id=act.id;done++;
+          S.id=act.id;done++;raw.push({name:f.name,text:String(fr.result)});
         }
       }catch(err){bad.push(f.name);}
       if(--pending<=0)finish();
@@ -713,6 +717,87 @@ function handleFiles(files){
     fr.onerror=function(){bad.push(f.name);if(--pending<=0)finish();};
     fr.readAsText(f);
   });
+}
+/* ---------------- hand the raw files back to the local folder ---------------- */
+var FS_OK=('showDirectoryPicker' in window);
+var fsDir=null,fsPending=[];
+function idbOpen(){
+  return new Promise(function(res,rej){
+    var r=indexedDB.open('runAtlasFs',1);
+    r.onupgradeneeded=function(){r.result.createObjectStore('kv');};
+    r.onsuccess=function(){res(r.result);};
+    r.onerror=function(){rej(r.error);};
+  });
+}
+function idbGet(k){
+  return idbOpen().then(function(d){return new Promise(function(res,rej){
+    var q=d.transaction('kv').objectStore('kv').get(k);
+    q.onsuccess=function(){res(q.result);};q.onerror=function(){rej(q.error);};
+  });});
+}
+function idbSet(k,v){
+  return idbOpen().then(function(d){return new Promise(function(res,rej){
+    var q=d.transaction('kv','readwrite').objectStore('kv').put(v,k);
+    q.onsuccess=function(){res(1);};q.onerror=function(){rej(q.error);};
+  });});
+}
+function fsRestore(){
+  if(!FS_OK)return;
+  idbGet('garminDir').then(function(h){if(h)fsDir=h;}).catch(function(){});
+}
+function askFolder(){
+  var t=document.getElementById('toast');
+  t.innerHTML='';
+  var s=document.createElement('span');
+  s.textContent='Save these files into your Garmin folder? ';
+  var b=document.createElement('button');
+  b.type='button';b.className='text-btn';b.style.color='#dbed96';b.textContent='Choose folder';
+  b.onclick=function(){t.hidden=true;fsPick();};
+  t.appendChild(s);t.appendChild(b);t.hidden=false;
+  clearTimeout(t._h);t._h=setTimeout(function(){t.hidden=true;},12000);
+}
+function fsPick(){
+  if(!FS_OK){toast('This browser cannot write to a folder — Chrome or Edge can.');return;}
+  window.showDirectoryPicker({id:'garmin-folder',mode:'readwrite'}).then(function(h){
+    fsDir=h;
+    return idbSet('garminDir',h).catch(function(){});
+  }).then(function(){
+    toast('Connected to '+fsDir.name+'. Saving…');
+    fsSave(fsPending);fsPending=[];
+  }).catch(function(e){
+    if(e&&e.name==='SecurityError')toast('Folder access needs HTTPS or localhost.');
+    else toast('Folder not connected'+(e&&e.name?' ('+e.name+')':'')+'.');
+  });
+}
+function fsWrite(list){
+  return Promise.all(list.map(function(f){
+    return fsDir.getFileHandle(f.name,{create:true})
+      .then(function(fh){return fh.createWritable();})
+      .then(function(w){return w.write(f.text).then(function(){return w.close();});});
+  }));
+}
+function fsSave(list){
+  if(!list||!list.length)return;
+  if(!FS_OK){
+    list.forEach(function(f){
+      var a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([f.text],{type:'text/csv'}));
+      a.download=f.name;a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);},5000);
+    });
+    toast('Downloaded '+list.length+' file'+(list.length>1?'s':'')+' — move it into D:\\Desktop\\Marathon\\Garmin so it can be published.');
+    return;
+  }
+  if(!fsDir){fsPending=list;askFolder();return;}
+  var perm='prompt';
+  try{perm=fsDir.queryPermission?fsDir.queryPermission({mode:'readwrite'}):'granted';}catch(e){perm='granted';}
+  if(perm==='granted'){
+    fsWrite(list).then(function(){
+      toast('Saved '+list.length+' file'+(list.length>1?'s':'')+' into '+fsDir.name+' · publishing will pick them up.');
+    }).catch(function(e){toast('Could not write: '+(e&&e.name||e));});
+  }else{
+    fsPending=list;askFolder();
+  }
 }
 function clearImports(){
   A=A.filter(function(a){return !a.imported;});
@@ -784,12 +869,20 @@ document.getElementById('guideOpen').addEventListener('click',function(){
     '<h3>Reading the numbers</h3><ul><li>Pace and time are min/km and h:mm:ss.</li><li>Stride in metres, cadence in steps per minute, ground contact in milliseconds, vertical oscillation in centimetres.</li><li>Running effectiveness is speed (m/s) per W/kg; efficiency index is speed per heart rate.</li></ul>'+
     '<h3>Notes on the source</h3><ul><li>The workbook stored durations as clock values that Excel re-read as hours:minutes, so every time was rebuilt from pace × distance.</li><li>The personal-best sheet carries Excel serial numbers rather than dates, so no date is shown until you set one.</li><li>The half-marathon telemetry totals 1:40:35 while the recorded best is 1:38:31 — watch totals versus official timing.</li></ul>'+
     '<h3>Colours</h3><div class="swatches">'+A.slice(0,8).map(function(a){return '<span class="swatch"><i style="background:'+colorOf(a)+'"></i>'+esc(a.label)+'</span>';}).join('')+'</div>'+
-    '<h3>Adding new runs</h3><ul><li>Use <strong>Import CSV</strong> (top right) to load a Garmin lap CSV export. It is parsed in your browser, saved in this browser\'s local storage and added to the session list.</li><li>To make a run permanent for everyone, put the file in <code>D:\\Desktop\\Marathon\\Garmin</code> and rebuild the embedded data — the page itself is a static file and cannot read that folder.</li></ul>'+
+    '<h3>Adding new runs</h3><ul><li>Use <strong>Import CSV</strong> (top right) to load a Garmin lap CSV export. It is parsed in your browser and, if the folder is connected, written back into <code>D:\\Desktop\\Marathon\\Garmin</code>.</li><li>Once the file is in that folder, rebuilding the embedded data publishes it for everyone — the page itself is a static file and cannot read your disk on its own.</li></ul>'+
+    folderBlock()+
     impBlock();
   var rm=document.getElementById('clearImports');
   if(rm)rm.addEventListener('click',function(){d.close();clearImports();});
+  var fp=document.getElementById('folderPick');
+  if(fp)fp.addEventListener('click',fsPick);
   if(d.showModal)d.showModal();else d.setAttribute('open','');
 });
+function folderBlock(){
+  if(!FS_OK)return '<h3>Local folder</h3><p>This browser cannot write to a folder. Chrome or Edge can pick one and reuse it.</p>';
+  return '<h3>Local folder</h3><p>Imported CSV files are copied back to: <strong>'+(fsDir?esc(fsDir.name):'not connected')+'</strong>. The first import asks you once; after that it is automatic.</p>'+
+    '<p><button type="button" class="text-btn" id="folderPick">'+(fsDir?'Change folder':'Connect folder')+'</button></p>';
+}
 function impBlock(){
   var imp=A.filter(function(a){return a.imported;});
   if(!imp.length)return '';
@@ -804,6 +897,7 @@ window.addEventListener('hashchange',function(){
 });
 var start=(location.hash||'').replace('#','');
 if(['session','log','lab','models'].indexOf(start)>=0)S.page=start;
+fsRestore();
 loadImports();
 render();
 })();
