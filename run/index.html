@@ -1,20 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#103f38"><title>Run Atlas — Garmin training journal</title>
-<style>:root{--paper:#f5f5ef;--ink:#182f2b;--muted:#52655d;--line:#d7dfd5;--teal:#146557;--forest:#104a40;--lime:#d5e991;--clay:#b9633f;--slate:#586f80;--card:#fffefa;--radius:18px;--sans:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button,a,input,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer;color:inherit}a{color:var(--teal)}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #cd814e;outline-offset:3px}button:disabled{opacity:.42;cursor:default}a{text-underline-offset:3px}svg{display:block}.skip{position:fixed;top:-80px;left:12px;z-index:20;background:white;padding:10px}.skip:focus{top:10px}.mast{background:#fbfcf7;border-bottom:1px solid var(--line)}.mast-inner{max-width:1280px;margin:auto;min-height:73px;padding:0 44px;display:flex;align-items:center;gap:38px}.wordmark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);white-space:nowrap}.wordmark svg{width:34px;height:34px}.wordmark>span{font-size:25px;font-weight:780;letter-spacing:-1.6px}.brand-dot{color:var(--teal)}.top-nav{align-self:stretch;display:flex;gap:24px;overflow-x:auto}.top-nav a{display:flex;align-items:center;color:#53655e;text-decoration:none;position:relative;font-size:13px;font-weight:620;padding:4px 1px 0;white-space:nowrap}.top-nav a[aria-current=page]{color:var(--forest);font-weight:760}.top-nav a[aria-current=page]:after{content:'';position:absolute;left:0;right:0;height:3px;bottom:0;background:var(--teal)}.mast-actions{margin-left:auto;display:flex;gap:9px;align-items:center}.btn,.icon-btn,.select-shell{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);min-height:37px;padding:8px 13px;font-weight:660;font-size:13px}.btn:hover,.icon-btn:hover,.select-shell:hover{filter:brightness(.96)}.btn-primary{color:#fff;background:var(--forest);border-color:var(--forest)}.btn-quiet{background:transparent}.i{width:16px;height:16px;flex:none}.btn>span[data-icon]{display:inline-flex}.icon-btn{width:30px;min-height:30px;padding:3px;font-size:23px;line-height:1}.text-btn{padding:0;border:0;background:transparent;font-size:13px;font-weight:680;color:var(--teal)}.text-btn:hover{text-decoration:underline}main,footer{width:100%;max-width:1280px;padding-left:44px;padding-right:44px;margin:auto}main{outline:none;padding-top:34px}.headline{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:24px}.eyebrow,.micro{font:700 10px/1.45 var(--mono);letter-spacing:.14em;text-transform:uppercase}.eyebrow{color:var(--teal);display:flex;align-items:center;gap:8px}.eyebrow .rule{width:24px;height:2px;background:var(--teal)}h1,h2,h3,h4,p{margin:0}h1{font-size:clamp(38px,4.2vw,60px);font-weight:620;line-height:1.02;letter-spacing:-.061em;margin:10px 0 8px}#pageIntro{color:var(--muted);font-size:14px;max-width:710px}#topMeta{text-align:right;line-height:1.5}.file-meta{font:11px var(--mono);color:#4f645c;overflow-wrap:anywhere}.date-link{display:inline-block;color:var(--teal);background:none;border:0;padding:4px 0;font-size:12px;text-decoration:underline;text-underline-offset:3px}.hero{border-radius:var(--radius);border:1px solid #becdc1;display:grid;grid-template-columns:47% 53%;overflow:hidden;background:var(--card)}.hero-main{position:relative;isolation:isolate;overflow:hidden;background:#104a40;color:white;padding:23px 28px 22px;min-height:190px;display:flex;flex-direction:column;justify-content:center}.hero-content{position:relative;z-index:1;width:fit-content}.hero .micro{color:#e0ecc7}.distance{font-size:clamp(53px,5.5vw,83px);font-weight:570;line-height:1.08;letter-spacing:-.064em;font-variant-numeric:tabular-nums}.distance small{margin-left:8px;font-size:.35em;letter-spacing:-.055em;font-weight:470;color:#d0e3c1}.hero-bottom{display:flex;align-items:center;gap:8px;margin-top:9px;color:#e1edde;font-size:12px}.track-art{position:absolute;width:67%;height:110%;right:-6%;top:-3%;z-index:0}.hero-metrics{display:grid;grid-template-columns:1fr 1fr;padding:5px 23px}.kpi{padding:15px 16px;align-self:stretch;display:flex;flex-direction:column;justify-content:center}.kpi:nth-child(-n+2){border-bottom:1px solid var(--line)}.kpi:nth-child(odd){border-right:1px solid var(--line)}.kpi-label{color:var(--muted);font-size:12px;font-weight:625;display:flex;gap:7px;align-items:center}.kpi-value{font-size:32px;font-weight:610;letter-spacing:-.055em;line-height:1.1;font-variant-numeric:tabular-nums;margin-top:5px}.kpi-unit{font:500 12px var(--sans);color:var(--muted);letter-spacing:0;margin-left:5px}.analysis-grid{display:grid;grid-template-columns:minmax(0,1.92fr) minmax(250px,1fr);gap:16px;margin-top:18px;align-items:stretch}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}.card-pad{padding:22px 25px}.head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.section-index{color:#637a6c;font:650 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}.head-row h2,.inspector h2{font-size:24px;line-height:1.15;letter-spacing:-.047em;font-weight:630}.sub{color:var(--muted);font-size:12px;margin-top:4px}.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;line-height:1.3;background:#edf2e8;border:1px solid #d2ddcf;border-radius:22px;font:650 10px var(--mono);white-space:nowrap;color:#385c45}.seg{display:inline-flex;gap:2px;margin-top:16px;padding:3px;border:1px solid var(--line);background:#f2f4ee;border-radius:9px;flex-wrap:wrap}.seg button{border:0;border-radius:6px;background:transparent;color:var(--muted);font-size:12px;font-weight:650;padding:5px 13px}.seg button[aria-pressed=true]{background:#fff;color:#144c3f;box-shadow:0 1px 4px #19362322}.plot{margin-top:10px;--labelW:62px;--valueW:63px}.axis-heading{display:flex;justify-content:space-between;padding-left:var(--labelW);padding-right:var(--valueW);font:10px var(--mono);color:var(--muted);margin-bottom:6px}.plot-rows{max-height:370px;overflow:auto}.plot-row,.axis-row{display:grid;grid-template-columns:var(--labelW) minmax(0,1fr) var(--valueW);align-items:center}.plot-row{width:100%;background:none;border:0;text-align:left;min-height:35px;border-radius:5px;padding:0}.plot-row:hover,.plot-row[aria-pressed=true]{background:#eef3e8}.plot-lab{font:640 11px var(--mono);padding-left:4px;color:#394e46}.plot-track{height:34px;position:relative;background-image:linear-gradient(to right,#dce3d9 1px,transparent 1px);background-size:25% 100%;border-right:1px solid #dce3d9}.plot-track:before{content:'';position:absolute;top:50%;left:0;right:0;border-top:1px dashed #c8d4c7}.plot-mark{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;background:var(--teal);transform:translate(-50%,-50%);border:1px solid var(--card)}.plot-row[aria-pressed=true] .plot-mark{width:14px;height:14px;box-shadow:0 0 0 3px #b4d79e;background:#15594c;border:2px solid white}.plot-val{font:650 12px var(--mono);text-align:right;padding-right:5px}.axis-row{font:10px var(--mono);color:var(--muted);height:23px}.ticks{position:relative;height:100%}.ticks span{position:absolute;top:5px;transform:translateX(-50%);white-space:nowrap}.chart-control{margin-top:7px;padding-top:10px;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center;justify-content:space-between}.check{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;cursor:pointer}.check input{accent-color:var(--teal)}.chart-note{font-size:11px;color:var(--muted)}.inspector{background:#e8eee1;padding:22px 23px;border-color:#cbd8c6}.inspector-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.arrows{display:flex;gap:5px}.arrows .icon-btn{background:#f5f8ee;border-color:#c6d2c1;border-radius:50%;width:26px;min-height:26px;font-size:17px}.lap-name{margin-top:11px;display:flex;align-items:center;gap:10px}.inspector .big-reading{margin:12px 0 4px;font-size:47px;line-height:1.05;font-weight:580;letter-spacing:-.06em}.big-reading .kpi-unit{font-size:13px}.inspector-list{display:grid;grid-template-columns:1fr 1fr;gap:9px 13px;border-top:1px solid #c9d5c5;margin-top:14px;padding-top:13px}.mini-label{font-size:11px;color:#4d6155}.mini-val{font-size:18px;font-weight:620;letter-spacing:-.045em;font-variant-numeric:tabular-nums}.mini-unit{font-size:10px;color:var(--muted);margin-left:4px;letter-spacing:0}.inspector-note{margin-top:13px;color:#3f594b;font-size:12px;line-height:1.45}.table-card{margin-top:18px}.table-head{padding:20px 24px 10px}.select-shell{font-size:12px;padding:6px 8px;min-height:32px;max-width:100%}.scroll-table{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap;font-size:13px;font-variant-numeric:tabular-nums}th,td{text-align:right;padding:11px 12px;border-bottom:1px solid var(--line)}th{font-size:11px;font-weight:650;color:var(--muted)}th:first-child,td:first-child{text-align:left;padding-left:24px}th:last-child,td:last-child{padding-right:24px}tbody tr[data-sel=true]{background:#f1f5e9}tfoot td{font-weight:700;background:#f5f7ef}td button{padding:0;border:0;background:transparent;color:var(--teal);font-size:13px;font-weight:680;text-decoration:underline;text-underline-offset:3px}.table-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:13px 24px;font-size:11px;color:var(--muted)}.table-foot .text-btn{font-size:12px}.plain-note{font-size:13px;line-height:1.5;color:var(--muted);padding:19px 0}.hidden,[hidden]{display:none!important}footer{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:22px;padding-top:16px;padding-bottom:26px;color:var(--muted)}.foot-brand{display:flex;gap:8px;align-items:center;font-size:12px}.dot{width:6px;height:6px;background:#427f65;border-radius:50%}.foot-slash{color:#aab7ac}#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#193f36;color:white;padding:12px 18px;border-radius:10px;box-shadow:0 5px 26px #10231830;max-width:min(92vw,760px);width:max-content;z-index:12;font-size:13px}.sheet-head{display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;padding:15px 0;background:var(--card);z-index:1}dialog{color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:16px;width:min(760px,calc(100% - 24px));max-height:88vh;max-height:88dvh;padding:0 24px 24px;box-shadow:0 20px 90px #172d2750}dialog::backdrop{background:#1c322d80}dialog h2{font-size:32px;letter-spacing:-.055em;line-height:1.2;margin-bottom:9px}dialog h3{font-size:18px;letter-spacing:-.03em;margin:19px 0 4px}dialog p,dialog li{font-size:13px;color:var(--muted);line-height:1.6}dialog .intro{font-size:15px}dialog ol,dialog ul{padding-left:21px;margin:4px 0 12px}.swatches{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.swatch{padding:5px 9px;border-radius:7px;display:inline-flex;align-items:center;gap:5px;font:11px var(--mono);border:1px solid var(--line)}.swatch i{border-radius:50%;width:11px;height:11px}.raw-scroll{max-height:53vh;overflow:auto}.raw-scroll th{position:sticky;top:0;background:#eef3e9}.raw-scroll th,.raw-scroll td{padding:7px 10px}.raw-scroll table{font-size:12px}
+<style>:root{--paper:#f5f5ef;--ink:#182f2b;--muted:#52655d;--line:#d7dfd5;--teal:#146557;--forest:#104a40;--lime:#d5e991;--clay:#b9633f;--slate:#586f80;--card:#fffefa;--radius:18px;--sans:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button,a,input,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer;color:inherit}a{color:var(--teal)}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #cd814e;outline-offset:3px}button:disabled{opacity:.42;cursor:default}a{text-underline-offset:3px}svg{display:block}.skip{position:fixed;top:-80px;left:12px;z-index:20;background:white;padding:10px}.skip:focus{top:10px}.mast{background:#fbfcf7;border-bottom:1px solid var(--line)}.mast-inner{max-width:1280px;margin:auto;min-height:73px;padding:0 44px;display:flex;align-items:center;gap:38px}.wordmark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);white-space:nowrap}.wordmark svg{width:34px;height:34px}.wordmark>span{font-size:25px;font-weight:780;letter-spacing:-1.6px}.brand-dot{color:var(--teal)}.mast-actions{margin-left:auto;display:flex;gap:9px;align-items:center}.btn,.icon-btn,.select-shell{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);min-height:37px;padding:8px 13px;font-weight:660;font-size:13px}.btn:hover,.icon-btn:hover,.select-shell:hover{filter:brightness(.96)}.btn-primary{color:#fff;background:var(--forest);border-color:var(--forest)}.btn-quiet{background:transparent}.i{width:16px;height:16px;flex:none}.btn>span[data-icon]{display:inline-flex}.icon-btn{width:30px;min-height:30px;padding:3px;font-size:23px;line-height:1}.text-btn{padding:0;border:0;background:transparent;font-size:13px;font-weight:680;color:var(--teal)}.text-btn:hover{text-decoration:underline}main,footer{width:100%;max-width:1280px;padding-left:44px;padding-right:44px;margin:auto}main{outline:none;padding-top:34px}.headline{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:24px}.eyebrow,.micro{font:700 10px/1.45 var(--mono);letter-spacing:.14em;text-transform:uppercase}.eyebrow{color:var(--teal);display:flex;align-items:center;gap:8px}.eyebrow .rule{width:24px;height:2px;background:var(--teal)}h1,h2,h3,h4,p{margin:0}h1{font-size:clamp(38px,4.2vw,60px);font-weight:620;line-height:1.02;letter-spacing:-.061em;margin:10px 0 8px}#pageIntro{color:var(--muted);font-size:14px;max-width:710px}#topMeta{text-align:right;line-height:1.5}.file-meta{font:11px var(--mono);color:#4f645c;overflow-wrap:anywhere}.date-link{display:inline-block;color:var(--teal);background:none;border:0;padding:4px 0;font-size:12px;text-decoration:underline;text-underline-offset:3px}.hero{border-radius:var(--radius);border:1px solid #becdc1;display:grid;grid-template-columns:47% 53%;overflow:hidden;background:var(--card)}.hero-main{position:relative;isolation:isolate;overflow:hidden;background:#104a40;color:white;padding:23px 28px 22px;min-height:190px;display:flex;flex-direction:column;justify-content:center}.hero-content{position:relative;z-index:1;width:fit-content}.hero .micro{color:#e0ecc7}.distance{font-size:clamp(53px,5.5vw,83px);font-weight:570;line-height:1.08;letter-spacing:-.064em;font-variant-numeric:tabular-nums}.distance small{margin-left:8px;font-size:.35em;letter-spacing:-.055em;font-weight:470;color:#d0e3c1}.hero-bottom{display:flex;align-items:center;gap:8px;margin-top:9px;color:#e1edde;font-size:12px}.track-art{position:absolute;width:67%;height:110%;right:-6%;top:-3%;z-index:0}.hero-metrics{display:grid;grid-template-columns:1fr 1fr;padding:5px 23px}.kpi{padding:15px 16px;align-self:stretch;display:flex;flex-direction:column;justify-content:center}.kpi:nth-child(-n+2){border-bottom:1px solid var(--line)}.kpi:nth-child(odd){border-right:1px solid var(--line)}.kpi-label{color:var(--muted);font-size:12px;font-weight:625;display:flex;gap:7px;align-items:center}.kpi-value{font-size:32px;font-weight:610;letter-spacing:-.055em;line-height:1.1;font-variant-numeric:tabular-nums;margin-top:5px}.kpi-unit{font:500 12px var(--sans);color:var(--muted);letter-spacing:0;margin-left:5px}.analysis-grid{display:grid;grid-template-columns:minmax(0,1.92fr) minmax(250px,1fr);gap:16px;margin-top:18px;align-items:stretch}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}.card-pad{padding:22px 25px}.head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.section-index{color:#637a6c;font:650 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}.head-row h2,.inspector h2{font-size:24px;line-height:1.15;letter-spacing:-.047em;font-weight:630}.sub{color:var(--muted);font-size:12px;margin-top:4px}.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;line-height:1.3;background:#edf2e8;border:1px solid #d2ddcf;border-radius:22px;font:650 10px var(--mono);white-space:nowrap;color:#385c45}.seg{display:inline-flex;gap:2px;margin-top:16px;padding:3px;border:1px solid var(--line);background:#f2f4ee;border-radius:9px;flex-wrap:wrap}.seg button{border:0;border-radius:6px;background:transparent;color:var(--muted);font-size:12px;font-weight:650;padding:5px 13px}.seg button[aria-pressed=true]{background:#fff;color:#144c3f;box-shadow:0 1px 4px #19362322}.plot{margin-top:10px;--labelW:62px;--valueW:63px}.axis-heading{display:flex;justify-content:space-between;padding-left:var(--labelW);padding-right:var(--valueW);font:10px var(--mono);color:var(--muted);margin-bottom:6px}.plot-rows{max-height:370px;overflow:auto}.plot-row,.axis-row{display:grid;grid-template-columns:var(--labelW) minmax(0,1fr) var(--valueW);align-items:center}.plot-row{width:100%;background:none;border:0;text-align:left;min-height:35px;border-radius:5px;padding:0}.plot-row:hover,.plot-row[aria-pressed=true]{background:#eef3e8}.plot-lab{font:640 11px var(--mono);padding-left:4px;color:#394e46}.plot-track{height:34px;position:relative;background-image:linear-gradient(to right,#dce3d9 1px,transparent 1px);background-size:25% 100%;border-right:1px solid #dce3d9}.plot-track:before{content:'';position:absolute;top:50%;left:0;right:0;border-top:1px dashed #c8d4c7}.plot-mark{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;background:var(--teal);transform:translate(-50%,-50%);border:1px solid var(--card)}.plot-row[aria-pressed=true] .plot-mark{width:14px;height:14px;box-shadow:0 0 0 3px #b4d79e;background:#15594c;border:2px solid white}.plot-val{font:650 12px var(--mono);text-align:right;padding-right:5px}.axis-row{font:10px var(--mono);color:var(--muted);height:23px}.ticks{position:relative;height:100%}.ticks span{position:absolute;top:5px;transform:translateX(-50%);white-space:nowrap}.chart-control{margin-top:7px;padding-top:10px;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center;justify-content:space-between}.check{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;cursor:pointer}.check input{accent-color:var(--teal)}.chart-note{font-size:11px;color:var(--muted)}.inspector{background:#e8eee1;padding:22px 23px;border-color:#cbd8c6}.inspector-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.arrows{display:flex;gap:5px}.arrows .icon-btn{background:#f5f8ee;border-color:#c6d2c1;border-radius:50%;width:26px;min-height:26px;font-size:17px}.lap-name{margin-top:11px;display:flex;align-items:center;gap:10px}.inspector .big-reading{margin:12px 0 4px;font-size:47px;line-height:1.05;font-weight:580;letter-spacing:-.06em}.big-reading .kpi-unit{font-size:13px}.inspector-list{display:grid;grid-template-columns:1fr 1fr;gap:9px 13px;border-top:1px solid #c9d5c5;margin-top:14px;padding-top:13px}.mini-label{font-size:11px;color:#4d6155}.mini-val{font-size:18px;font-weight:620;letter-spacing:-.045em;font-variant-numeric:tabular-nums}.mini-unit{font-size:10px;color:var(--muted);margin-left:4px;letter-spacing:0}.inspector-note{margin-top:13px;color:#3f594b;font-size:12px;line-height:1.45}.table-card{margin-top:18px}.table-head{padding:20px 24px 10px}.select-shell{font-size:12px;padding:6px 8px;min-height:32px;max-width:100%}.scroll-table{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap;font-size:13px;font-variant-numeric:tabular-nums}th,td{text-align:right;padding:11px 12px;border-bottom:1px solid var(--line)}th{font-size:11px;font-weight:650;color:var(--muted)}th:first-child,td:first-child{text-align:left;padding-left:24px}th:last-child,td:last-child{padding-right:24px}tbody tr[data-sel=true]{background:#f1f5e9}tfoot td{font-weight:700;background:#f5f7ef}td button{padding:0;border:0;background:transparent;color:var(--teal);font-size:13px;font-weight:680;text-decoration:underline;text-underline-offset:3px}.table-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:13px 24px;font-size:11px;color:var(--muted)}.table-foot .text-btn{font-size:12px}.plain-note{font-size:13px;line-height:1.5;color:var(--muted);padding:19px 0}.hidden,[hidden]{display:none!important}footer{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:22px;padding-top:16px;padding-bottom:26px;color:var(--muted)}.foot-brand{display:flex;gap:8px;align-items:center;font-size:12px}.dot{width:6px;height:6px;background:#427f65;border-radius:50%}.foot-slash{color:#aab7ac}#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#193f36;color:white;padding:12px 18px;border-radius:10px;box-shadow:0 5px 26px #10231830;max-width:min(92vw,760px);width:max-content;z-index:12;font-size:13px}.sheet-head{display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;padding:15px 0;background:var(--card);z-index:1}dialog{color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:16px;width:min(760px,calc(100% - 24px));max-height:88vh;max-height:88dvh;padding:0 24px 24px;box-shadow:0 20px 90px #172d2750}dialog::backdrop{background:#1c322d80}dialog h2{font-size:32px;letter-spacing:-.055em;line-height:1.2;margin-bottom:9px}dialog h3{font-size:18px;letter-spacing:-.03em;margin:19px 0 4px}dialog p,dialog li{font-size:13px;color:var(--muted);line-height:1.6}dialog .intro{font-size:15px}dialog ol,dialog ul{padding-left:21px;margin:4px 0 12px}.swatches{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.swatch{padding:5px 9px;border-radius:7px;display:inline-flex;align-items:center;gap:5px;font:11px var(--mono);border:1px solid var(--line)}.swatch i{border-radius:50%;width:11px;height:11px}.raw-scroll{max-height:53vh;overflow:auto}.raw-scroll th{position:sticky;top:0;background:#eef3e9}.raw-scroll th,.raw-scroll td{padding:7px 10px}.raw-scroll table{font-size:12px}
 
 /* --- additions for this journal (same token language) --- */
-.nav-drop{display:flex;align-items:center;gap:5px;border:0;background:none;color:#53655e;font-size:13px;font-weight:620;padding:4px 1px 0;white-space:nowrap;position:relative}
-.nav-drop[aria-current=page]{color:var(--forest);font-weight:760}
-.nav-drop[aria-current=page]:after{content:'';position:absolute;left:0;right:0;height:3px;bottom:-1px;background:var(--teal)}
-.nav-drop .caret{width:11px;height:11px;flex:none;opacity:.72;transition:transform .16s ease}
-.nav-drop[aria-expanded=true] .caret{transform:rotate(180deg)}
-.nav-menu{position:fixed;z-index:30;min-width:264px;max-width:min(330px,92vw);max-height:66vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 44px #172d2726;padding:6px}
-.nav-menu .menu-head{font:700 10px/1.45 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--teal);padding:6px 10px 5px}
-.nav-menu button{display:flex;width:100%;align-items:baseline;justify-content:space-between;gap:10px;border:0;background:none;text-align:left;padding:7px 10px;border-radius:8px;font-size:13px;font-weight:620;color:var(--ink)}
-.nav-menu button:hover{background:#eef3e8}
-.nav-menu button[aria-current=true]{background:#e8eee1;font-weight:740}
-.nav-menu .m-sub{font:11px var(--mono);color:var(--muted);flex:none}
-.nav-menu .menu-foot{border-top:1px solid var(--line);margin-top:5px;padding:7px 10px 4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .metric-rail{position:sticky;bottom:10px;z-index:9;margin-top:18px;background:#fbfcf7;border:1px solid var(--line);border-radius:12px;padding:8px 12px;display:flex;gap:6px;align-items:center;overflow-x:auto}
 .metric-rail .rail-label{font:700 10px/1.45 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--teal);flex:none;padding-right:8px;margin-right:2px;border-right:1px solid var(--line)}
 .metric-rail .mchip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 11px;font:650 11px var(--mono);color:var(--muted);white-space:nowrap;flex:none}
@@ -45,21 +33,21 @@
 .stat-box .u{font-size:11px;color:var(--muted)}
 .corner{color:var(--clay)}
 @media(min-width:1500px){.mast-inner,main,footer{max-width:1360px}}
-@media(max-width:920px){.mast-inner,main,footer{padding-left:24px;padding-right:24px}.mast-inner{gap:19px}.top-nav{gap:17px}.analysis-grid{grid-template-columns:minmax(0,1.8fr) minmax(220px,1fr);gap:12px}.card-pad,.inspector{padding:17px}.hero-metrics{padding:3px 7px}.kpi{padding:12px}.kpi-value{font-size:28px}.hero-main{padding:20px;min-height:175px}}
-@media(max-width:700px){main,footer{padding-left:15px;padding-right:15px}.mast-inner{padding:10px 15px 0;display:grid;grid-template-columns:1fr auto;gap:4px 10px}.wordmark>span{font-size:22px}.wordmark svg{width:30px;height:30px}.mast-actions{grid-column:2;grid-row:1;gap:6px}.top-nav{grid-row:2;grid-column:1/-1;gap:27px;min-height:36px}.top-nav a{font-size:12px;padding:3px 0 8px}.btn{font-size:12px;min-height:33px;padding:7px 10px}.btn-quiet .save-text{display:none}main{padding-top:22px}.headline{margin-bottom:16px;align-items:flex-start}.headline #topMeta .file-meta{display:none}#topMeta{max-width:112px;flex-shrink:0}h1{margin:7px 0}#pageIntro{font-size:13px}.analysis-grid{grid-template-columns:1fr;margin-top:12px}.hero{grid-template-columns:1fr}.hero-main{min-height:145px;padding:18px 22px}.track-art{width:51%;right:-3%}.hero-metrics{grid-template-columns:repeat(4,1fr);padding:7px 6px}.kpi{padding:7px 8px}.kpi:nth-child(-n+2){border-bottom:0}.kpi:not(:last-child){border-right:1px solid var(--line)}.kpi-label{font-size:10px;gap:3px}.kpi-value{font-size:22px}.kpi-unit{font-size:10px;margin-left:3px}.inspector-list{grid-template-columns:repeat(4,1fr)}.inspector .big-reading{margin:6px 0}.chart-control{align-items:flex-start;flex-wrap:wrap}.table-head{padding:16px 15px 5px}.table-foot{padding:10px 15px}th:first-child,td:first-child{padding-left:15px}th:last-child,td:last-child{padding-right:15px}.table-card{margin-top:12px}.head-row h2,.inspector h2{font-size:22px}.table-head .head-row{flex-wrap:wrap}.seg button{padding:5px 11px}footer{flex-wrap:wrap}.card{border-radius:14px}.metric-rail{bottom:0;border-radius:0;border-left:0;border-right:0}}
+@media(max-width:920px){.mast-inner,main,footer{padding-left:24px;padding-right:24px}.analysis-grid{grid-template-columns:minmax(0,1.8fr) minmax(220px,1fr);gap:12px}.card-pad,.inspector{padding:17px}.hero-metrics{padding:3px 7px}.kpi{padding:12px}.kpi-value{font-size:28px}.hero-main{padding:20px;min-height:175px}}
+@media(max-width:700px){main,footer{padding-left:15px;padding-right:15px}.mast-inner{padding:10px 15px 0;display:grid;grid-template-columns:1fr auto;gap:4px 10px}.wordmark>span{font-size:22px}.wordmark svg{width:30px;height:30px}.btn{font-size:12px;min-height:33px;padding:7px 10px}.btn-quiet .save-text{display:none}main{padding-top:22px}.headline{margin-bottom:16px;align-items:flex-start}.headline #topMeta .file-meta{display:none}#topMeta{max-width:112px;flex-shrink:0}h1{margin:7px 0}#pageIntro{font-size:13px}.analysis-grid{grid-template-columns:1fr;margin-top:12px}.hero{grid-template-columns:1fr}.hero-main{min-height:145px;padding:18px 22px}.track-art{width:51%;right:-3%}.hero-metrics{grid-template-columns:repeat(4,1fr);padding:7px 6px}.kpi{padding:7px 8px}.kpi:nth-child(-n+2){border-bottom:0}.kpi:not(:last-child){border-right:1px solid var(--line)}.kpi-label{font-size:10px;gap:3px}.kpi-value{font-size:22px}.kpi-unit{font-size:10px;margin-left:3px}.inspector-list{grid-template-columns:repeat(4,1fr)}.inspector .big-reading{margin:6px 0}.chart-control{align-items:flex-start;flex-wrap:wrap}.table-head{padding:16px 15px 5px}.table-foot{padding:10px 15px}th:first-child,td:first-child{padding-left:15px}th:last-child,td:last-child{padding-right:15px}.table-card{margin-top:12px}.head-row h2,.inspector h2{font-size:22px}.table-head .head-row{flex-wrap:wrap}.seg button{padding:5px 11px}footer{flex-wrap:wrap}.card{border-radius:14px}.metric-rail{bottom:0;border-radius:0;border-left:0;border-right:0}}
 @media(max-width:420px){.headline{display:block}.headline #topMeta{text-align:left;max-width:none}.hero-metrics{grid-template-columns:1fr 1fr;padding:3px 12px}.kpi:nth-child(n){border:0}.kpi:nth-child(-n+2){border-bottom:1px solid var(--line)}.kpi:nth-child(odd){border-right:1px solid var(--line)}.kpi{padding:8px}.inspector-list{grid-template-columns:1fr 1fr}.plot{--labelW:53px;--valueW:42px}.card-pad,.inspector{padding:15px}dialog{padding:0 16px 16px}.hero-main{min-height:132px}.pb-grid{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
-@media print{.mast-actions,.top-nav,footer,.chart-control,.seg,.arrows,#toast,.text-btn,.metric-rail{display:none!important}body{background:white}main,.mast-inner{padding:10px!important}main{max-width:none}.hero,.card{break-inside:avoid}*{print-color-adjust:exact}}
+@media print{.mast-actions,body{background:white}main,.mast-inner{padding:10px!important}main{max-width:none}.hero,.card{break-inside:avoid}*{print-color-adjust:exact}}
 </style></head>
 <body><a class="skip" href="#main">Skip to content</a>
 <header class="mast"><div class="mast-inner">
 <a class="wordmark" href="#log" aria-label="Run Atlas, training journal"><svg viewBox="0 0 35 35" fill="none" aria-hidden="true"><rect width="35" height="35" rx="9" fill="#12473f"></rect><g transform="rotate(-35 17.5 17.5)" stroke="#dbed96" stroke-width="1.6"><rect x="5" y="10" width="25" height="15" rx="7.5"></rect><rect x="8.4" y="13.4" width="18.2" height="8.2" rx="4.1"></rect></g></svg><span>Run Atlas<span class="brand-dot">.</span></span></a>
-<nav class="top-nav" aria-label="Dashboard views"><button type="button" class="nav-drop" id="sessionDrop" data-page="session" aria-current="page" aria-haspopup="true" aria-expanded="false">Session review<svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><a href="#log" data-page="log">Training log</a><a href="#lab" data-page="lab">Form lab</a><a href="#models" data-page="models">Models</a></nav>
-<div class="mast-actions"><button class="btn btn-primary" id="csv" type="button" title="Load a Garmin lap CSV export into this journal">Import CSV</button><input id="csvFile" type="file" accept=".csv,text/csv,text/plain" multiple="" hidden=""></div>
+
+<div class="mast-actions"><button class="btn" id="account" type="button">Account</button></div>
 </div></header>
 <main id="main" tabindex="-1"><div class="headline"><div><div id="eyebrow" class="eyebrow"><span class="rule"></span>Session review</div><h1 id="pageTitle">3K 1</h1><p id="pageIntro">Every kilometre of this run, with the form metrics recorded by the watch. Choose a metric to re-sort the split ladder.</p></div><div id="topMeta"><div class="file-meta">Garmin Recording.xlsx</div><div class="file-meta">4 laps · 3.02 km</div><button type="button" class="date-link" id="setDate">Add session date</button></div></div><div id="view"><div class="hero"><div class="hero-main"><svg class="track-art" viewBox="0 0 200 200" fill="none" aria-hidden="true"><g stroke="#d5e991" stroke-opacity=".45" stroke-width="2"><circle cx="150" cy="100" r="92"></circle><circle cx="150" cy="100" r="70"></circle><circle cx="150" cy="100" r="48"></circle><circle cx="150" cy="100" r="26"></circle></g></svg><div class="hero-content"><div class="micro">Session distance</div><div class="distance">3.02<small>km</small></div><div class="hero-bottom">11:25 · 3:47 /km · 0 m ascent</div></div></div><div class="hero-metrics"><div class="kpi"><div class="kpi-label">Time</div><div class="kpi-value">11:25</div></div><div class="kpi"><div class="kpi-label">Avg pace</div><div class="kpi-value">3:47<span class="kpi-unit">/km</span></div></div><div class="kpi"><div class="kpi-label">Avg HR</div><div class="kpi-value">169<span class="kpi-unit">bpm</span></div></div><div class="kpi"><div class="kpi-label">Cadence</div><div class="kpi-value">176<span class="kpi-unit">spm</span></div></div></div></div><div class="analysis-grid"><section class="card card-pad"><div class="head-row"><div><p class="section-index">Section 01</p><h2>Split ladder</h2><p class="sub">One row per kilometre · Pace (min/km)</p></div><span class="pill">Lower is faster</span></div><div class="seg" role="group" aria-label="Metric"><button type="button" data-seg="pace" aria-pressed="true">Pace</button><button type="button" data-seg="stride" aria-pressed="false">Stride Length</button><button type="button" data-seg="cad" aria-pressed="false">Run Cadence</button><button type="button" data-seg="hr" aria-pressed="false">Avg HR</button><button type="button" data-seg="power" aria-pressed="false">Avg Power</button><button type="button" data-seg="gct" aria-pressed="false">Ground Contact</button><button type="button" data-seg="vo" aria-pressed="false">Vertical Oscillation</button><button type="button" data-seg="vr" aria-pressed="false">Vertical Ratio</button><button type="button" data-seg="re" aria-pressed="false">Running Effectiveness</button><button type="button" data-seg="ei" aria-pressed="false">Efficiency Index</button></div><div class="plot"><div class="axis-heading"><span>slowest</span><span>fastest</span></div><div class="plot-rows"><button type="button" class="plot-row" data-lap="1" aria-pressed="true"><span class="plot-lab">1 km</span><span class="plot-track"><span class="plot-mark" style="left:0.00%"></span></span><span class="plot-val">3:53</span></button><button type="button" class="plot-row" data-lap="2" aria-pressed="false"><span class="plot-lab">2 km</span><span class="plot-track"><span class="plot-mark" style="left:22.22%"></span></span><span class="plot-val">3:47</span></button><button type="button" class="plot-row" data-lap="3" aria-pressed="false"><span class="plot-lab">3 km</span><span class="plot-track"><span class="plot-mark" style="left:44.44%"></span></span><span class="plot-val">3:41</span></button><button type="button" class="plot-row" data-lap="4" aria-pressed="false"><span class="plot-lab">4 km</span><span class="plot-track"><span class="plot-mark" style="left:100.00%"></span></span><span class="plot-val">3:26</span></button></div><div class="axis-row"><span></span><span class="ticks"><span style="left:0%">3:53</span><span style="left:25%">3:46</span><span style="left:50%">3:40</span><span style="left:75%">3:33</span><span style="left:100%">3:26</span></span><span></span></div></div><div class="chart-control"><span class="chart-note">Click a row to inspect that kilometre.</span></div></section><aside class="card inspector"><div class="inspector-top"><div><p class="section-index">Kilometre 1</p></div><div class="arrows"><button class="icon-btn" id="prevLap" type="button" aria-label="Previous kilometre">‹</button><button class="icon-btn" id="nextLap" type="button" aria-label="Next kilometre">›</button></div></div><div class="lap-name"><span class="pill">1.00 km split</span><span class="mini-label">3:53</span></div><div class="big-reading">3:53<span class="kpi-unit">min/km</span></div><p class="mini-label">Pace for this kilometre</p><div class="inspector-list"><div><div class="mini-label">Cadence</div><div class="mini-val">171<span class="mini-unit">spm</span></div></div><div><div class="mini-label">Stride</div><div class="mini-val">1.46<span class="mini-unit">m</span></div></div><div><div class="mini-label">Avg HR</div><div class="mini-val">152<span class="mini-unit">bpm</span></div></div><div><div class="mini-label">Ground contact</div><div class="mini-val">217<span class="mini-unit">ms</span></div></div><div><div class="mini-label">Vert. oscillation</div><div class="mini-val">9.90<span class="mini-unit">cm</span></div></div><div><div class="mini-label">Vert. ratio</div><div class="mini-val">6.80<span class="mini-unit">%</span></div></div><div><div class="mini-label">Power</div><div class="mini-val">393<span class="mini-unit">W</span></div></div><div><div class="mini-label">W/kg</div><div class="mini-val">5.80<span class="mini-unit"></span></div></div></div><p class="inspector-note">Ground contact, vertical oscillation and stride length together describe how much the leg springs against the ground.</p></aside></div><section class="card card-pad" style="margin-top:16px"><div class="head-row"><div><p class="section-index">Section 03</p><h2>Selected metrics by kilometre</h2><p class="sub">Add or remove metrics with the rail below.</p></div></div><div class="small-grid"><div class="mini-card"><div class="cap">Pace</div><h3>min/km</h3><svg viewBox="0 0 520 170" width="100%" style="height:auto" role="img" aria-label="Pace by kilometre"><line x1="44" y1="41.7" x2="504" y2="41.7" stroke="#dfe5da" stroke-width="1"></line><text x="37" y="45.2" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">3:30</text><line x1="44" y1="79.9" x2="504" y2="79.9" stroke="#dfe5da" stroke-width="1"></line><text x="37" y="83.4" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">3:40</text><line x1="44" y1="118.1" x2="504" y2="118.1" stroke="#dfe5da" stroke-width="1"></line><text x="37" y="121.6" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">3:50</text><line x1="44.0" y1="12" x2="44.0" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="44.0" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1</text><line x1="157.9" y1="12" x2="157.9" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="157.9" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1.5</text><line x1="271.7" y1="12" x2="271.7" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="271.7" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">2</text><line x1="385.6" y1="12" x2="385.6" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="385.6" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">2.5</text><line x1="499.4" y1="12" x2="499.4" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="499.4" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">3</text><path d="M44.0 129.6 L271.7 106.6 L499.4 83.7 L504.0 26.4 L504.0 144 L44.0 144 Z" fill="#146557" opacity=".10"></path><path d="M44.0 129.6 L271.7 106.6 L499.4 83.7 L504.0 26.4" fill="none" stroke="#146557" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="44.0" cy="129.6" r="2.4" fill="#146557"><title>Pace · 1 → 3:53</title></circle><circle cx="271.7" cy="106.6" r="2.4" fill="#146557"><title>Pace · 2 → 3:47</title></circle><circle cx="499.4" cy="83.7" r="2.4" fill="#146557"><title>Pace · 3 → 3:41</title></circle><circle cx="504.0" cy="26.4" r="2.4" fill="#146557"><title>Pace · 3 → 3:26</title></circle></svg></div><div class="mini-card"><div class="cap">Stride Length</div><h3>m</h3><svg viewBox="0 0 520 170" width="100%" style="height:auto" role="img" aria-label="Stride Length by kilometre"><line x1="44" y1="141.0" x2="504" y2="141.0" stroke="#dfe5da" stroke-width="1"></line><text x="37" y="144.5" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1.45</text><line x1="44" y1="83.7" x2="504" y2="83.7" stroke="#dfe5da" stroke-width="1"></line><text x="37" y="87.2" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1.5</text><line x1="44" y1="26.4" x2="504" y2="26.4" stroke="#dfe5da" stroke-width="1"></line><text x="37" y="29.9" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1.55</text><line x1="44.0" y1="12" x2="44.0" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="44.0" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1</text><line x1="157.9" y1="12" x2="157.9" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="157.9" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1.5</text><line x1="271.7" y1="12" x2="271.7" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="271.7" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">2</text><line x1="385.6" y1="12" x2="385.6" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="385.6" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">2.5</text><line x1="499.4" y1="12" x2="499.4" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="499.4" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">3</text><path d="M44.0 129.6 L271.7 118.1 L499.4 106.6 L504.0 26.4 L504.0 144 L44.0 144 Z" fill="#146557" opacity=".10"></path><path d="M44.0 129.6 L271.7 118.1 L499.4 106.6 L504.0 26.4" fill="none" stroke="#146557" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="44.0" cy="129.6" r="2.4" fill="#146557"><title>Stride Length · 1 → 1.46</title></circle><circle cx="271.7" cy="118.1" r="2.4" fill="#146557"><title>Stride Length · 2 → 1.47</title></circle><circle cx="499.4" cy="106.6" r="2.4" fill="#146557"><title>Stride Length · 3 → 1.48</title></circle><circle cx="504.0" cy="26.4" r="2.4" fill="#146557"><title>Stride Length · 3 → 1.55</title></circle></svg></div><div class="mini-card"><div class="cap">Run Cadence</div><h3>spm</h3><svg viewBox="0 0 520 170" width="100%" style="height:auto" role="img" aria-label="Run Cadence by kilometre"><line x1="44" y1="136.0" x2="504" y2="136.0" stroke="#dfe5da" stroke-width="1"></line><text x="37" y="139.5" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">170</text><line x1="44" y1="71.6" x2="504" y2="71.6" stroke="#dfe5da" stroke-width="1"></line><text x="37" y="75.1" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">180</text><line x1="44.0" y1="12" x2="44.0" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="44.0" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1</text><line x1="157.9" y1="12" x2="157.9" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="157.9" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">1.5</text><line x1="271.7" y1="12" x2="271.7" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="271.7" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">2</text><line x1="385.6" y1="12" x2="385.6" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="385.6" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">2.5</text><line x1="499.4" y1="12" x2="499.4" y2="144" stroke="#eaeee5" stroke-width="1"></line><text x="499.4" y="158" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" fill="#52655d">3</text><path d="M44.0 129.6 L271.7 84.4 L499.4 71.6 L504.0 26.4 L504.0 144 L44.0 144 Z" fill="#146557" opacity=".10"></path><path d="M44.0 129.6 L271.7 84.4 L499.4 71.6 L504.0 26.4" fill="none" stroke="#146557" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="44.0" cy="129.6" r="2.4" fill="#146557"><title>Run Cadence · 1 → 171</title></circle><circle cx="271.7" cy="84.4" r="2.4" fill="#146557"><title>Run Cadence · 2 → 178</title></circle><circle cx="499.4" cy="71.6" r="2.4" fill="#146557"><title>Run Cadence · 3 → 180</title></circle><circle cx="504.0" cy="26.4" r="2.4" fill="#146557"><title>Run Cadence · 3 → 187</title></circle></svg></div></div></section><section class="card table-card"><div class="table-head"><div class="head-row"><div><p class="section-index">Section 02</p><h2>Every split</h2></div><div class="select-shell"><select id="jumpSession" aria-label="Choose session"><option value="3k_1" selected="">3K 1 · 3.02 km</option><option value="5k_1">5K 1 · 5.01 km</option><option value="5k_2">5K 2 · 5.01 km</option><option value="7k_1">7K 1 · 7.09 km</option><option value="10k_1">10K 1 · 10.01 km</option><option value="10k_2">10K 2 · 10.02 km</option><option value="10k_3">10K 3 · 10.01 km</option><option value="10k_4">10K 4 · 10.01 km</option><option value="21k_1">21K 1 · 21.29 km</option><option value="recent_1">RECENT 1 · 3.02 km</option><option value="recent_2">RECENT 2 · 5.01 km</option></select></div></div></div><div class="scroll-table"><table><caption class="plain-note">All laps, as exported by the watch.</caption><thead><tr><th>lap</th><th>dist</th><th>time</th><th>Pace</th><th>GAP (Grade Adj.)</th><th>Avg HR</th><th>Run Cadence</th><th>Stride Length</th><th>Ground Contact</th><th>Vertical Oscillation</th><th>Vertical Ratio</th><th>Avg Power</th><th>Power / Weight</th><th>Total Ascent</th></tr></thead><tbody><tr data-sel="true"><td>1.00</td><td>1.00</td><td>3:53</td><td>3:53</td><td>3:55</td><td>152</td><td>171</td><td>1.46</td><td>217</td><td>9.90</td><td>6.80</td><td>393</td><td>5.80</td><td>0.00</td></tr><tr data-sel="false"><td>2.00</td><td>1.00</td><td>3:47</td><td>3:47</td><td>3:50</td><td>172</td><td>178</td><td>1.47</td><td>215</td><td>9.90</td><td>6.70</td><td>413</td><td>6.09</td><td>0.00</td></tr><tr data-sel="false"><td>3.00</td><td>1.00</td><td>3:41</td><td>3:41</td><td>3:44</td><td>183</td><td>180</td><td>1.48</td><td>211</td><td>9.70</td><td>6.60</td><td>421</td><td>6.21</td><td>0.00</td></tr><tr data-sel="false"><td>4.00</td><td>0.02</td><td>0:04</td><td>3:26</td><td>3:25</td><td>186</td><td>187</td><td>1.55</td><td>193</td><td>9.40</td><td>6.10</td><td>445</td><td>6.56</td><td>0.00</td></tr></tbody><tfoot><tr><td>Summary</td><td>3.02</td><td>11:25</td><td>3:47</td><td>3:50</td><td>169</td><td>176</td><td>1.47</td><td>214</td><td>9.8</td><td>6.7</td><td>409</td><td>6.04</td><td>0</td></tr></tfoot></table></div><div class="table-foot"><span>Time and pace in min/km. Distances in km, stride in m, ground contact in ms, oscillation in cm.</span></div></section><div class="metric-rail" role="group" aria-label="Metrics to include"><span class="rail-label">Metrics</span><button type="button" class="mchip" data-met="pace" aria-pressed="true">Pace</button><button type="button" class="mchip" data-met="stride" aria-pressed="true">Stride Length</button><button type="button" class="mchip" data-met="cad" aria-pressed="true">Run Cadence</button><button type="button" class="mchip" data-met="hr" aria-pressed="false">Avg HR</button><button type="button" class="mchip" data-met="hrmax" aria-pressed="false">Max HR</button><button type="button" class="mchip" data-met="gap" aria-pressed="false">GAP (Grade Adj.)</button><button type="button" class="mchip" data-met="power" aria-pressed="false">Avg Power</button><button type="button" class="mchip" data-met="wkg" aria-pressed="false">Power / Weight</button><button type="button" class="mchip" data-met="gct" aria-pressed="false">Ground Contact</button><button type="button" class="mchip" data-met="vo" aria-pressed="false">Vertical Oscillation</button><button type="button" class="mchip" data-met="vr" aria-pressed="false">Vertical Ratio</button><button type="button" class="mchip" data-met="re" aria-pressed="false">Running Effectiveness</button><button type="button" class="mchip" data-met="ei" aria-pressed="false">Efficiency Index</button><button type="button" class="mchip" data-met="kmh" aria-pressed="false">Speed</button><button type="button" class="mchip" data-met="asc" aria-pressed="false">Total Ascent</button><button type="button" class="mchip" data-met="cal" aria-pressed="false">Calories</button><button type="button" class="mchip" data-met="cadmax" aria-pressed="false">Max Cadence</button><button type="button" class="mchip" data-met="bestpace" aria-pressed="false">Best Pace</button><span class="rail-actions"><button type="button" class="text-btn" data-mets="core">Core 3</button><button type="button" class="text-btn" data-mets="all">All</button><button type="button" class="text-btn" data-mets="none">None</button></span></div></div></main>
 <footer><div class="foot-brand"><span class="dot"></span>Run Atlas <span class="foot-slash">/</span> Garmin training journal</div><button class="text-btn" id="guideOpen" type="button">Data notes <span aria-hidden="true">↗</span></button></footer>
-<div class="nav-menu" id="sessionMenu" role="menu" aria-labelledby="sessionDrop" hidden=""></div>
+</div>
 <div id="toast" role="status" aria-live="polite" hidden=""></div>
 <dialog id="sheet"><div class="sheet-head"><span class="eyebrow" id="sheetKicker">RUN ATLAS</span><button class="icon-btn" aria-label="Close dialog" id="sheetClose">×</button></div><div id="sheetContents"></div></dialog>
 <noscript><p>Enable JavaScript to explore the training journal.</p></noscript>
@@ -536,360 +524,26 @@ function wire(){
     else window.prompt('Dates JSON',txt);
   });
 }
-/* ---------------- CSV import (Garmin lap export) ---------------- */
-var LS_IMP='runAtlasImportedV1';
-var CSV_ORDER=['time','cum','dist','pace','gap','hr','hrmax','asc','desc','power','wkg','powermax','wkgmax','cad','gct','gctbal','stride','vo','vr','cal','temp','bestpace','cadmax','movtime','movpace','ssl','sslpct'];
-var CSV_DUR={time:1,cum:1,pace:1,gap:1,bestpace:1,movtime:1,movpace:1};
-var CSV_ALIAS=[['time',['time','lap time','split time']],['cum',['cumulative time','cum time','total time','elapsed time']],
-['dist',['distance','distance m','distance km','lap distance','dist']],['pace',['avg pace','average pace','pace']],
-['gap',['avg gap','average gap','gap','grade adjusted pace']],['hr',['avg hr','average hr','avg heart rate','average heart rate','heart rate']],
-['hrmax',['max hr','maximum hr','max heart rate']],['asc',['total ascent','ascent','elevation gain']],['desc',['total descent','descent']],
-['power',['avg power','average power','power']],['wkg',['avg w kg','average w kg','power weight','w kg']],
-['powermax',['max power','maximum power']],['wkgmax',['max w kg','maximum w kg']],
-['cad',['avg run cadence','average run cadence','avg cadence','run cadence','cadence']],
-['gct',['avg gct','average gct','avg ground contact time','avg ground contact','ground contact time']],
-['gctbal',['gct balance','ground contact balance','avg gct balance']],
-['stride',['avg stride length','average stride length','stride length','stride']],
-['vo',['avg vertical oscillation','average vertical oscillation','vertical oscillation']],
-['vr',['avg vertical ratio','average vertical ratio','vertical ratio']],['cal',['calories','cal']],['temp',['temperature']],
-['bestpace',['best pace']],['cadmax',['max cadence','maximum cadence','max run cadence']],
-['movtime',['moving time']],['movpace',['moving pace']],['ssl',['step speed loss']],['sslpct',['step speed loss %']]];
-function r3(v){return Math.round(v*1000)/1000;}
-function r2(v){return Math.round(v*100)/100;}
-function r1(v){return Math.round(v*10)/10;}
-function r4(v){return Math.round(v*10000)/10000;}
-function csvRows(text){
-  var rows=[],row=[],cur='',q=false;
-  text=String(text).replace(/^﻿/,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n');
-  for(var i=0;i<text.length;i++){
-    var c=text.charAt(i);
-    if(q){ if(c==='"'){ if(text.charAt(i+1)==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
-    else { if(c==='"')q=true; else if(c===','){row.push(cur);cur='';} else if(c==='\n'){row.push(cur);rows.push(row);row=[];cur='';} else cur+=c; }
-  }
-  row.push(cur);rows.push(row);
-  return rows.filter(function(r){return r.some(function(x){return String(x||'').trim()!=='';});});
-}
-function strDurToSec(s){
-  s=String(s==null?'':s).trim();
-  if(!s||s==='--'||s==='-')return null;
-  var p=s.split(':'),v=[];
-  for(var i=0;i<p.length;i++){var f=parseFloat(p[i]);if(!isFinite(f))return null;v.push(f);}
-  if(v.length===2)return r2(v[0]*60+v[1]);
-  if(v.length===3)return r2(v[0]*3600+v[1]*60+v[2]);
-  return null;
-}
-function matchCsvKey(low){
-  for(var i=0;i<CSV_ALIAS.length;i++){
-    var k=CSV_ALIAS[i][0],al=CSV_ALIAS[i][1];
-    for(var j=0;j<al.length;j++){ if(low===al[j])return k; }
-  }
-  for(var a=0;a<CSV_ALIAS.length;a++){
-    var k2=CSV_ALIAS[a][0],al2=CSV_ALIAS[a][1];
-    for(var b=0;b<al2.length;b++){ if(low.indexOf(al2[b])===0)return k2; }
-  }
-  return null;
-}
-function enrichLap(l){
-  var pace=l.pace,cad=l.cad,stride=l.stride,hr=l.hr,wkg=l.wkg,vo=l.vo;
-  if(pace&&pace>0){l.speed=r3(1000/pace);l.kmh=r2(l.speed*3.6);}
-  if(cad&&stride)l.speed_cs=r3(cad*stride/60);
-  if(l.speed&&wkg&&wkg>0)l.re=r3(l.speed/wkg);
-  if(l.speed&&hr&&hr>0)l.ei=r3(l.speed/hr*100);
-  if(vo&&stride&&stride>0)l.vr_calc=r2(vo/(stride*100)*100);
-  if(cad&&l.speed)l.stride_need=r3(l.speed*60/cad);
-  return l;
-}
-function summariseLaps(laps){
-  function sumOf(k){var s=0;laps.forEach(function(l){s+=(l[k]||0);});return s;}
-  function wavg(k){var n=0,d=0;laps.forEach(function(l){var v=l[k],w=l.dist||0;if(v!=null&&isFinite(v)&&w){n+=v*w;d+=w;}});return d?r3(n/d):null;}
-  function maxOf(k){var m=0;laps.forEach(function(l){if(l[k]&&l[k]>m)m=l[k];});return m||null;}
-  function minOf(k){var m=null;laps.forEach(function(l){if(l[k]&&(m===null||l[k]<m))m=l[k];});return m;}
-  var dist=r3(sumOf('dist')),time=r1(sumOf('time'));
-  var s={dist:dist,time:time,timeFmt:fmtTime(time),
-    pace:dist?r1(time/dist):null,paceFmt:dist?fmtPace(time/dist):null,
-    hr:wavg('hr'),hrmax:maxOf('hrmax'),cad:wavg('cad'),stride:wavg('stride'),
-    power:wavg('power'),wkg:wavg('wkg'),gct:wavg('gct'),vo:wavg('vo'),vr:wavg('vr'),
-    gap:wavg('gap'),re:wavg('re'),ei:wavg('ei'),
-    asc:r1(sumOf('asc')),desc:r1(sumOf('desc')),cal:Math.round(sumOf('cal')),
-    bestpace:minOf('bestpace'),cadmax:maxOf('cadmax'),laps:laps.length};
-  s.bestpaceFmt=s.bestpace?fmtPace(s.bestpace):null;
-  s.gapFmt=s.gap?fmtPace(s.gap):null;
-  if(s.pace)s.kmh=r2(3600/s.pace);
-  var half=Math.floor(laps.length/2);
-  if(half>=2){
-    var a=laps.slice(0,half),b=laps.slice(laps.length-half);
-    function avg(arr,k){var t=0;t=arr.reduce(function(x,l){return x+(l[k]||0);},0);return t/Math.max(arr.length,1);}
-    var pa=avg(a,'pace'),pb=avg(b,'pace'),ha=avg(a,'hr'),hb=avg(b,'hr');
-    if(pa&&ha&&hb)s.decoupling=r2(((pb/hb)/(pa/ha)-1)*100);
-  }
-  return s;
-}
-function labelFromName(base){
-  var b=String(base).replace(/^activity[_ -]?/i,'').trim();
-  if(/^\d+$/.test(b))return ('IMPORT '+b).slice(0,28);
-  return b.replace(/[_]+/g,' ').toUpperCase().slice(0,28)||'IMPORT';
-}
-function groupFromDist(d){
-  if(d<3.5)return '3K'; if(d<7.5)return '5K'; if(d<12)return '10K'; if(d<25)return '21K'; return 'LONG';
-}
-function buildFromCsv(text,fileName){
-  var rows=csvRows(text);
-  if(rows.length<2)return null;
-  var header=rows[0];
-  var low=header.map(function(h){return String(h==null?'':h).toLowerCase().replace(/\([^)]*\)/g,' ').replace(/\//g,' ').replace(/\s+/g,' ').trim();});
-  var distIsM=header.some(function(h){var s=String(h==null?'':h);return /distance/i.test(s)&&/m\b/.test(s.toLowerCase())&&!/km/i.test(s);});
-  var map={};
-  low.forEach(function(h,i){var k=matchCsvKey(h);if(k&&map[k]==null)map[k]=i;});
-  var laps=[];
-  for(var r=1;r<rows.length;r++){
-    var row=rows[r];if(!row||!row.length)continue;
-    var first=String(row[0]==null?'':row[0]).trim();
-    if(/^(summary|total)/i.test(first))continue;
-    var lapNo=parseFloat(first);
-    if(!isFinite(lapNo))continue;
-    var lap={lap:lapNo};
-    for(var j=0;j<CSV_ORDER.length;j++){
-      var k=CSV_ORDER[j];
-      var idx=(map[k]!=null?map[k]:j+1);
-      if(idx>=row.length)continue;
-      var raw=String(row[idx]==null?'':row[idx]).trim();
-      if(raw===''||raw==='--'||raw==='-')continue;
-      if(k==='dist'){var dv=parseFloat(raw.replace(/,/g,''));if(isFinite(dv))lap.dist=r4(dv/(distIsM?1000:1));continue;}
-      if(CSV_DUR[k]){var t=strDurToSec(raw);if(t!=null)lap[k]=t;continue;}
-      var v=parseFloat(raw.replace(/,/g,''));if(isFinite(v))lap[k]=r3(v);
-    }
-    if(lap.dist==null)continue;
-    if(lap.pace)lap.time=r2(lap.pace*lap.dist);
-    else if(lap.time)lap.pace=r2(lap.time/lap.dist);
-    enrichLap(lap);
-    laps.push(lap);
-  }
-  if(!laps.length)return null;
-  var cum=0,d=0;
-  laps.forEach(function(l){cum+=(l.time||0);d+=(l.dist||0);l.cum=r1(cum);l.dk=r3(d);});
-  var s=summariseLaps(laps);
-  var base=String(fileName).replace(/\.[^.]+$/,'');
-  var id='csv_'+base.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
-  return {id:id,label:labelFromName(base),group:groupFromDist(s.dist),source:fileName,date:null,recent:true,imported:true,laps:laps,summary:s};
-}
-function saveImports(){
-  var mine=A.filter(function(a){return a.imported;});
-  try{localStorage.setItem(LS_IMP,JSON.stringify(mine));}
-  catch(e){toast('Imported into this page, but the browser storage is full — it will not persist after reload.');}
-}
-function loadImports(){
-  var raw=null;
-  try{raw=JSON.parse(localStorage.getItem(LS_IMP)||'[]');}catch(e){raw=[];}
-  if(!raw||!raw.length)return;
-  raw.forEach(function(a){
-    if(!a||!a.laps||!a.laps.length)return;
-    for(var i=0;i<A.length;i++){if(A[i].id===a.id){A[i]=a;return;}}
-    a.imported=true;a.laps.forEach(enrichLap);A.push(a);
-  });
-}
-function handleFiles(files){
-  var list=[];for(var i=0;i<files.length;i++)list.push(files[i]);
-  if(!list.length)return;
-  var done=0,bad=[],pending=list.length,raw=[];
-  function finish(){
-    if(done){
-      saveImports();S.lap=1;go('session');
-      toast('Imported '+done+' session'+(done>1?'s':'')+' · now showing '+cur().label);
-      fsSave(raw);
-    }
-    else toast('Could not read '+bad.join(', ')+'. Expected a Garmin lap CSV with a Lap column.');
-  }
-  list.forEach(function(f){
-    var fr=new FileReader();
-    fr.onload=function(){
-      try{
-        var act=buildFromCsv(String(fr.result),f.name);
-        if(!act){bad.push(f.name);}
-        else{
-          var found=false;
-          for(var i=0;i<A.length;i++){if(A[i].id===act.id){A[i]=act;found=true;break;}}
-          if(!found)A.push(act);
-          S.id=act.id;done++;raw.push({name:f.name,text:String(fr.result)});
-        }
-      }catch(err){bad.push(f.name);}
-      if(--pending<=0)finish();
-    };
-    fr.onerror=function(){bad.push(f.name);if(--pending<=0)finish();};
-    fr.readAsText(f);
-  });
-}
-/* ---------------- hand the raw files back to the local folder ---------------- */
-var FS_OK=('showDirectoryPicker' in window);
-var fsDir=null,fsPending=[];
-function idbOpen(){
-  return new Promise(function(res,rej){
-    var r=indexedDB.open('runAtlasFs',1);
-    r.onupgradeneeded=function(){r.result.createObjectStore('kv');};
-    r.onsuccess=function(){res(r.result);};
-    r.onerror=function(){rej(r.error);};
-  });
-}
-function idbGet(k){
-  return idbOpen().then(function(d){return new Promise(function(res,rej){
-    var q=d.transaction('kv').objectStore('kv').get(k);
-    q.onsuccess=function(){res(q.result);};q.onerror=function(){rej(q.error);};
-  });});
-}
-function idbSet(k,v){
-  return idbOpen().then(function(d){return new Promise(function(res,rej){
-    var q=d.transaction('kv','readwrite').objectStore('kv').put(v,k);
-    q.onsuccess=function(){res(1);};q.onerror=function(){rej(q.error);};
-  });});
-}
-function fsRestore(){
-  if(!FS_OK)return;
-  idbGet('garminDir').then(function(h){if(h)fsDir=h;}).catch(function(){});
-}
-function askFolder(){
-  var t=document.getElementById('toast');
-  t.innerHTML='';
-  var s=document.createElement('span');
-  s.textContent='Save these files into your Garmin folder? ';
-  var b=document.createElement('button');
-  b.type='button';b.className='text-btn';b.style.color='#dbed96';b.textContent='Choose folder';
-  b.onclick=function(){t.hidden=true;fsPick();};
-  t.appendChild(s);t.appendChild(b);t.hidden=false;
-  clearTimeout(t._h);t._h=setTimeout(function(){t.hidden=true;},12000);
-}
-function fsPick(){
-  if(!FS_OK){toast('This browser cannot write to a folder — Chrome or Edge can.');return;}
-  window.showDirectoryPicker({id:'garmin-folder',mode:'readwrite'}).then(function(h){
-    fsDir=h;
-    return idbSet('garminDir',h).catch(function(){});
-  }).then(function(){
-    toast('Connected to '+fsDir.name+'. Saving…');
-    fsSave(fsPending);fsPending=[];
-  }).catch(function(e){
-    if(e&&e.name==='SecurityError')toast('Folder access needs HTTPS or localhost.');
-    else toast('Folder not connected'+(e&&e.name?' ('+e.name+')':'')+'.');
-  });
-}
-function fsWrite(list){
-  return Promise.all(list.map(function(f){
-    return fsDir.getFileHandle(f.name,{create:true})
-      .then(function(fh){return fh.createWritable();})
-      .then(function(w){return w.write(f.text).then(function(){return w.close();});});
-  }));
-}
-function fsSave(list){
-  if(!list||!list.length)return;
-  if(!FS_OK){
-    list.forEach(function(f){
-      var a=document.createElement('a');
-      a.href=URL.createObjectURL(new Blob([f.text],{type:'text/csv'}));
-      a.download=f.name;a.click();
-      setTimeout(function(){URL.revokeObjectURL(a.href);},5000);
-    });
-    toast('Downloaded '+list.length+' file'+(list.length>1?'s':'')+' — move it into D:\\Desktop\\Marathon\\Garmin so it can be published.');
-    return;
-  }
-  if(!fsDir){fsPending=list;askFolder();return;}
-  var perm='prompt';
-  try{perm=fsDir.queryPermission?fsDir.queryPermission({mode:'readwrite'}):'granted';}catch(e){perm='granted';}
-  if(perm==='granted'){
-    fsWrite(list).then(function(){
-      toast('Saved '+list.length+' file'+(list.length>1?'s':'')+' into '+fsDir.name+' · publishing will pick them up.');
-    }).catch(function(e){toast('Could not write: '+(e&&e.name||e));});
-  }else{
-    fsPending=list;askFolder();
-  }
-}
-function clearImports(){
-  A=A.filter(function(a){return !a.imported;});
-  try{localStorage.removeItem(LS_IMP);}catch(e){}
-  if(!cur())S.id=A[0].id;
-  go(S.page);toast('Imported sessions removed.');
-}
 function go(p){
   S.page=p;
   try{history.replaceState(null,'','#'+p);}catch(e){}
   render();
 }
 function render(){
-  document.querySelectorAll('.top-nav [data-page]').forEach(function(a){
-    if(a.dataset.page===S.page)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
-  });
   if(S.page==='session')pageSession();
   else if(S.page==='log')pageLog();
   else if(S.page==='lab')pageLab();
   else pageModels();
 }
-document.querySelectorAll('.top-nav a[data-page]').forEach(function(a){
-  a.addEventListener('click',function(e){e.preventDefault();closeMenu();go(a.dataset.page);});
-});
-/* ---------------- session dropdown ---------------- */
-var menuEl=document.getElementById('sessionMenu'),dropEl=document.getElementById('sessionDrop');
-function menuOpen(){return !menuEl.hidden;}
-function closeMenu(){menuEl.hidden=true;dropEl.setAttribute('aria-expanded','false');}
-function openMenu(){
-  menuEl.innerHTML='<div class="menu-head">Choose a session</div>'+A.map(function(a){
-    var dt=S.dates[a.id];
-    return '<button type="button" role="menuitem" data-id="'+esc(a.id)+'" aria-current="'+(a.id===S.id?'true':'false')+'">'+esc(a.label)+
-      '<span class="m-sub">'+num(a.summary.dist,2)+' km'+(dt?' · '+esc(dt):'')+'</span></button>';
-  }).join('')+'<div class="menu-foot"><span class="mini-label">'+A.length+' sessions</span><span class="text-btn" id="menuImport">Import CSV</span></div>';
-  menuEl.hidden=false;
-  dropEl.setAttribute('aria-expanded','true');
-  var r=dropEl.getBoundingClientRect(),w=menuEl.offsetWidth||280;
-  menuEl.style.left=Math.max(8,Math.min(r.left,Math.max(8,window.innerWidth-w-8)))+'px';
-  var below=window.innerHeight-r.bottom;
-  menuEl.style.top=(below>menuEl.offsetHeight+16?r.bottom+5:Math.max(8,r.top-menuEl.offsetHeight-5))+'px';
-}
-function menuItemOf(el){
-  while(el&&el!==menuEl){
-    if(el.tagName==='BUTTON'&&el.getAttribute&&el.getAttribute('data-id'))return el;
-    el=el.parentNode;
-  }
-  return null;
-}
-dropEl.addEventListener('click',function(e){e.stopPropagation();if(menuOpen())closeMenu();else openMenu();});
-menuEl.addEventListener('click',function(e){
-  var b=menuItemOf(e.target);
-  if(b){S.id=b.getAttribute('data-id');S.lap=1;closeMenu();go('session');return;}
-  if(e.target&&e.target.id==='menuImport'){closeMenu();document.getElementById('csvFile').click();}
-});
-document.addEventListener('click',function(e){
-  if(menuOpen()&&!menuEl.contains(e.target)&&!dropEl.contains(e.target))closeMenu();
-});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu();});
-window.addEventListener('resize',closeMenu);
-window.addEventListener('scroll',closeMenu,true);
-document.getElementById('csv').addEventListener('click',function(){closeMenu();document.getElementById('csvFile').click();});
-document.getElementById('csvFile').addEventListener('change',function(e){
-  handleFiles(e.target.files);e.target.value='';
-});
 document.getElementById('guideOpen').addEventListener('click',function(){
   var d=document.getElementById('sheet');
   document.getElementById('sheetContents').innerHTML=
     '<h2>About this journal</h2><p class="intro">Eleven Garmin sessions: nine from the recorded workbook and two recent exports. All splits are the watch values, unsmoothed.</p>'+
     '<h3>Reading the numbers</h3><ul><li>Pace and time are min/km and h:mm:ss.</li><li>Stride in metres, cadence in steps per minute, ground contact in milliseconds, vertical oscillation in centimetres.</li><li>Running effectiveness is speed (m/s) per W/kg; efficiency index is speed per heart rate.</li></ul>'+
     '<h3>Notes on the source</h3><ul><li>The workbook stored durations as clock values that Excel re-read as hours:minutes, so every time was rebuilt from pace × distance.</li><li>The personal-best sheet carries Excel serial numbers rather than dates, so no date is shown until you set one.</li><li>The half-marathon telemetry totals 1:40:35 while the recorded best is 1:38:31 — watch totals versus official timing.</li></ul>'+
-    '<h3>Colours</h3><div class="swatches">'+A.slice(0,8).map(function(a){return '<span class="swatch"><i style="background:'+colorOf(a)+'"></i>'+esc(a.label)+'</span>';}).join('')+'</div>'+
-    '<h3>Adding new runs</h3><ul><li>Use <strong>Import CSV</strong> (top right) to load a Garmin lap CSV export. It is parsed in your browser and, if the folder is connected, written back into <code>D:\\Desktop\\Marathon\\Garmin</code>.</li><li>Once the file is in that folder, rebuilding the embedded data publishes it for everyone — the page itself is a static file and cannot read your disk on its own.</li></ul>'+
-    folderBlock()+
-    impBlock();
-  var rm=document.getElementById('clearImports');
-  if(rm)rm.addEventListener('click',function(){d.close();clearImports();});
-  var fp=document.getElementById('folderPick');
-  if(fp)fp.addEventListener('click',fsPick);
+    '<h3>Colours</h3><div class="swatches">'+A.slice(0,8).map(function(a){return '<span class="swatch"><i style="background:'+colorOf(a)+'"></i>'+esc(a.label)+'</span>';}).join('')+'</div>';
   if(d.showModal)d.showModal();else d.setAttribute('open','');
 });
-function folderBlock(){
-  if(!FS_OK)return '<h3>Local folder</h3><p>This browser cannot write to a folder. Chrome or Edge can pick one and reuse it.</p>';
-  return '<h3>Local folder</h3><p>Imported CSV files are copied back to: <strong>'+(fsDir?esc(fsDir.name):'not connected')+'</strong>. The first import asks you once; after that it is automatic.</p>'+
-    '<p><button type="button" class="text-btn" id="folderPick">'+(fsDir?'Change folder':'Connect folder')+'</button></p>';
-}
-function impBlock(){
-  var imp=A.filter(function(a){return a.imported;});
-  if(!imp.length)return '';
-  return '<h3>Imported in this browser ('+imp.length+')</h3><ul>'+imp.map(function(a){
-    return '<li>'+esc(a.label)+' · '+num(a.summary.dist,2)+' km · '+esc(a.source)+'</li>';
-  }).join('')+'</ul><p><button type="button" class="text-btn" id="clearImports">Remove imported sessions</button></p>';
-}
 document.getElementById('sheetClose').addEventListener('click',function(){document.getElementById('sheet').close();});
 window.addEventListener('hashchange',function(){
   var h=(location.hash||'').replace('#','');
@@ -897,8 +551,6 @@ window.addEventListener('hashchange',function(){
 });
 var start=(location.hash||'').replace('#','');
 if(['session','log','lab','models'].indexOf(start)>=0)S.page=start;
-fsRestore();
-loadImports();
 render();
 })();
 </script>
