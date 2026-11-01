@@ -41,7 +41,7 @@
 </style></head>
 <body><a class="skip" href="#main">Skip to content</a>
 <header class="mast"><div class="mast-inner">
-<a class="wordmark" href="#log" aria-label="Run Atlas, training journal"><svg viewBox="0 0 35 35" fill="none" aria-hidden="true"><rect width="35" height="35" rx="9" fill="#12473f"></rect><g transform="rotate(-35 17.5 17.5)" stroke="#dbed96" stroke-width="1.6"><rect x="5" y="10" width="25" height="15" rx="7.5"></rect><rect x="8.4" y="13.4" width="18.2" height="8.2" rx="4.1"></rect></g></svg><span>Run Atlas<span class="brand-dot">.</span></span></a>
+<a class="wordmark" href="index.html" aria-label="Run Atlas, back to the session overview"><svg viewBox="0 0 35 35" fill="none" aria-hidden="true"><rect width="35" height="35" rx="9" fill="#12473f"></rect><g transform="rotate(-35 17.5 17.5)" stroke="#dbed96" stroke-width="1.6"><rect x="5" y="10" width="25" height="15" rx="7.5"></rect><rect x="8.4" y="13.4" width="18.2" height="8.2" rx="4.1"></rect></g></svg><span>Run Atlas<span class="brand-dot">.</span></span></a>
 
 <nav class="top-nav" aria-label="Dashboard views"><a href="#log" data-page="log">Training log</a><a href="#lab" data-page="lab">Form lab</a><a href="#models" data-page="models">Models</a></nav>
 
@@ -234,6 +234,17 @@ document.addEventListener('keydown',function(e){
 });
 window.addEventListener('resize',function(){if(menuOpen())closeMenu();});
 window.addEventListener('scroll',function(){if(menuOpen())closeMenu();},true);
+/* wordmark -> back to the plain session overview (no hash in the URL) */
+var wm=document.querySelector('.wordmark');
+if(wm)wm.addEventListener('click',function(e){
+  if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;
+  e.preventDefault();
+  try{history.replaceState(null,'',location.pathname+location.search||'index.html');}catch(err){}
+  closeMenu();
+  S.page='session';S.lap=1;
+  render();
+  try{window.scrollTo({top:0,behavior:'smooth'});}catch(err){window.scrollTo(0,0);}
+});
 
 
 /* ---------------- shared blocks ---------------- */
