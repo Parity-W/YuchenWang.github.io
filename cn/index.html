@@ -9,6 +9,8 @@
 		<title>王誉晨的个人网站 - 主页</title>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" type="text/css" href="../css/main.css">
+		<link rel="stylesheet" type="text/css" href="../css/cv-access.css">
+		<script src="../js/cv-access.js" defer></script>
 		<!--[if !IE]>--><link rel="stylesheet" type="text/css" href="../css/not_IE.css"><!--<![endif]-->
 		<link rel="shortcut icon" type="image/x-icon" href="../img/wolf.icon" media="screen" />
 		<script>
@@ -38,7 +40,7 @@
 				<img src="../img/卡通照.jpeg" alt="" width="319" />
 			</div> -->
 			<div style="float:right; width:319px; height:363.5px;">
-				<img src="../img/透明卡通照.png" alt="" width="319" />
+				<img id="cv-access-trigger" src="../img/透明卡通照.png" alt="王誉晨的卡通头像" width="319" role="button" tabindex="0" aria-label="双击或双触打开简历密码框" aria-haspopup="dialog" aria-controls="cv-password-dialog" draggable="false" />
 			</div>
         		<h1>王誉晨</h1>
 			<p><a href="https://spe.sysu.edu.cn/" target="_blank">中山大学物理学院</a>物理系2020级本科生</p>
@@ -118,6 +120,17 @@
 				　　页码：252<br>
 				　　内容简介：本书内容涵盖粒子物理基础、宇宙线的物理（加速、相互作用）和天文（起源、传播）问题及其探测方法。针对目前广为采用的大气簇射实验，本书侧重讨论了大气簇射中宇宙线各成分（包括强子、光子、<i>μ</i>子和中微子）的理论模型及数值模拟方法。书中的理论分析简明直观，密切结合实验，具有较强的针对性。读者通过本书可以对宇宙线这个学科有整体和适当深度的了解。本书适合作为物理学专业高年级本科生和研究生的入门教材。对粒子物理标准模型和天文学有基础性的了解有助于对本书的理解。本书亦适合工作在宇宙线领域的专家学者参考。<br>
 			</p> -->
+		<dialog id="cv-password-dialog" aria-labelledby="cv-password-title">
+			<form id="cv-password-form">
+				<h2 id="cv-password-title">Password:</h2>
+				<input id="cv-password-input" name="password" type="password" autocomplete="current-password" aria-labelledby="cv-password-title" aria-describedby="cv-password-error" required autofocus />
+				<p id="cv-password-error" role="alert" aria-live="polite"></p>
+				<div class="cv-password-actions">
+					<button id="cv-password-cancel" type="button">取消</button>
+					<button type="submit">打开简历</button>
+				</div>
+			</form>
+		</dialog>
 	</body>
 	<footer>
 		<br><br><br><br>
@@ -135,3 +148,4 @@
 		</table>
 	</footer>
 </html>
+

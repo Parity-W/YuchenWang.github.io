@@ -1,0 +1,83 @@
+#cv-access-trigger {
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#cv-access-trigger:focus-visible {
+  outline: 3px solid #5e4e2a;
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
+#cv-password-dialog {
+  box-sizing: border-box;
+  width: min(24rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 1.5rem;
+  border: 2px solid #5e4e2a;
+  border-radius: 14px;
+  background: #fffaf0;
+  color: #352c19;
+  box-shadow: 0 16px 48px #0005;
+}
+
+#cv-password-dialog::backdrop {
+  background: #241d1480;
+}
+
+#cv-password-title {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+}
+
+#cv-password-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #89754d;
+  border-radius: 6px;
+  background: #fff;
+  color: #352c19;
+  font: inherit;
+  font-size: 16px;
+}
+
+#cv-password-input:focus-visible,
+#cv-password-dialog button:focus-visible {
+  outline: 3px solid #8c6b24;
+  outline-offset: 3px;
+}
+
+#cv-password-error {
+  min-height: 1.5em;
+  margin: 0.5rem 0 1rem;
+  color: #9d2525;
+  font-size: 1rem;
+}
+
+.cv-password-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+#cv-password-dialog button {
+  min-height: 44px;
+  padding: 0.6rem 1rem;
+  border: 1px solid #5e4e2a;
+  border-radius: 6px;
+  background: #5e4e2a;
+  color: #fffaf0;
+  cursor: pointer;
+  font: inherit;
+}
+
+#cv-password-dialog button[type="button"] {
+  background: transparent;
+  color: #5e4e2a;
+}
